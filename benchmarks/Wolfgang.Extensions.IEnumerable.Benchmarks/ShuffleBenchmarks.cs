@@ -75,7 +75,7 @@ public class ShuffleBenchmarks
         }
 
         var list = source.ToList();
-        var rng = new Random();
+        var rng = Random.Shared;
 
         for (var i = list.Count - 1; i > 0; i--)
         {
