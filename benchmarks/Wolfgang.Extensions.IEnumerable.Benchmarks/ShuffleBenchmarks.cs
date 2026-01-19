@@ -67,7 +67,7 @@ public class ShuffleBenchmarks
     /// <summary>
     /// Fisher-Yates shuffle implementation as suggested in the PR review
     /// </summary>
-    private static List<T> ShuffleFisherYates<T>(IEnumerable<T> source)
+    private static IEnumerable<T> ShuffleFisherYates<T>(IEnumerable<T> source)
     {
         if (source == null)
         {

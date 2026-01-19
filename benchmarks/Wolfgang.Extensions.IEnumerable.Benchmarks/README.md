@@ -7,7 +7,7 @@ This benchmark project compares two implementations of the `Shuffle()` extension
 1. **Current Implementation (Guid-based)**
    - Uses `OrderBy(_ => Guid.NewGuid())`
    - Simple and readable, but slower
-   - Creates a new GUID for each element
+   - Generates a GUID for each element during the sort operation
 
 2. **Fisher-Yates Shuffle**
    - Uses the classic Fisher-Yates shuffle algorithm
