@@ -14,7 +14,7 @@ public static class IEnumerableExtensions
     /// Executes the specified action on each item in the enumerable
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose will be randomly ordered.</param>
+    /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
     /// <param name="action">The action to execute on each item in the enumerable</param>
     /// <exception cref="ArgumentNullException">source is null.</exception>
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
