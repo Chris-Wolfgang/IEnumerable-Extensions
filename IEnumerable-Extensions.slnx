@@ -24,7 +24,9 @@
     <File Path=".github/ISSUE_TEMPLATE/BUG_REPORT.yaml" />
     <File Path=".github/ISSUE_TEMPLATE/feature_request.md" />
   </Folder>
-  <Folder Name="/benchmark/" />
+  <Folder Name="/benchmark/">
+    <Project Path="benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks.csproj" />
+  </Folder>
   <Folder Name="/examples/">
   </Folder>
   <Folder Name="/src/">
