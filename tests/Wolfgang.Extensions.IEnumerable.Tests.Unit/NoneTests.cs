@@ -27,7 +27,7 @@ public class NoneTests
             new Balloon {Color = "Red"},
         };
 
-        Assert.False(source.None());
+        Assert.False(source.ToEnumerable().None());
     }
 
 
@@ -39,7 +39,7 @@ public class NoneTests
         {
         };
 
-        Assert.True(source.None());
+        Assert.True(source.ToEnumerable().None());
     }
 
 
@@ -49,7 +49,7 @@ public class NoneTests
     {
         var source = new[] { 3, 6, 9, 12 };
 
-        Assert.False(source.None());
+        Assert.False(source.ToEnumerable().None());
     }
 
         
@@ -59,7 +59,7 @@ public class NoneTests
     {
         var source = new int[] {};
 
-        Assert.True(source.None());
+        Assert.True(source.ToEnumerable().None());
     }
 
 
@@ -81,7 +81,7 @@ public class NoneTests
     {
         var source = new[] { 3, 6, 9, 12 };
 
-        var exception = Assert.Throws<ArgumentNullException>(() => source.None(null!));
+        var exception = Assert.Throws<ArgumentNullException>(() => source.ToEnumerable().None(null!));
 
         Assert.Equal("predicate", exception.ParamName);
     }
@@ -99,7 +99,7 @@ public class NoneTests
             new Balloon {Color = "Red"},
         };
 
-        Assert.False(source.None(b => b.Color == "Red"));
+        Assert.False(source.ToEnumerable().None(b => b.Color == "Red"));
     }
 
 
@@ -115,7 +115,7 @@ public class NoneTests
             new Balloon {Color = "Blue"},
         };
 
-        Assert.False(source.None(b => b.Color == "Red"));
+        Assert.False(source.ToEnumerable().None(b => b.Color == "Red"));
     }
 
 
@@ -131,7 +131,7 @@ public class NoneTests
             new Balloon {Color = "Blue"},
         };
 
-        Assert.True(source.None(b => b.Color == "Red"));
+        Assert.True(source.ToEnumerable().None(b => b.Color == "Red"));
     }
 
 
@@ -141,7 +141,7 @@ public class NoneTests
     {
         var source = new[] { 3, 6, 9, 12 };
 
-        Assert.False(source.None(n => n % 3 == 0));
+        Assert.False(source.ToEnumerable().None(n => n % 3 == 0));
     }
 
 
@@ -151,7 +151,7 @@ public class NoneTests
     {
         var source = new[] { 1, 2, 3, 4 };
 
-        Assert.False(source.None(n => n % 3 == 0));
+        Assert.False(source.ToEnumerable().None(n => n % 3 == 0));
     }
 
 
@@ -161,7 +161,7 @@ public class NoneTests
     {
         var source = new[] { 1, 2, 4, 5 };
 
-        Assert.True(source.None(n => n % 3 == 0));
+        Assert.True(source.ToEnumerable().None(n => n % 3 == 0));
     }
 
 

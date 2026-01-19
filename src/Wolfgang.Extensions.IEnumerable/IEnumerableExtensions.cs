@@ -29,6 +29,12 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(action));
         }
 
+        if (source is List<T> s)
+        {
+            s.ForEach(action);
+            return;
+        }
+
         foreach (var item in source)
         {
             action(item);
@@ -71,9 +77,7 @@ public static class IEnumerableExtensions
     /// true if the source sequence is null or contains no elements; otherwise, false.
     /// </returns>
     public static bool IsNullOrEmpty<T>(this IEnumerable<T>? source)
-    {
-        return source == null || !source.Any();
-    }
+        => source == null || !source.Any();
 
 
 

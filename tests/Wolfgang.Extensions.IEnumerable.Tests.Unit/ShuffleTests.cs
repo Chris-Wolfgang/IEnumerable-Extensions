@@ -21,7 +21,7 @@ public class ShuffleTests
     {
         var source = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        var actualResult = source.Shuffle().ToArray();
+        var actualResult = source.ToEnumerable().Shuffle().ToArray();
 
         Assert.NotEqual(source, actualResult);
         Assert.Equal(source.Length, actualResult.Length);
@@ -41,7 +41,7 @@ public class ShuffleTests
 
         var expectedResult = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        source.Shuffle();
+        source.ToEnumerable().Shuffle();
 
         Assert.Equal(expectedResult, source);
     }
