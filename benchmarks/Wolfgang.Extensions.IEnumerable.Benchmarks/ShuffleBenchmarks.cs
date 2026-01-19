@@ -25,13 +25,13 @@ public class ShuffleBenchmarks
     // ===== Small List (100 items) =====
 
     [Benchmark]
-    public List<int> CurrentImplementation_Small()
+    public IEnumerable<int> CurrentImplementation_Small()
     {
-        return _smallList.Shuffle().ToList();
+        return _smallList.Shuffle();
     }
 
     [Benchmark]
-    public List<int> FisherYates_Small()
+    public IEnumerable<int> FisherYates_Small()
     {
         return ShuffleFisherYates(_smallList);
     }
@@ -39,13 +39,13 @@ public class ShuffleBenchmarks
     // ===== Medium List (1,000 items) =====
 
     [Benchmark]
-    public List<int> CurrentImplementation_Medium()
+    public IEnumerable<int> CurrentImplementation_Medium()
     {
-        return _mediumList.Shuffle().ToList();
+        return _mediumList.Shuffle();
     }
 
     [Benchmark]
-    public List<int> FisherYates_Medium()
+    public IEnumerable<int> FisherYates_Medium()
     {
         return ShuffleFisherYates(_mediumList);
     }
@@ -53,13 +53,13 @@ public class ShuffleBenchmarks
     // ===== Large List (10,000 items) =====
 
     [Benchmark]
-    public List<int> CurrentImplementation_Large()
+    public IEnumerable<int> CurrentImplementation_Large()
     {
-        return _largeList.Shuffle().ToList();
+        return _largeList.Shuffle();
     }
 
     [Benchmark]
-    public List<int> FisherYates_Large()
+    public IEnumerable<int> FisherYates_Large()
     {
         return ShuffleFisherYates(_largeList);
     }
@@ -75,7 +75,7 @@ public class ShuffleBenchmarks
         }
 
         var list = source.ToList();
-        var rng = Random.Shared;
+        var rng = new Random();
 
         for (var i = list.Count - 1; i > 0; i--)
         {
