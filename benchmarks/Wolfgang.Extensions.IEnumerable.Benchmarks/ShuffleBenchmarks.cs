@@ -1,5 +1,5 @@
 using BenchmarkDotNet.Attributes;
-using Wolfgang.Extensions.IEnumerable;
+using BenchmarkDotNet.Engines;
 
 namespace Wolfgang.Extensions.IEnumerable.Benchmarks;
 
@@ -10,6 +10,7 @@ namespace Wolfgang.Extensions.IEnumerable.Benchmarks;
 [RankColumn]
 public class ShuffleBenchmarks
 {
+    private readonly Consumer _consumer = new();
     private List<int> _smallList = null!;
     private List<int> _mediumList = null!;
     private List<int> _largeList = null!;
@@ -25,44 +26,26 @@ public class ShuffleBenchmarks
     // ===== Small List (100 items) =====
 
     [Benchmark]
-    public IEnumerable<int> CurrentImplementation_Small()
-    {
-        return _smallList.Shuffle();
-    }
+    public void CurrentImplementation_Small() => _smallList.Shuffle().Consume(_consumer);
 
     [Benchmark]
-    public IEnumerable<int> FisherYates_Small()
-    {
-        return ShuffleFisherYates(_smallList);
-    }
+    public void FisherYates_Small() => ShuffleFisherYates(_smallList).Consume(_consumer);
 
     // ===== Medium List (1,000 items) =====
 
     [Benchmark]
-    public IEnumerable<int> CurrentImplementation_Medium()
-    {
-        return _mediumList.Shuffle();
-    }
+    public void CurrentImplementation_Medium() => _mediumList.Shuffle().Consume(_consumer);
 
     [Benchmark]
-    public IEnumerable<int> FisherYates_Medium()
-    {
-        return ShuffleFisherYates(_mediumList);
-    }
+    public void FisherYates_Medium() => ShuffleFisherYates(_mediumList).Consume(_consumer);
 
     // ===== Large List (10,000 items) =====
 
     [Benchmark]
-    public IEnumerable<int> CurrentImplementation_Large()
-    {
-        return _largeList.Shuffle();
-    }
+    public void CurrentImplementation_Large() => _largeList.Shuffle().Consume(_consumer);
 
     [Benchmark]
-    public IEnumerable<int> FisherYates_Large()
-    {
-        return ShuffleFisherYates(_largeList);
-    }
+    public void FisherYates_Large() => ShuffleFisherYates(_largeList).Consume(_consumer);
 
     /// <summary>
     /// Fisher-Yates shuffle implementation as suggested in the PR review
