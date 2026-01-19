@@ -98,7 +98,10 @@ public static class IEnumerableExtensions
     /// 
     /// </example>
     public static bool None<T>(this IEnumerable<T> source)
-        => !source.Any();
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        return !source.Any();
+    }
 
 
 
@@ -122,7 +125,11 @@ public static class IEnumerableExtensions
     /// 
     /// </example>
     public static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate)
-        => !source.Any(predicate);
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(predicate);
+        return !source.Any(predicate);
+    }
 
 
 
