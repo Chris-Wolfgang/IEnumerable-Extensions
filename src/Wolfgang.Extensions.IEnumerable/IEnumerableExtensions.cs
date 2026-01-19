@@ -130,7 +130,7 @@ public static class IEnumerableExtensions
     /// Creates a new IEnumerable{T} containing the elements from source in a random order
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose will be randomly ordered.</param>
+    /// <param name="source">An IEnumerable{T} whose elements will be randomly ordered.</param>
     /// <returns>A new IEnumerable{T} containing the elements from source in a random order.</returns>
     /// <exception cref="ArgumentNullException">source is null.</exception>
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
