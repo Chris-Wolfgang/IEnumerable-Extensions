@@ -14,7 +14,7 @@ public static class IEnumerableExtensions
     /// Executes the specified action on each item in the enumerable
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose will be randomly ordered.</param>
+    /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
     /// <param name="action">The action to execute on each item in the enumerable</param>
     /// <exception cref="ArgumentNullException">source is null.</exception>
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
@@ -90,10 +90,10 @@ public static class IEnumerableExtensions
     ///     {
     ///         var numbers = new[] { 1, 2, 3, 4 };
     ///
-    ///         Console.WriteLine (number.None()); // Prints false
+    ///         Console.WriteLine (numbers.None()); // Prints false
     ///
     ///         numbers = new [] {};
-    ///         Console.WriteLine (number.None()); // Prints true
+    ///         Console.WriteLine (numbers.None()); // Prints true
     ///     }
     /// 
     /// </example>
@@ -116,8 +116,8 @@ public static class IEnumerableExtensions
     ///     {
     ///         var numbers = new[] { 1, 2, 3, 4 };
     ///
-    ///         Console.WriteLine (number.None(n => n % 3)); // Prints false
-    ///         Console.WriteLine (number.None(n => n % 5)); // Prints true
+    ///         Console.WriteLine (number.None(n => n % 3 == 0)); // Prints false
+    ///         Console.WriteLine (number.None(n => n % 5 == 0)); // Prints true
     ///     }
     /// 
     /// </example>
@@ -130,11 +130,18 @@ public static class IEnumerableExtensions
     /// Creates a new IEnumerable{T} containing the elements from source in a random order
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose will be randomly ordered.</param>
+    /// <param name="source">An IEnumerable{T} whose elements will be randomly ordered.</param>
     /// <returns>A new IEnumerable{T} containing the elements from source in a random order.</returns>
     /// <exception cref="ArgumentNullException">source is null.</exception>
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
-        => source
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        return source
             .OrderBy(_ => Guid.NewGuid())
             .ToList();
+    }
 }

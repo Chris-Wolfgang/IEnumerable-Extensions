@@ -1,6 +1,6 @@
 namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
-public class IsEmpty
+public class IsEmptyTest
 {
 
 
