@@ -65,6 +65,26 @@ public class NoneTests
 
 
     [Fact]
+    public void None_with_source_when_source_implements_ICollection_and_list_is_empty_uses_cast_short_circuit()
+    {
+        var source = new int[] { };
+
+        Assert.True(source.None());
+    }
+
+
+
+    [Fact]
+    public void None_with_source_when_source_implements_ICollection_and_list_is_not_empty_uses_cast_short_circuit()
+    {
+        var source = new[] { 1, 2, 4, 5 };
+
+        Assert.False(source.None());
+    }
+
+
+
+    [Fact]
     public void None_with_source_and_predicate_when_passed_null_source_throws_ArgumentNullException()
     {
         List<int> source = null!;
@@ -163,7 +183,6 @@ public class NoneTests
 
         Assert.True(source.ToEnumerable().None(n => n % 3 == 0));
     }
-
 
 
 

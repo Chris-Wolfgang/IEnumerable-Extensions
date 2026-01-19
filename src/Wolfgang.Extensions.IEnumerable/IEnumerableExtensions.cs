@@ -17,7 +17,7 @@ public static class IEnumerableExtensions
     /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
     /// <param name="action">The action to execute on each item in the enumerable</param>
     /// <exception cref="ArgumentNullException">source is null.</exception>
-    public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+    public static void ForEach<T>(this IEnumerable<T>? source, Action<T> action)
     {
         if (source == null)
         {
@@ -29,6 +29,8 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(action));
         }
 
+        // This block should not be hit as the List<T>.ForEach should get selected by the compiler
+        // but adding it for performance reasons in case it does not
         if (source is List<T> s)
         {
             s.ForEach(action);
@@ -101,9 +103,20 @@ public static class IEnumerableExtensions
     ///     }
     /// 
     /// </example>
-    public static bool None<T>(this IEnumerable<T> source)
-        => !source.Any();
+    public static bool None<T>(this IEnumerable<T>? source)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
 
+        if (source is ICollection<T> s)
+        {
+            return s.Count == 0;
+        }
+
+        return !source.Any();
+    }
 
 
     /// <summary>
@@ -125,9 +138,20 @@ public static class IEnumerableExtensions
     ///     }
     /// 
     /// </example>
-    public static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate)
-        => !source.Any(predicate);
+    public static bool None<T>(this IEnumerable<T>? source, Func<T, bool> predicate)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
 
+        if (predicate == null)
+        {
+            throw new ArgumentNullException(nameof(predicate));
+        }
+
+        return !source.Any(predicate);
+    }
 
 
     /// <summary>
