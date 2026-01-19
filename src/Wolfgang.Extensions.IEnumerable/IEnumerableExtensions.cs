@@ -134,7 +134,14 @@ public static class IEnumerableExtensions
     /// <returns>A new IEnumerable{T} containing the elements from source in a random order.</returns>
     /// <exception cref="ArgumentNullException">source is null.</exception>
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
-        => source
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        return source
             .OrderBy(_ => Guid.NewGuid())
             .ToList();
+    }
 }
