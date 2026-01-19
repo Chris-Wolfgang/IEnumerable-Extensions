@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Wolfgang.Extensions.IEnumerable;
 
@@ -168,8 +169,28 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
-        return source
-            .OrderBy(_ => Guid.NewGuid())
-            .ToList();
+        // Fisher-Yates shuffle implementation as suggested in the PR review
+        var list = source.ToList();
+        var rng = RandomSource;
+
+        for (var i = list.Count - 1; i > 0; i--)
+        {
+            var j = rng.Next(i + 1);
+            var temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
+        }
+
+        return list;
     }
+
+#if NET6_0_OR_GREATER
+    private static Random RandomSource => Random.Shared;
+#else
+    private static readonly ThreadLocal<Random> SThreadLocalRandom = new(CreateRandom);
+    private static Random RandomSource => SThreadLocalRandom.Value!;
+
+    private static Random CreateRandom()
+        => new(unchecked((Environment.TickCount * 31) + Thread.CurrentThread.ManagedThreadId));
+#endif
 }
