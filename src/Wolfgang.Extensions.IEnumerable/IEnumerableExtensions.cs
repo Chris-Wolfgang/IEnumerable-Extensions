@@ -116,8 +116,8 @@ public static class IEnumerableExtensions
     ///     {
     ///         var numbers = new[] { 1, 2, 3, 4 };
     ///
-    ///         Console.WriteLine (number.None(n => n % 3)); // Prints false
-    ///         Console.WriteLine (number.None(n => n % 5)); // Prints true
+    ///         Console.WriteLine (number.None(n => n % 3 == 0)); // Prints false
+    ///         Console.WriteLine (number.None(n => n % 5 == 0)); // Prints true
     ///     }
     /// 
     /// </example>
