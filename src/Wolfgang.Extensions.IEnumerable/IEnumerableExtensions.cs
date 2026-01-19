@@ -90,10 +90,10 @@ public static class IEnumerableExtensions
     ///     {
     ///         var numbers = new[] { 1, 2, 3, 4 };
     ///
-    ///         Console.WriteLine (number.None()); // Prints false
+    ///         Console.WriteLine (numbers.None()); // Prints false
     ///
     ///         numbers = new [] {};
-    ///         Console.WriteLine (number.None()); // Prints true
+    ///         Console.WriteLine (numbers.None()); // Prints true
     ///     }
     /// 
     /// </example>
