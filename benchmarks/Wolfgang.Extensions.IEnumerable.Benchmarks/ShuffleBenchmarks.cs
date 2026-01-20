@@ -58,6 +58,7 @@ public class ShuffleBenchmarks
         }
 
         var list = source.ToList();
+        // Using Random.Shared (requires .NET 6+) - this is why benchmark targets net8.0 only
         var rng = Random.Shared;
 
         for (var i = list.Count - 1; i > 0; i--)
