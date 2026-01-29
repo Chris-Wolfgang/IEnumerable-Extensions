@@ -193,4 +193,31 @@ public static class IEnumerableExtensions
     private static Random CreateRandom()
         => new(unchecked((Environment.TickCount * 31) + Thread.CurrentThread.ManagedThreadId));
 #endif
+
+
+
+
+    /// <summary>
+    /// Converts the specified IEnumerable{T} to an IEnumerable{T}.
+    /// </summary>
+    /// <param name="source">The source to convert</param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns>An <see cref="IEnumerable{T}"/> containing the elements of the source.</returns>
+    /// <remarks>
+    /// Sometimes, particularly during testing you need an IEnumerable{T} that is not a more
+    /// specific type like List{T} or Array as there may be optimizations or overloads that
+    /// trigger different code paths for those types.
+    /// </remarks>
+    public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> source)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        foreach (var element in source)
+        {
+            yield return element;
+        }
+    }
 }
