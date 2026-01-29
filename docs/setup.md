@@ -293,8 +293,8 @@ devskim analyze --source-code . -f text
 
 ## Additional Resources
 
-- [.NET Documentation](https://docs.microsoft.com/dotnet/)
-- [C# Coding Conventions](https://docs.microsoft.com/dotnet/csharp/fundamentals/coding-style/coding-conventions)
+- [.NET Documentation](https://learn.microsoft.com/dotnet/)
+- [C# Coding Conventions](https://learn.microsoft.com/dotnet/csharp/fundamentals/coding-style/coding-conventions)
 - [Contributing Guidelines](../CONTRIBUTING.md)
 - [Code of Conduct](../CODE_OF_CONDUCT.md)
 
