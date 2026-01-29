@@ -8,7 +8,7 @@ The library addresses common scenarios when working with collections in .NET tha
 
 ## Key Features
 
-- **Multiple .NET Framework Support**: Targets .NET Framework 4.6.2, .NET Standard 2.0, .NET 8.0, and .NET 10.0
+- **Broad .NET Platform Support**: Supports .NET Framework 4.6.2 through .NET 10, including .NET Standard 2.0, .NET Core, and modern .NET versions
 - **Performance-Optimized**: Implements optimizations for specific collection types (e.g., `List<T>`, `ICollection<T>`)
 - **Well-Documented**: Comprehensive XML documentation with code examples
 - **Thoroughly Tested**: Extensive unit test coverage ensuring reliability

@@ -52,10 +52,12 @@ dotnet add package Wolfgang.Extensions.IEnumerable
 
 ## Supported Frameworks
 
+Supports .NET Framework 4.6.2 through .NET 10:
+
 - .NET Framework 4.6.2+
-- .NET Standard 2.0+
-- .NET 8.0+
-- .NET 10.0+
+- .NET Standard 2.0
+- .NET Core 2.0+
+- .NET 5-10
 
 ## Features
 

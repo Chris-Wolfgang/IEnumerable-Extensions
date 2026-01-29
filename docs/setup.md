@@ -6,7 +6,8 @@ This guide will help you set up a development environment for contributing to Wo
 
 ### Required Software
 
-1. **.NET SDK 8.0 or later**
+1. **.NET SDK** (version 8.0 or later recommended for development)
+   - The library supports .NET Framework 4.6.2 through .NET 10
    - Download from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)
    - Verify installation: `dotnet --version`
 
