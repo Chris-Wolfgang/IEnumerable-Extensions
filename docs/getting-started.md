@@ -25,10 +25,11 @@ Install-Package Wolfgang.Extensions.IEnumerable
 
 ## Requirements
 
-- **.NET Framework 4.6.2** or later
-- **.NET Standard 2.0** compatible runtime
-- **.NET 8.0** or later
-- **.NET 10.0** or later
+The library supports .NET Framework 4.6.2 through .NET 10, including:
+
+- **.NET Framework 4.6.2+**
+- **.NET Standard 2.0** compatible runtimes
+- **.NET Core 2.0+** and **.NET 5-10**
 
 ## Basic Usage
 
