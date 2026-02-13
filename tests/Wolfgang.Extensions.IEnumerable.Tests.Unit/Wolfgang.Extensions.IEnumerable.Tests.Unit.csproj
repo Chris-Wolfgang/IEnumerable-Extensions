@@ -93,7 +93,7 @@
 
 	<!-- .NET 8.0 - 10.0 specific packages (latest versions) -->
 	<ItemGroup Condition="&#xD;&#xA;			   '$(TargetFramework)' == 'net8.0' or&#xD;&#xA;			   '$(TargetFramework)' == 'net9.0' or&#xD;&#xA;			   '$(TargetFramework)' == 'net10.0'&#xD;&#xA;			   ">
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="3.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
