@@ -31,7 +31,7 @@ updates:
       # Versions >= 3.2.0 don't work on .NET Framework < 4.7.2
       - dependency-name: "xunit.runner.visualstudio"
         update-types: ["version-update:semver-minor", "version-update:semver-major"]
-      # Lock Microsoft.NET.Test.Sdk to 17.11.x for older .NET Framework compatibility  
+      # Lock Microsoft.NET.Test.Sdk to 17.11.x for older .NET Framework compatibility
       # Versions >= 17.12.0 may have compatibility issues with older .NET versions
       - dependency-name: "Microsoft.NET.Test.Sdk"
         update-types: ["version-update:semver-minor", "version-update:semver-major"]
