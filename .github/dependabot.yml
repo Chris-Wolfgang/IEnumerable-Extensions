@@ -26,6 +26,11 @@ updates:
     labels:
       - "dependencies"
       - "dotnet"
+    ignore:
+      # Lock Microsoft.NET.Test.Sdk - version 18.x doesn't work with older .NET versions
+      # Specific versions are locked in the csproj file based on framework compatibility
+      - dependency-name: "Microsoft.NET.Test.Sdk"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "nuget"
     directory: "/benchmarks"
