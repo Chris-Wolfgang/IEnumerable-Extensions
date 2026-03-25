@@ -18,6 +18,12 @@ public static class IEnumerableExtensions
     /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
     /// <param name="action">The action to execute on each item in the enumerable</param>
     /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <example>
+    /// <code>
+    /// var numbers = new[] { 1, 2, 3, 4, 5 };
+    /// numbers.ForEach(n => Console.WriteLine(n));
+    /// </code>
+    /// </example>
     public static void ForEach<T>(this IEnumerable<T>? source, Action<T> action)
     {
         if (source == null)
@@ -54,6 +60,12 @@ public static class IEnumerableExtensions
     /// <returns>
     /// true if the source sequence contains no elements; otherwise, false.
     /// </returns>
+    /// <example>
+    /// <code>
+    /// var items = new List&lt;string&gt;();
+    /// Console.WriteLine(items.IsEmpty()); // Prints true
+    /// </code>
+    /// </example>
     public static bool IsEmpty<T>(this IEnumerable<T>? source)
     {
         if (source == null)
@@ -79,6 +91,12 @@ public static class IEnumerableExtensions
     /// <returns>
     /// true if the source sequence is null or contains no elements; otherwise, false.
     /// </returns>
+    /// <example>
+    /// <code>
+    /// IEnumerable&lt;string&gt;? data = null;
+    /// Console.WriteLine(data.IsNullOrEmpty()); // Prints true
+    /// </code>
+    /// </example>
     public static bool IsNullOrEmpty<T>(this IEnumerable<T>? source)
         => source == null || !source.Any();
 
@@ -156,12 +174,63 @@ public static class IEnumerableExtensions
 
 
     /// <summary>
+    /// Executes a side-effect action on each element of an IEnumerable{T}
+    /// without transforming the elements. The original items are yielded unchanged.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements of source.</typeparam>
+    /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
+    /// <param name="action">The action to execute on each element.</param>
+    /// <returns>An IEnumerable{T} that yields the original elements after executing the action.</returns>
+    /// <exception cref="ArgumentNullException">source or action is null.</exception>
+    /// <example>
+    /// <code>
+    /// foreach (var item in source.Do(x => Console.WriteLine($"Processing: {x}")))
+    /// {
+    ///     // item is unchanged
+    /// }
+    /// </code>
+    /// </example>
+    public static IEnumerable<T> Do<T>(this IEnumerable<T>? source, Action<T> action)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        if (action == null)
+        {
+            throw new ArgumentNullException(nameof(action));
+        }
+
+        return DoIterator(source, action);
+    }
+
+
+
+    private static IEnumerable<T> DoIterator<T>(IEnumerable<T> source, Action<T> action)
+    {
+        foreach (var item in source)
+        {
+            action(item);
+            yield return item;
+        }
+    }
+
+
+
+    /// <summary>
     /// Creates a new IEnumerable{T} containing the elements from source in a random order
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <param name="source">An IEnumerable{T} whose elements will be randomly ordered.</param>
     /// <returns>A new IEnumerable{T} containing the elements from source in a random order.</returns>
     /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <example>
+    /// <code>
+    /// var deck = new[] { "Ace", "King", "Queen", "Jack" };
+    /// var shuffled = deck.Shuffle();
+    /// </code>
+    /// </example>
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
     {
         if (source == null)
