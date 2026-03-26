@@ -17,7 +17,10 @@ The library addresses common scenarios when working with collections in .NET tha
 ## Available Extension Methods
 
 ### ForEach
-Executes the specified action on each item in the enumerable, providing a more functional approach to iteration with side effects.
+Executes the specified action on each item in the enumerable, providing a more functional approach to iteration with side effects. This is a terminal operation that consumes the sequence.
+
+### Do
+Executes a side-effect action on each element without transforming the elements. The original items are yielded unchanged, making it ideal for logging, metrics, or debugging within a pipeline.
 
 ### IsEmpty
 Efficiently determines whether a sequence contains no elements, with optimizations for common collection types.

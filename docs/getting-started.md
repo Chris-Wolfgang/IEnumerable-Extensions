@@ -41,7 +41,7 @@ using Wolfgang.Extensions.IEnumerable;
 
 ### Examples
 
-#### ForEach - Iterate with Actions
+#### ForEach - Terminal Iteration with Actions
 
 ```csharp
 var numbers = new[] { 1, 2, 3, 4, 5 };
@@ -51,11 +51,29 @@ numbers.ForEach(n => Console.WriteLine(n));
 
 // Execute complex actions
 var users = GetUsers();
-users.ForEach(user => 
+users.ForEach(user =>
 {
     user.IsActive = true;
     user.LastUpdated = DateTime.Now;
 });
+```
+
+#### Do - Passthrough Side Effects
+
+```csharp
+// Log each item as it flows through a pipeline
+var results = items
+    .Where(x => x.IsActive)
+    .Do(x => Console.WriteLine($"Processing: {x.Name}"))
+    .Select(x => x.Transform())
+    .ToList();
+
+// Chain multiple Do calls for debugging
+var output = data
+    .Do(x => logger.LogDebug($"Before filter: {x}"))
+    .Where(x => x.Value > 0)
+    .Do(x => logger.LogDebug($"After filter: {x}"))
+    .ToList();
 ```
 
 #### IsEmpty - Check for Empty Collections
@@ -124,6 +142,7 @@ All extension methods can be chained with LINQ and other extension methods:
 ```csharp
 var numbers = Enumerable.Range(1, 100)
     .Where(n => n % 2 == 0)
+    .Do(n => Console.WriteLine($"Filtered: {n}"))
     .Shuffle()
     .Take(10);
 

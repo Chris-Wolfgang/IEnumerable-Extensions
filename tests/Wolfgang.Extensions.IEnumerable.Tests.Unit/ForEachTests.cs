@@ -57,4 +57,18 @@ public class ForEachTests
         Assert.Equal(expected, result);
     }
 
+
+
+    [Fact]
+    public void ForEach_when_source_is_List_cast_as_IEnumerable_uses_List_ForEach()
+    {
+        IEnumerable<int> source = new List<int> { 1, 2, 3, 4, 5 };
+        var result = new List<int>();
+
+        source.ForEach(i => result.Add(i * 2));
+
+        var expected = new[] { 2, 4, 6, 8, 10 };
+        Assert.Equal(expected, result);
+    }
+
 }
