@@ -12,7 +12,7 @@
 .PARAMETER Repository
     The repository in owner/repo format. If not provided, uses the current repository.
 
-.PARAMETER Confirm
+.PARAMETER AutoConfirm
     Skip the confirmation prompt and proceed automatically. Alias: -y
 
 .EXAMPLE
@@ -39,7 +39,7 @@ param(
 
     [Parameter()]
     [Alias("y")]
-    [switch]$Confirm
+    [switch]$AutoConfirm
 )
 
 # Check if gh CLI is installed
@@ -169,8 +169,8 @@ foreach ($item in $plan) {
 Write-Host ""
 
 # Prompt for confirmation
-if ($Confirm) {
-    Write-Host "Auto-confirmed via -Confirm flag." -ForegroundColor Green
+if ($AutoConfirm) {
+    Write-Host "Auto-confirmed via -AutoConfirm flag." -ForegroundColor Green
 } else {
     $response = Read-Host "Proceed with these changes? (y/N)"
     if ($response -ne 'y' -and $response -ne 'Y') {
