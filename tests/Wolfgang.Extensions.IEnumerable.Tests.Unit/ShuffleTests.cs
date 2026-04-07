@@ -36,13 +36,36 @@ public class ShuffleTests
     [Fact]
     public void Shuffle_does_not_change_the_order_of_the_original_list()
     {
-
-        var source = new[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-
+        var source = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         var expectedResult = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         source.ToEnumerable().Shuffle();
 
         Assert.Equal(expectedResult, source);
+    }
+
+
+
+    [Fact]
+    public void Shuffle_with_empty_source_returns_empty()
+    {
+        var source = new int[] { };
+
+        var result = source.ToEnumerable().Shuffle();
+
+        Assert.Empty(result);
+    }
+
+
+
+    [Fact]
+    public void Shuffle_with_single_element_returns_same_element()
+    {
+        var source = new[] { 42 };
+
+        var result = source.ToEnumerable().Shuffle().ToArray();
+
+        Assert.Single(result);
+        Assert.Equal(42, result[0]);
     }
 }
