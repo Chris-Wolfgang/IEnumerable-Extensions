@@ -267,7 +267,10 @@ if (-not $SkipSecurity) {
         else {
             $archive = "gitleaks_${version}_linux_x64.tar.gz"
             $url = "https://github.com/gitleaks/gitleaks/releases/download/v${version}/$archive"
-            curl -sSfL $url | tar xz -C /usr/local/bin gitleaks
+            $dest = "$HOME/.local/bin"
+            New-Item -ItemType Directory -Force -Path $dest | Out-Null
+            curl -sSfL $url | tar xz -C $dest gitleaks
+            $env:PATH = "${dest}:$env:PATH"
         }
     }
 
