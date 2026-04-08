@@ -481,21 +481,42 @@ jobs:
 
           $threshold = if ($env:CODECOV_MINIMUM) { [int]$env:CODECOV_MINIMUM } else { 90 }
           $failedProjects = @()
+          $parsedProjects = 0
 
           foreach ($line in (Get-Content "CoverageReport/Summary.txt")) {
-            if ($line -match '^\s*(\S+)\s+(\d+(?:\.\d+)?)%\s*$' -and $line -notmatch '^\s*Summary') {
-              $module  = $Matches[1]
-              $percent = [int][math]::Floor([double]$Matches[2])
+            if ($line -match '^\s*$' -or $line -match '^\s*Summary') {
+              continue
+            }
 
-              Write-Host "Checking module: '$module' - Coverage: ${percent}%"
+            if ($line -match '^\s*(\S+)') {
+              $module = $Matches[1]
+              $percentMatches = [regex]::Matches($line, '(\d+(?:\.\d+)?)%')
 
-              if ($percent -lt $threshold) {
-                Write-Host "  ❌ FAIL: Below ${threshold}% threshold" -ForegroundColor Red
-                $failedProjects += "$module (${percent}%)"
-              } else {
-                Write-Host "  ✅ PASS: Meets ${threshold}% threshold" -ForegroundColor Green
+              if ($percentMatches.Count -gt 0) {
+                $parsedProjects++
+                $percent = [int][math]::Floor([double]$percentMatches[$percentMatches.Count - 1].Groups[1].Value)
+
+                Write-Host "Checking module: '$module' - Coverage: ${percent}%"
+
+                if ($percent -lt $threshold) {
+                  Write-Host "  ❌ FAIL: Below ${threshold}% threshold" -ForegroundColor Red
+                  $failedProjects += "$module (${percent}%)"
+                } else {
+                  Write-Host "  ✅ PASS: Meets ${threshold}% threshold" -ForegroundColor Green
+                }
               }
             }
+          }
+
+          if ($parsedProjects -eq 0) {
+            Write-Host ""
+            Write-Host "==========================================" -ForegroundColor Red
+            Write-Host "❌ COVERAGE GATE FAILED" -ForegroundColor Red
+            Write-Host "==========================================" -ForegroundColor Red
+            Write-Host "No module coverage lines were parsed from CoverageReport/Summary.txt." -ForegroundColor Red
+            Write-Host ""
+            Write-Host "Stage 2a failed."
+            exit 1
           }
 
           if ($failedProjects.Count -gt 0) {
