@@ -49,7 +49,7 @@ public class ShuffleTests
     [Fact]
     public void Shuffle_with_empty_source_returns_empty()
     {
-        var source = new int[] { };
+        var source = Array.Empty<int>();
 
         var result = source.ToEnumerable().Shuffle();
 

@@ -3,7 +3,7 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 
 // ReSharper disable once InconsistentNaming
-internal static class IEnumerableExtensionTestHelper
+internal static class IEnumerableTestHelper
 {
     internal static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T>? source)
     {
