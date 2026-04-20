@@ -1,3 +1,4 @@
+using NoneExample;
 using Wolfgang.Extensions.IEnumerable;
 
 // None is the inverse of Any.
@@ -46,5 +47,3 @@ if (errors.None())
 {
     Console.WriteLine("No errors found — validation passed.");
 }
-
-internal record User(string Name, string Email, bool IsVerified);
