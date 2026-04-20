@@ -131,19 +131,7 @@ public static class IEnumerableExtensions
     /// </code>
     /// </example>
     public static bool None<T>(this IEnumerable<T>? source)
-    {
-        if (source == null)
-        {
-            throw new ArgumentNullException(nameof(source));
-        }
-
-        if (source is ICollection<T> s)
-        {
-            return s.Count == 0;
-        }
-
-        return !source.Any();
-    }
+        => source.IsEmpty();
 
 
     /// <summary>
