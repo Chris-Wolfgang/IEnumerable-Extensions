@@ -1,4 +1,3 @@
-using ForEachExample;
 using Wolfgang.Extensions.IEnumerable;
 
 // ForEach executes an action on each item in the enumerable.
@@ -36,3 +35,10 @@ users.ForEach(u => u.IsActive = true);
 
 Console.WriteLine("After activating all users:");
 users.ForEach(u => Console.WriteLine($"  {u.Name}: Active = {u.IsActive}"));
+
+internal class User
+{
+    public string Name { get; set; } = "";
+
+    public bool IsActive { get; set; }
+}
