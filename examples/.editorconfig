@@ -1,0 +1,12 @@
+# Example projects are intentionally single-file top-level programs with
+# inline supporting types to keep them approachable for users learning
+# the library. The rules below are not appropriate for that style.
+
+# MA0047 — Declare type in a namespace
+dotnet_diagnostic.MA0047.severity = none
+
+# MA0048 — File name must match type name
+dotnet_diagnostic.MA0048.severity = none
+
+# S3903 — Move type into a named namespace
+dotnet_diagnostic.S3903.severity = none
