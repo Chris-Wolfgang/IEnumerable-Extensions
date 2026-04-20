@@ -44,7 +44,7 @@ public class DoTests
     [Fact]
     public void Do_when_source_is_empty_executes_no_actions()
     {
-        var source = new int[] { };
+        var source = Array.Empty<int>();
         var observed = new List<int>();
 
         var result = source.ToEnumerable().Do(x => observed.Add(x)).ToList();

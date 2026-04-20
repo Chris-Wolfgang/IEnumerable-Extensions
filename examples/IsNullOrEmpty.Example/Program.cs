@@ -1,3 +1,4 @@
+using IsNullOrEmptyExample;
 using Wolfgang.Extensions.IEnumerable;
 
 // IsNullOrEmpty safely checks whether a sequence is null or contains no elements.
@@ -35,5 +36,3 @@ static void ProcessOrders(IEnumerable<Order>? orders)
     Console.WriteLine("Processing orders:");
     orders.ForEach(o => Console.WriteLine($"  {o.Id}: ${o.Amount}"));
 }
-
-internal record Order(string Id, decimal Amount);

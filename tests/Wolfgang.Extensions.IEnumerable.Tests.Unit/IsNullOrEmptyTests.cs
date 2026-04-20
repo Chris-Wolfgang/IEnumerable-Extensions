@@ -19,7 +19,7 @@ public class IsNullOrEmptyTests
     [Fact]
     public void IsNullOrEmpty_with_empty_source_returns_true()
     {
-        var source = new int[] { };
+        var source = Array.Empty<int>();
 
         var result = source.ToEnumerable().IsNullOrEmpty();
 

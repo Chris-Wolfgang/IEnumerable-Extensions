@@ -39,7 +39,7 @@ public class ForEachTests
     [Fact]
     public void ForEach_with_empty_enumerable_does_not_execute_action()
     {
-        var source = new int[] { };
+        var source = Array.Empty<int>();
         var result = new List<int>();
         source.ToEnumerable().ForEach(i => result.Add(i * 2));
         Assert.Empty(result);
