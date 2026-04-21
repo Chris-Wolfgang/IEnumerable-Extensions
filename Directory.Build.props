@@ -19,41 +19,12 @@
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)BannedSymbols.txt" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- Roslynator - Code quality and refactoring -->
-    <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    
-    <!-- AsyncFixer - Async/await best practices -->
-    <PackageReference Include="AsyncFixer" Version="2.1.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    
-    <!-- Microsoft Threading Analyzers - Thread safety -->
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    
-    <!-- BannedApiAnalyzers - Prevent usage of specific APIs -->
-    <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="4.14.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    
-    <!-- Meziantou - Comprehensive code quality -->
-    <PackageReference Include="Meziantou.Analyzer" Version="3.0.50">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-
-    <!-- SonarAnalyzer - Industry-standard analysis -->
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.21.0.135717">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+  <!--
+    Analyzer PackageReferences intentionally live in each .csproj instead of here.
+    Directory.Build.props is a CI-protected file — changes to it are overwritten with
+    the main-branch version before the build runs, so Dependabot bumps placed here
+    would never actually be tested. csproj files are not protected, so moving the
+    references there lets Dependabot update analyzer versions and have CI validate
+    the change.
+  -->
 </Project>
