@@ -3,7 +3,7 @@
 		<TargetFrameworks>net462;netstandard2.0;net8.0;net10.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
-		<Version>1.1.0</Version>
+		<Version>1.2.0</Version>
 		<Title>$(AssemblyName)</Title>
 		<Authors>Chris Wolfgang</Authors>
 		<Description>A collection of extension methods for types that implement IEnumerable</Description>
