@@ -60,6 +60,7 @@ public static class IEnumerableExtensions
     /// <returns>
     /// true if the source sequence contains no elements; otherwise, false.
     /// </returns>
+    /// <exception cref="ArgumentNullException">source is null.</exception>
     /// <example>
     /// <code>
     /// var items = new List&lt;string&gt;();
