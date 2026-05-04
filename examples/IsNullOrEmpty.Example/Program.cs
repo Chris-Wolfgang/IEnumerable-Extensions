@@ -20,7 +20,7 @@ Console.WriteLine($"Populated collection: {populatedCollection.IsNullOrEmpty()}"
 Console.WriteLine();
 
 // Practical example: guard clause in a method
-ProcessOrders(null);
+ProcessOrders(orders: null);
 ProcessOrders(Array.Empty<Order>());
 ProcessOrders(new[] { new Order("ORD-001", 29.99m), new Order("ORD-002", 49.99m) });
 
