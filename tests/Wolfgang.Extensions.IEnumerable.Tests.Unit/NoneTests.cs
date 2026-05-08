@@ -35,9 +35,7 @@ public class NoneTests
     [Fact]
     public void None_with_source_when_list_of_objects_is_empty_returns_true()
     {
-        var source = new Balloon[]
-        {
-        };
+        var source = Array.Empty<Balloon>();
 
         Assert.True(source.ToEnumerable().None());
     }
@@ -57,7 +55,7 @@ public class NoneTests
     [Fact]
     public void None_with_source_when_list_of_integers_contains_no_items_returns_true()
     {
-        var source = new int[] {};
+        var source = Array.Empty<int>();
 
         Assert.True(source.ToEnumerable().None());
     }
@@ -67,7 +65,7 @@ public class NoneTests
     [Fact]
     public void None_with_source_when_source_implements_ICollection_and_list_is_empty_uses_cast_short_circuit()
     {
-        var source = new int[] { };
+        var source = Array.Empty<int>();
 
         Assert.True(source.None());
     }
@@ -119,7 +117,7 @@ public class NoneTests
             new Balloon {Color = "Red"},
         };
 
-        Assert.False(source.ToEnumerable().None(b => b.Color == "Red"));
+        Assert.False(source.ToEnumerable().None(b => string.Equals(b.Color, "Red", StringComparison.Ordinal)));
     }
 
 
@@ -135,7 +133,7 @@ public class NoneTests
             new Balloon {Color = "Blue"},
         };
 
-        Assert.False(source.ToEnumerable().None(b => b.Color == "Red"));
+        Assert.False(source.ToEnumerable().None(b => string.Equals(b.Color, "Red", StringComparison.Ordinal)));
     }
 
 
@@ -151,7 +149,7 @@ public class NoneTests
             new Balloon {Color = "Blue"},
         };
 
-        Assert.True(source.ToEnumerable().None(b => b.Color == "Red"));
+        Assert.True(source.ToEnumerable().None(b => string.Equals(b.Color, "Red", StringComparison.Ordinal)));
     }
 
 

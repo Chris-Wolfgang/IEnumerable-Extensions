@@ -17,7 +17,7 @@ public class IsEmptyTests
     [Fact]
     public void IsEmpty_with_empty_source_returns_true()
     {
-        var source = new int[] { };
+        var source = Array.Empty<int>();
         var result = source.ToEnumerable().IsEmpty();
         Assert.True(result);
     }

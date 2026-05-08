@@ -28,6 +28,12 @@
     <Project Path="benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks.csproj" />
   </Folder>
   <Folder Name="/examples/">
+    <Project Path="examples/ForEach.Example/ForEach.Example.csproj" />
+    <Project Path="examples/Do.Example/Do.Example.csproj" />
+    <Project Path="examples/IsEmpty.Example/IsEmpty.Example.csproj" />
+    <Project Path="examples/IsNullOrEmpty.Example/IsNullOrEmpty.Example.csproj" />
+    <Project Path="examples/None.Example/None.Example.csproj" />
+    <Project Path="examples/Shuffle.Example/Shuffle.Example.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Wolfgang.Extensions.IEnumerable/Wolfgang.Extensions.IEnumerable.csproj" />
