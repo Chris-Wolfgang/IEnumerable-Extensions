@@ -18,7 +18,7 @@ public class NonePredicateBenchmarks
     [GlobalSetup]
     public void Setup() => _data = Enumerable.Range(0, Size).ToArray();
 
-    // Predicate that fails near the end (worst case for short-circuit)
+    // Predicate that matches near the end (near worst case for short-circuit)
     [Benchmark(Baseline = true)]
     public bool Linq_NotAny_LateMatch() => !_data.Any(x => x == Size - 1);
 

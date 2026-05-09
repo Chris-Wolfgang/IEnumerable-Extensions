@@ -32,16 +32,18 @@ public class DoBenchmarks
     }
 
     [Benchmark]
-    public void Do_Iterator()
+    public long Do_Iterator()
     {
         long sum = 0;
         _data.Do(x => sum += x).Consume(_consumer);
+        return sum;
     }
 
     [Benchmark]
-    public void Linq_Select_SideEffect()
+    public long Linq_Select_SideEffect()
     {
         long sum = 0;
         _data.Select(x => { sum += x; return x; }).Consume(_consumer);
+        return sum;
     }
 }
