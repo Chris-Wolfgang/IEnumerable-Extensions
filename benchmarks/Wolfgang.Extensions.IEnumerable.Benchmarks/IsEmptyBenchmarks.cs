@@ -4,7 +4,8 @@ namespace Wolfgang.Extensions.IEnumerable.Benchmarks;
 
 /// <summary>
 /// Compares IsEmpty / IsNullOrEmpty / None against the canonical LINQ
-/// <c>!source.Any()</c> idiom. Highlights the ICollection{T} fast path.
+/// <c>!source.Any()</c> idiom. Highlights the <see cref="ICollection{T}"/>
+/// fast path.
 /// </summary>
 [MemoryDiagnoser]
 [RankColumn]

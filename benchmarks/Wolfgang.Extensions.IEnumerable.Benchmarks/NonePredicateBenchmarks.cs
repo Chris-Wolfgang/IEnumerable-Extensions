@@ -4,7 +4,8 @@ namespace Wolfgang.Extensions.IEnumerable.Benchmarks;
 
 /// <summary>
 /// Compares <c>None(predicate)</c> against the canonical <c>!source.Any(predicate)</c>
-/// idiom. Should be a wash since None just delegates to !Any.
+/// idiom. Results are expected to be close, since None forwards to !Any after
+/// performing argument validation.
 /// </summary>
 [MemoryDiagnoser]
 [RankColumn]
