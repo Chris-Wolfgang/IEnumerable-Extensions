@@ -11,7 +11,6 @@ namespace Wolfgang.Extensions.IEnumerable.Benchmarks;
 public class ForEachBenchmarks
 {
     private List<int> _list = null!;
-    private int[] _array = null!;
     private IEnumerable<int> _listAsEnumerable = null!;
     private IEnumerable<int> _arrayAsEnumerable = null!;
     private IEnumerable<int> _yieldEnumerable = null!;
@@ -23,9 +22,8 @@ public class ForEachBenchmarks
     public void Setup()
     {
         _list = Enumerable.Range(0, Size).ToList();
-        _array = _list.ToArray();
         _listAsEnumerable = _list;
-        _arrayAsEnumerable = _array;
+        _arrayAsEnumerable = _list.ToArray();
         _yieldEnumerable = YieldRange(Size);
     }
 
