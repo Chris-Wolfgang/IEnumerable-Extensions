@@ -52,10 +52,28 @@ public class IsEmptyBenchmarks
     // ----- Yield enumerables (no ICollection fast path) -----
 
     [Benchmark]
+    public bool Linq_NotAny_EmptyYield() => !_emptyYield.Any();
+
+    [Benchmark]
     public bool IsEmpty_EmptyYield() => _emptyYield.IsEmpty();
 
     [Benchmark]
+    public bool IsNullOrEmpty_EmptyYield() => _emptyYield.IsNullOrEmpty();
+
+    [Benchmark]
+    public bool None_EmptyYield() => _emptyYield.None();
+
+    [Benchmark]
+    public bool Linq_NotAny_PopulatedYield() => !_populatedYield.Any();
+
+    [Benchmark]
     public bool IsEmpty_PopulatedYield() => _populatedYield.IsEmpty();
+
+    [Benchmark]
+    public bool IsNullOrEmpty_PopulatedYield() => _populatedYield.IsNullOrEmpty();
+
+    [Benchmark]
+    public bool None_PopulatedYield() => _populatedYield.None();
 
     private static IEnumerable<int> YieldRange(int count)
     {
