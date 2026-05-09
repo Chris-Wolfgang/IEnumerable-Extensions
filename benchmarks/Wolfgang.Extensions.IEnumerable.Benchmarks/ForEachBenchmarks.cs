@@ -12,6 +12,8 @@ public class ForEachBenchmarks
 {
     private List<int> _list = null!;
     private int[] _array = null!;
+    private IEnumerable<int> _listAsEnumerable = null!;
+    private IEnumerable<int> _arrayAsEnumerable = null!;
     private IEnumerable<int> _yieldEnumerable = null!;
 
     [Params(100, 10_000, 1_000_000)]
@@ -22,6 +24,8 @@ public class ForEachBenchmarks
     {
         _list = Enumerable.Range(0, Size).ToList();
         _array = _list.ToArray();
+        _listAsEnumerable = _list;
+        _arrayAsEnumerable = _array;
         _yieldEnumerable = YieldRange(Size);
     }
 
@@ -36,19 +40,23 @@ public class ForEachBenchmarks
         return sum;
     }
 
+    // Calls bind through IEnumerable<int> so the extension method
+    // (and its List<T> fast-path dispatch) is actually invoked, rather
+    // than the BCL List<T>.ForEach instance method.
+
     [Benchmark]
-    public long Extension_OnList()
+    public long Extension_OnListAsEnumerable()
     {
         long sum = 0;
-        _list.ForEach(i => sum += i);
+        _listAsEnumerable.ForEach(i => sum += i);
         return sum;
     }
 
     [Benchmark]
-    public long Extension_OnArray()
+    public long Extension_OnArrayAsEnumerable()
     {
         long sum = 0;
-        _array.ForEach(i => sum += i);
+        _arrayAsEnumerable.ForEach(i => sum += i);
         return sum;
     }
 
@@ -57,6 +65,14 @@ public class ForEachBenchmarks
     {
         long sum = 0;
         _yieldEnumerable.ForEach(i => sum += i);
+        return sum;
+    }
+
+    [Benchmark]
+    public long Bcl_ListForEach()
+    {
+        long sum = 0;
+        _list.ForEach(i => sum += i);
         return sum;
     }
 
