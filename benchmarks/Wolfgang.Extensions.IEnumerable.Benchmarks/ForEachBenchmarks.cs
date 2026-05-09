@@ -38,9 +38,9 @@ public class ForEachBenchmarks
         return sum;
     }
 
-    // Calls bind through IEnumerable<int> so the extension method
-    // (and its List<T> fast-path dispatch) is actually invoked, rather
-    // than the BCL List<T>.ForEach instance method.
+    // The following benchmarks bind the call through IEnumerable<int> so
+    // the extension method (and its List<T> fast-path dispatch) is actually
+    // invoked, rather than the BCL List<T>.ForEach instance method.
 
     [Benchmark]
     public long Extension_OnListAsEnumerable()
