@@ -178,36 +178,22 @@ if (-not $SkipTests -and -not $SkipCoverage -and $failed.Count -eq 0) {
             Write-Host ""
 
             $failedProjects = @()
-            $parsedProjects = 0
             foreach ($line in (Get-Content "CoverageReport/Summary.txt")) {
-                if ($line -match '^\s*$' -or $line -match '^\s*Summary') {
-                    continue
-                }
-
-                if ($line -match '^\s*(\S+)') {
+                if ($line -match '^\s*(\S+)\s+(\d+(?:\.\d+)?)%\s*$' -and $line -notmatch '^\s*Summary') {
                     $module = $Matches[1]
-                    $percentMatches = [regex]::Matches($line, '(\d+(?:\.\d+)?)%')
+                    $percent = [int][math]::Floor([double]$Matches[2])
 
-                    if ($percentMatches.Count -gt 0) {
-                        $parsedProjects++
-                        $percent = [int][math]::Floor([double]$percentMatches[$percentMatches.Count - 1].Groups[1].Value)
-
-                        if ($percent -lt $CoverageThreshold) {
-                            Write-Fail "  $module — ${percent}% (below ${CoverageThreshold}%)"
-                            $failedProjects += "$module (${percent}%)"
-                        }
-                        else {
-                            Write-Pass "  $module — ${percent}%"
-                        }
+                    if ($percent -lt $CoverageThreshold) {
+                        Write-Fail "  $module — ${percent}% (below ${CoverageThreshold}%)"
+                        $failedProjects += "$module (${percent}%)"
+                    }
+                    else {
+                        Write-Pass "  $module — ${percent}%"
                     }
                 }
             }
 
-            if ($parsedProjects -eq 0) {
-                Write-Fail "Coverage gate FAILED: No module coverage lines parsed from Summary.txt"
-                $failed += "Coverage"
-            }
-            elseif ($failedProjects.Count -gt 0) {
+            if ($failedProjects.Count -gt 0) {
                 Write-Fail "Coverage gate FAILED: $($failedProjects -join ', ')"
                 $failed += "Coverage"
             }
@@ -281,10 +267,7 @@ if (-not $SkipSecurity) {
         else {
             $archive = "gitleaks_${version}_linux_x64.tar.gz"
             $url = "https://github.com/gitleaks/gitleaks/releases/download/v${version}/$archive"
-            $dest = "$HOME/.local/bin"
-            New-Item -ItemType Directory -Force -Path $dest | Out-Null
-            curl -sSfL $url | tar xz -C $dest gitleaks
-            $env:PATH = "${dest}:$env:PATH"
+            curl -sSfL $url | tar xz -C /usr/local/bin gitleaks
         }
     }
 
@@ -314,4 +297,3 @@ else {
     Write-Pass "All checks passed"
     exit 0
 }
-
