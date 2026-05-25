@@ -5,7 +5,6 @@
 		<Version>1.2.1</Version>
 		<Title>$(AssemblyName)</Title>
 		<Description>A collection of extension methods for types that implement IEnumerable</Description>
-		<Copyright>Copyright 2026 Chris Wolfgang </Copyright>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Wolfgang.Extensions.IEnumerable</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<AssemblyVersion>1.0.0</AssemblyVersion>
