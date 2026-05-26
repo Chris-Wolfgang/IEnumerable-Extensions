@@ -9,6 +9,7 @@
 		<Description>A collection of extension methods for types that implement IEnumerable</Description>
 		<Copyright>Copyright 2026 Chris Wolfgang </Copyright>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Wolfgang.Extensions.IEnumerable</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Chris-Wolfgang/IEnumerable-Extensions.git</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
