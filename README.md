@@ -1,6 +1,6 @@
 # Wolfgang.Extensions.IEnumerable
 
-A collection of extension methods for `IEnumerable<T>` in .Net
+A collection of extension methods for `IEnumerable<T>` in .NET.
 
 [![NuGet](https://img.shields.io/nuget/v/Wolfgang.Extensions.IEnumerable.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Wolfgang.Extensions.IEnumerable)
 [![NuGet downloads](https://img.shields.io/nuget/dt/Wolfgang.Extensions.IEnumerable.svg?logo=nuget&label=downloads)](https://www.nuget.org/packages/Wolfgang.Extensions.IEnumerable)
@@ -61,8 +61,9 @@ items.None();                                     // false (has items)
 var shuffled = items.Shuffle().ToList();          // random order (Fisher-Yates)
 ```
 
-All methods are pure with respect to the input sequence: they do not mutate
-the source. Only `IsNullOrEmpty` accepts a null source (returns `true`); every
+None of these methods mutate the source sequence — `ForEach` and `Do` invoke
+your `Action<T>` for its side effects but never modify the upstream items
+themselves. Only `IsNullOrEmpty` accepts a null source (returns `true`); every
 other method throws `ArgumentNullException` when `source` is null. Methods
 that take an `action` / `predicate` also throw on a null callback.
 
