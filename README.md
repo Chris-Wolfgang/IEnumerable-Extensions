@@ -54,7 +54,7 @@ var doubled = items
     .ToList();
 
 items.IsEmpty();                                  // false
-((int[]?)null).IsNullOrEmpty();                   // true
+((int[]?)null).IsNullOrEmpty();                   // true (only IsNullOrEmpty accepts null)
 items.None(x => x > 10);                          // true
 items.None();                                     // false (has items)
 
@@ -62,8 +62,9 @@ var shuffled = items.Shuffle().ToList();          // random order (Fisher-Yates)
 ```
 
 All methods are pure with respect to the input sequence: they do not mutate
-the source. `ForEach` / `IsEmpty` / `IsNullOrEmpty` / `None` accept `null`
-sources (treated as empty / no-op). `Shuffle` requires a non-null source.
+the source. Only `IsNullOrEmpty` accepts a null source (returns `true`); every
+other method throws `ArgumentNullException` when `source` is null. Methods
+that take an `action` / `predicate` also throw on a null callback.
 
 ---
 
@@ -72,7 +73,7 @@ sources (treated as empty / no-op). `Shuffle` requires a non-null source.
 ### Methods
 | Method | Description |
 |--------|-------------|
-| `ForEach(Action<T>)` | Eagerly invokes an action for each item. Null source is a no-op. |
+| `ForEach(Action<T>)` | Eagerly invokes an action for each item. Throws `ArgumentNullException` if `source` or `action` is null. |
 | `Do(Action<T>)` | Lazy variant of `ForEach` — yields each item after invoking the action. |
 | `IsEmpty()` | Returns `true` when the sequence contains no elements. |
 | `IsNullOrEmpty()` | Returns `true` when the sequence is `null` OR contains no elements. |
@@ -95,8 +96,8 @@ var pipeline = new[] { 1, 2, 3 }
 
 // Emptiness
 new int[0].IsEmpty();                                // true
-((IEnumerable<int>?)null).IsNullOrEmpty();           // true
-((IEnumerable<int>?)null).IsEmpty();                 // true (null treated as empty)
+((IEnumerable<int>?)null).IsNullOrEmpty();           // true (null-tolerant)
+// ((IEnumerable<int>?)null).IsEmpty();              // throws ArgumentNullException
 
 // None
 new[] { 1, 2, 3 }.None();                            // false

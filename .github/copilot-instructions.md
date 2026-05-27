@@ -18,8 +18,10 @@
 - `Shuffle()` — returns a new sequence in random order using Fisher-Yates with a thread-safe RNG
 
 ## Important Notes
-- `ForEach` / `IsEmpty` / `IsNullOrEmpty` / `None` accept `null` sources (treated as empty / no-op)
-- `Shuffle` requires a non-null source and materializes the input before shuffling
+- All methods **except `IsNullOrEmpty`** throw `ArgumentNullException` when `source` is null. Only `IsNullOrEmpty` returns `true` for a null source.
+- `None`, `Do`, `ForEach`, `Shuffle` also throw `ArgumentNullException` when their `action` / `predicate` argument is null.
+- `Shuffle` materializes the input to a `List<T>` before shuffling.
+- `ForEach` has a fast path for `List<T>` (delegates to `List<T>.ForEach`); `IsEmpty` / `IsNullOrEmpty` have a fast path for `ICollection<T>` (uses `Count` without enumerating).
 - Public API is tracked by `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt` when the analyzer baseline is activated — additions surface as RS0016 at compile time
 
 ## Code Style
