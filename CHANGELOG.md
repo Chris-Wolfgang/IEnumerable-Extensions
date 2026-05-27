@@ -23,8 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `Do()` extension method as an alias / mirror of `ForEach()` to match
-  the naming used in `IAsyncEnumerable-Extensions`, plus example
+- `Do()` extension method — a lazy passthrough side-effect operator
+  (returns `IEnumerable<T>`, yielding each item after invoking the
+  action), complementing the existing eager void-returning `ForEach()`.
+  Naming matches `IAsyncEnumerable-Extensions`. Includes an example
   project demonstrating side-effect usage.
 
 ### Changed
