@@ -5,7 +5,6 @@
 		<!-- Benchmark targets net8.0 only because it uses Random.Shared (requires .NET 6+) -->
 		<TargetFramework>net8.0</TargetFramework>
 		<LangVersion>14</LangVersion>
-		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
