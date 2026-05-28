@@ -6,8 +6,8 @@
 		<Title>$(AssemblyName)</Title>
 		<Description>A collection of extension methods for types that implement IEnumerable</Description>
 		<PackageProjectUrl>https://github.com/Chris-Wolfgang/Wolfgang.Extensions.IEnumerable</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Chris-Wolfgang/IEnumerable-Extensions.git</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
