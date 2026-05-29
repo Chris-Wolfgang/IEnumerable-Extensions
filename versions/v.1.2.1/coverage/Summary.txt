@@ -1,0 +1,23 @@
+Summary
+  Generated on: 5/29/2026 - 8:34:27 PM
+  Coverage date: 5/29/2026 - 8:34:25 PM
+  Parser: Cobertura
+  Assemblies: 1
+  Classes: 1
+  Files: 1
+  Line coverage: 100%
+  Covered lines: 46
+  Uncovered lines: 0
+  Coverable lines: 46
+  Total lines: 258
+  Branch coverage: 100% (30 of 30)
+  Covered branches: 30
+  Total branches: 30
+  Method coverage: 100% (9 of 9)
+  Full method coverage: 100% (9 of 9)
+  Covered methods: 9
+  Fully covered methods: 9
+  Total methods: 9
+
+Wolfgang.Extensions.IEnumerable                            100%
+  Wolfgang.Extensions.IEnumerable.IEnumerableExtensions    100%
