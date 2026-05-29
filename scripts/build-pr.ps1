@@ -204,8 +204,15 @@ if (-not $SkipTests -and -not $SkipCoverage -and $failed.Count -eq 0) {
             Write-Host ""
 
             $failedProjects = @()
+            $matchedCount = 0
             foreach ($line in (Get-Content "CoverageReport/Summary.txt")) {
-                if ($line -match '^\s*(\S+)\s+(\d+(?:\.\d+)?)%\s*$' -and $line -notmatch '^\s*Summary') {
+                # Greedy .* before the final percent so multi-column Summary.txt
+                # rows (line% / branch% / method%) capture the LAST column rather
+                # than misreading the FIRST digit of an early column. Matches the
+                # Stage 2 (Windows) regex on pr.yaml. The trailing `\s*$` anchor
+                # still ensures we only match data rows that end with a percent.
+                if ($line -match '^\s*(\S+)\s+.*?(\d+(?:\.\d+)?)%\s*$' -and $line -notmatch '^\s*Summary') {
+                    $matchedCount++
                     $module = $Matches[1]
                     $percent = [int][math]::Floor([double]$Matches[2])
 
@@ -219,12 +226,21 @@ if (-not $SkipTests -and -not $SkipCoverage -and $failed.Count -eq 0) {
                 }
             }
 
-            if ($failedProjects.Count -gt 0) {
+            if ($matchedCount -eq 0) {
+                # Without this guard, a Summary.txt that exists but whose format
+                # has drifted (extra columns, header text mismatch, etc.) would
+                # silently report "Coverage gate passed" with zero modules — the
+                # exact silent-success failure that the CI workflow's Stage 1
+                # Linux job already guards against. Fail loudly so local matches CI.
+                Write-Fail "Coverage gate FAILED: no module coverage rows matched in Summary.txt — parser regex likely out of sync with ReportGenerator output format."
+                $failed += "Coverage"
+            }
+            elseif ($failedProjects.Count -gt 0) {
                 Write-Fail "Coverage gate FAILED: $($failedProjects -join ', ')"
                 $failed += "Coverage"
             }
             else {
-                Write-Pass "Coverage gate passed"
+                Write-Pass "Coverage gate passed ($matchedCount module(s) at or above ${CoverageThreshold}%)"
             }
         }
         else {
