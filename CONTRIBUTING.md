@@ -202,7 +202,7 @@ Key style rules enforced:
 - **Final newline:** Yes
 - **Braces:** New line style (Allman)
 - **Naming:** PascalCase for public members, camelCase for parameters/locals
-- **File-scoped namespaces:** Required in C# 10+
+- **File-scoped namespaces:** Recommended in C# 10+ (`.editorconfig` sets `csharp_style_namespace_declarations = file_scoped:suggestion`, surfacing as an IDE suggestion rather than a build break)
 - **`var` preferences:** Use for built-in types and when type is obvious
 - **Null checks:** Prefer pattern matching (`is null`, `is not null`)
 

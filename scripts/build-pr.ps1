@@ -311,7 +311,13 @@ if (-not $SkipSecurity) {
             $env:PATH = "$dest;$env:PATH"
         }
         else {
-            $archive = "gitleaks_${version}_linux_x64.tar.gz"
+            # Detect macOS vs Linux + CPU arch so the right gitleaks release
+            # tarball is downloaded. PowerShell 7+ exposes $IsMacOS / $IsLinux
+            # automatic variables; the older $IsLinux check below covers Linux
+            # fallthrough. RuntimeInformation gives us the CPU arch on either.
+            $arch = if ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture -eq 'Arm64') { 'arm64' } else { 'x64' }
+            $os = if ($IsMacOS) { 'darwin' } else { 'linux' }
+            $archive = "gitleaks_${version}_${os}_${arch}.tar.gz"
             $url = "https://github.com/gitleaks/gitleaks/releases/download/v${version}/$archive"
             # Install to a user-writable location instead of /usr/local/bin
             # (which would require sudo for most local dev shells). $HOME/.local/bin
