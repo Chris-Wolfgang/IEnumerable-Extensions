@@ -118,6 +118,7 @@ jobs:
             "Directory.Build.props"
             "Directory.Build.targets"
             "BannedSymbols.txt"
+            "coverlet.runsettings"
             "*.globalconfig"
             "*.ruleset"
             ".github/workflows/*.yml"
@@ -192,6 +193,7 @@ jobs:
             "Directory.Build.props"
             "Directory.Build.targets"
             "BannedSymbols.txt"
+            "coverlet.runsettings"
           )
           
           for config_file in "${exact_files[@]}"; do
@@ -273,6 +275,7 @@ jobs:
             "Directory.Build.props"
             "Directory.Build.targets"
             "BannedSymbols.txt"
+            "coverlet.runsettings"
             "*.globalconfig"
             "*.ruleset"
             ".github/workflows/*.yml"
@@ -674,7 +677,8 @@ jobs:
             ".editorconfig",
             "Directory.Build.props",
             "Directory.Build.targets",
-            "BannedSymbols.txt"
+            "BannedSymbols.txt",
+            "coverlet.runsettings"
           )
           
           # Copy each configuration file from main branch if it exists
@@ -985,6 +989,7 @@ jobs:
             "Directory.Build.props"
             "Directory.Build.targets"
             "BannedSymbols.txt"
+            "coverlet.runsettings"
             "*.globalconfig"
             "*.ruleset"
             ".github/workflows/*.yml"
@@ -1372,6 +1377,7 @@ jobs:
             "Directory.Build.props"
             "Directory.Build.targets"
             "BannedSymbols.txt"
+            "coverlet.runsettings"
             "*.globalconfig"
             "*.ruleset"
             ".github/workflows/*.yml"
