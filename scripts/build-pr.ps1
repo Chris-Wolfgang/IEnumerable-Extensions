@@ -84,7 +84,17 @@ if (-not $SkipTests -and $failed.Count -eq 0) {
     $testProjects = @(Get-ChildItem -Path './tests' -Recurse -File -Include '*.csproj', '*.vbproj', '*.fsproj' -ErrorAction SilentlyContinue)
 
     if ($testProjects.Count -eq 0) {
-        Write-Host "No test projects found in ./tests — skipping"
+        # If ./src has projects, fail — silent skip would diverge from CI's
+        # strict gate. If neither ./src nor ./tests has projects (template-pack
+        # / in-dev repos), the skip is legitimate.
+        $srcHasProjects = @(Get-ChildItem -Path './src' -Recurse -File -Include '*.csproj','*.vbproj','*.fsproj' -ErrorAction SilentlyContinue).Count -gt 0
+        if ($srcHasProjects) {
+            Write-Fail "./tests has no test projects but ./src contains projects — refusing to silently skip the coverage gate."
+            $failed += "Tests"
+        }
+        else {
+            Write-Host "No test projects found in ./tests and no ./src projects — skipping (template-pack / in-dev shape)."
+        }
     }
     else {
         foreach ($testProj in $testProjects) {
@@ -164,7 +174,23 @@ if (-not $SkipTests -and -not $SkipCoverage -and $failed.Count -eq 0) {
         $rgPath = Get-Command reportgenerator -ErrorAction SilentlyContinue
         if (-not $rgPath) {
             Write-Host "Installing ReportGenerator..."
-            dotnet tool install -g dotnet-reportgenerator-globaltool
+            dotnet tool update -g dotnet-reportgenerator-globaltool 2>$null
+            if ($LASTEXITCODE -ne 0) { dotnet tool install -g dotnet-reportgenerator-globaltool }
+            # Ensure global tools dir is on PATH for this session. The .NET
+            # installer normally adds it to the user's profile, but a fresh
+            # shell or a pwsh-invoked-from-script session may not have it yet.
+            $globalToolsDir = if ($IsWindows -or $env:OS -eq 'Windows_NT') {
+                Join-Path $env:USERPROFILE '.dotnet\tools'
+            } else {
+                Join-Path $HOME '.dotnet/tools'
+            }
+            if (Test-Path $globalToolsDir -PathType Container) {
+                $sep = [IO.Path]::PathSeparator
+                $pathSegments = $env:PATH -split [regex]::Escape($sep)
+                if ($pathSegments -notcontains $globalToolsDir) {
+                    $env:PATH = "$globalToolsDir$sep$env:PATH"
+                }
+            }
         }
 
         reportgenerator `
@@ -178,33 +204,35 @@ if (-not $SkipTests -and -not $SkipCoverage -and $failed.Count -eq 0) {
             Write-Host ""
 
             $failedProjects = @()
-            $parsedProjects = 0
+            $matchedCount = 0
             foreach ($line in (Get-Content "CoverageReport/Summary.txt")) {
-                if ($line -match '^\s*$' -or $line -match '^\s*Summary') {
-                    continue
-                }
-
-                if ($line -match '^\s*(\S+)') {
+                # Greedy .* before the final percent so multi-column Summary.txt
+                # rows (line% / branch% / method%) capture the LAST column rather
+                # than misreading the FIRST digit of an early column. Matches the
+                # Stage 2 (Windows) regex on pr.yaml. The trailing `\s*$` anchor
+                # still ensures we only match data rows that end with a percent.
+                if ($line -match '^\s*(\S+)\s+.*?(\d+(?:\.\d+)?)%\s*$' -and $line -notmatch '^\s*Summary') {
+                    $matchedCount++
                     $module = $Matches[1]
-                    $percentMatches = [regex]::Matches($line, '(\d+(?:\.\d+)?)%')
+                    $percent = [int][math]::Floor([double]$Matches[2])
 
-                    if ($percentMatches.Count -gt 0) {
-                        $parsedProjects++
-                        $percent = [int][math]::Floor([double]$percentMatches[$percentMatches.Count - 1].Groups[1].Value)
-
-                        if ($percent -lt $CoverageThreshold) {
-                            Write-Fail "  $module — ${percent}% (below ${CoverageThreshold}%)"
-                            $failedProjects += "$module (${percent}%)"
-                        }
-                        else {
-                            Write-Pass "  $module — ${percent}%"
-                        }
+                    if ($percent -lt $CoverageThreshold) {
+                        Write-Fail "  $module — ${percent}% (below ${CoverageThreshold}%)"
+                        $failedProjects += "$module (${percent}%)"
+                    }
+                    else {
+                        Write-Pass "  $module — ${percent}%"
                     }
                 }
             }
 
-            if ($parsedProjects -eq 0) {
-                Write-Fail "Coverage gate FAILED: No module coverage lines parsed from Summary.txt"
+            if ($matchedCount -eq 0) {
+                # Without this guard, a Summary.txt that exists but whose format
+                # has drifted (extra columns, header text mismatch, etc.) would
+                # silently report "Coverage gate passed" with zero modules — the
+                # exact silent-success failure that the CI workflow's Stage 1
+                # Linux job already guards against. Fail loudly so local matches CI.
+                Write-Fail "Coverage gate FAILED: no module coverage rows matched in Summary.txt — parser regex likely out of sync with ReportGenerator output format."
                 $failed += "Coverage"
             }
             elseif ($failedProjects.Count -gt 0) {
@@ -212,11 +240,15 @@ if (-not $SkipTests -and -not $SkipCoverage -and $failed.Count -eq 0) {
                 $failed += "Coverage"
             }
             else {
-                Write-Pass "Coverage gate passed"
+                Write-Pass "Coverage gate passed ($matchedCount module(s) at or above ${CoverageThreshold}%)"
             }
         }
         else {
-            Write-Host "Coverage report not generated — skipping threshold check"
+            # Diverged from pr.yaml behavior in the past — that would let a local
+            # "All checks passed" silently hide ReportGenerator failures while CI
+            # rejected the same situation. Fail loudly here too, so local matches CI.
+            Write-Fail "Coverage report not generated (CoverageReport/Summary.txt missing) — ReportGenerator likely failed."
+            $failed += "Coverage"
         }
     }
 }
@@ -273,18 +305,29 @@ if (-not $SkipSecurity) {
             $dest = Join-Path $env:LOCALAPPDATA "gitleaks"
             New-Item -ItemType Directory -Force -Path $dest | Out-Null
             $zip = Join-Path $env:TEMP $archive
-            Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing
+            Invoke-WebRequest -Uri $url -OutFile $zip
             Expand-Archive -Path $zip -DestinationPath $dest -Force
             Remove-Item $zip -ErrorAction SilentlyContinue
             $env:PATH = "$dest;$env:PATH"
         }
         else {
-            $archive = "gitleaks_${version}_linux_x64.tar.gz"
+            # Detect macOS vs Linux + CPU arch so the right gitleaks release
+            # tarball is downloaded. PowerShell 7+ exposes $IsMacOS / $IsLinux
+            # automatic variables; the older $IsLinux check below covers Linux
+            # fallthrough. RuntimeInformation gives us the CPU arch on either.
+            $arch = if ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture -eq 'Arm64') { 'arm64' } else { 'x64' }
+            $os = if ($IsMacOS) { 'darwin' } else { 'linux' }
+            $archive = "gitleaks_${version}_${os}_${arch}.tar.gz"
             $url = "https://github.com/gitleaks/gitleaks/releases/download/v${version}/$archive"
-            $dest = "$HOME/.local/bin"
-            New-Item -ItemType Directory -Force -Path $dest | Out-Null
-            curl -sSfL $url | tar xz -C $dest gitleaks
-            $env:PATH = "${dest}:$env:PATH"
+            # Install to a user-writable location instead of /usr/local/bin
+            # (which would require sudo for most local dev shells). $HOME/.local/bin
+            # is on PATH by default on most Linux distros and macOS; if not, prepend it.
+            $localBin = Join-Path $HOME ".local/bin"
+            New-Item -ItemType Directory -Force -Path $localBin | Out-Null
+            curl -sSfL $url | tar xz -C $localBin gitleaks
+            if (-not ($env:PATH -split [IO.Path]::PathSeparator | Where-Object { $_ -eq $localBin })) {
+                $env:PATH = "$localBin$([IO.Path]::PathSeparator)$env:PATH"
+            }
         }
     }
 
@@ -314,4 +357,3 @@ else {
     Write-Pass "All checks passed"
     exit 0
 }
-

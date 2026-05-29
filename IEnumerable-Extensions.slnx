@@ -1,12 +1,15 @@
 <Solution>
   <Folder Name="/.root/">
     <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
     <File Path=".gitignore" />
+    <File Path="CHANGELOG.md" />
     <File Path="CODE_OF_CONDUCT.md" />
     <File Path="CONTRIBUTING.md" />
+    <File Path="Directory.Build.props" />
     <File Path="LICENSE" />
     <File Path="README.md" />
-    <File Path="SETUP.md" />
+    <File Path="SECURITY.md" />
   </Folder>
   <Folder Name="/.root/.github/">
     <File Path=".github/CODEOWNERS" />
@@ -15,21 +18,25 @@
     <File Path=".github/pull_request_template.md" />
   </Folder>
   <Folder Name="/.root/.github/workflows/">
-    <File Path=".github/workflows/create-labels.yaml" />
+    <File Path=".github/workflows/benchmarks.yaml" />
+    <File Path=".github/workflows/build-all-versions.yaml" />
+    <File Path=".github/workflows/codeql.yaml" />
     <File Path=".github/workflows/docfx.yaml" />
     <File Path=".github/workflows/pr.yaml" />
     <File Path=".github/workflows/release.yaml" />
+    <File Path=".github/workflows/stryker.yaml" />
   </Folder>
   <Folder Name="/.root/ISSUE_TEMPLATE/">
     <File Path=".github/ISSUE_TEMPLATE/BUG_REPORT.yaml" />
-    <File Path=".github/ISSUE_TEMPLATE/feature_request.md" />
+    <File Path=".github/ISSUE_TEMPLATE/feature_request.yaml" />
+    <File Path=".github/ISSUE_TEMPLATE/maintenance-task.yaml" />
   </Folder>
   <Folder Name="/benchmark/">
     <Project Path="benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks.csproj" />
   </Folder>
   <Folder Name="/examples/">
-    <Project Path="examples/ForEach.Example/ForEach.Example.csproj" />
     <Project Path="examples/Do.Example/Do.Example.csproj" />
+    <Project Path="examples/ForEach.Example/ForEach.Example.csproj" />
     <Project Path="examples/IsEmpty.Example/IsEmpty.Example.csproj" />
     <Project Path="examples/IsNullOrEmpty.Example/IsNullOrEmpty.Example.csproj" />
     <Project Path="examples/None.Example/None.Example.csproj" />
