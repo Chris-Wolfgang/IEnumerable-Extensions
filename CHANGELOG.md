@@ -19,6 +19,87 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.3.0] - 2026-05-30
+
+### Added
+
+- `ToEnumerable<T>()` extension method on `IEnumerable<T>` — wraps the
+  source in a lazy iterator so the returned sequence is guaranteed to
+  NOT be a more concrete type (e.g., `List<T>`, `ICollection<T>`, array).
+  Useful in tests and production code that wants to defeat type-checks
+  for fast paths that pattern-match on the runtime type of the source.
+  Throws `ArgumentNullException` on a null source (consistent with the
+  other public methods in this library).
+
+### Changed
+
+- Internal test helper `IEnumerableTestHelper.ToEnumerable` removed —
+  the 27 in-tree call sites now resolve to the new public
+  `IEnumerableExtensions.ToEnumerable<T>` instead. No behavior change
+  for tests beyond stricter null-handling (the internal helper silently
+  yielded an empty sequence on null source; the public version throws
+  `ArgumentNullException`, matching the rest of the library's API
+  contract). No tests passed null into the helper.
+
+## [1.2.1] - 2026-05-29
+
+### Fixed
+
+- **Binding stability on .NET Framework consumers.** Restored
+  `<AssemblyVersion>1.0.0.0</AssemblyVersion>` (pinned) + added explicit
+  `<FileVersion>$(Version).0</FileVersion>` to the src csproj. The v1.2.0
+  pattern of letting the SDK derive AssemblyVersion from `<Version>`
+  would have changed the binding identity on every minor/patch bump,
+  breaking .NET Framework consumers without a binding redirect. v1.2.1
+  pins AssemblyVersion to `1.0.0.0` for the entire 1.x line; future
+  bumps only change it on a deliberate breaking API change.
+- `PackageProjectUrl` corrected — previously pointed at
+  `Chris-Wolfgang/Wolfgang.Extensions.IEnumerable` (404), now points at
+  `Chris-Wolfgang/IEnumerable-Extensions` (the actual repository).
+
+### Added
+
+- `<PackageTags>` populated for NuGet search discoverability.
+- `PublicApiAnalyzers` baseline activated with the v1.2.0 public surface
+  captured in `PublicAPI.Shipped.txt`. Future surface changes surface
+  as RS0016 / RS0017 at compile time as a breaking-change review gate.
+- BenchmarkDotNet baseline project + `benchmarks.yaml` workflow
+  publishing trend charts to gh-pages `/dev/bench/`.
+- Stryker mutation-testing workflow (`stryker.yaml`).
+- D6 / D8 docs-build verification + previous-version preservation
+  guards in `docfx.yaml`.
+- T1 coverage report deployed to docs pages.
+- S1 CodeQL `security-extended` query pack.
+
+### Changed
+
+- CHANGELOG seeded with v1.0.0 / v1.1.0 / v1.2.0 entries from git tag history.
+- README rewritten with Quick Start, badges, examples, methods table.
+- `.github/copilot-instructions.md` rewritten from generic template
+  scaffolding to IEnumerable-specific guidance.
+- `IEnumerable-Extensions.slnx` cleaned up — stale `create-labels.yaml`
+  reference dropped, new template-tracked workflows + root files added,
+  `feature_request.md` renamed to `.yaml` to match repo state.
+
+### Fixed
+
+- README falsely claimed `ForEach` / `IsEmpty` / `None` accept null
+  sources (treated as empty / no-op). Only `IsNullOrEmpty` is null-tolerant;
+  every other method throws `ArgumentNullException`.
+- `Shuffle` test was flaky — replaced `Assert.NotEqual(source, actualResult)`
+  (1-in-3.6M flake rate via 10!) with multiset equality + a separate
+  statistical test on a 100-element input (false-negative rate 1/100! ≈ 10⁻¹⁵⁸).
+- `Shuffle_does_not_change_the_order_of_the_original_list` was vacuous
+  — replaced with `Shuffle_does_not_mutate_the_input_list_in_place`
+  that passes a real `List<int>` so an in-place implementation that
+  forgot to copy would actually be observable.
+- `build-pr.ps1` coverage gate hardened against silent-success when the
+  parser regex matches zero modules (matches the pr.yaml Stage 1/2
+  matched-count guard).
+- `build-pr.ps1` gitleaks installer now detects macOS + CPU arch and
+  downloads the right tarball (`darwin_arm64` / `darwin_x64` /
+  `linux_arm64` / `linux_x64`) — previously always fetched `linux_x64`.
+
 ## [1.2.0] - 2026-04-27
 
 ### Changed
@@ -62,7 +143,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fisher-Yates `Shuffle` implementation with thread-safe RNG.
 - Application and NuGet package icons.
 
-[Unreleased]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.2.1...v1.3.0
+[1.2.1]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/releases/tag/v1.0.0
