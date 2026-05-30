@@ -255,4 +255,51 @@ public static class IEnumerableExtensions
     private static Random CreateRandom()
         => new(unchecked((Environment.TickCount * 31) + Thread.CurrentThread.ManagedThreadId));
 #endif
+
+
+
+    /// <summary>
+    /// Wraps an <see cref="IEnumerable{T}"/> in a lazy iterator so the returned
+    /// sequence is guaranteed to NOT be a more concrete type (e.g., <see cref="List{T}"/>,
+    /// <see cref="System.Collections.Generic.ICollection{T}"/>, array). Useful in tests and
+    /// in production code that wants to defeat type-checks for fast paths that
+    /// pattern-match on the runtime type of the source.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements of source.</typeparam>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> to wrap.</param>
+    /// <returns>
+    /// A new <see cref="IEnumerable{T}"/> that yields the elements of <paramref name="source"/>
+    /// one at a time without exposing the concrete type of the underlying collection.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
+    /// <example>
+    /// <code>
+    /// var list = new List&lt;int&gt; { 1, 2, 3 };
+    /// var wrapped = list.ToEnumerable();
+    /// // `wrapped is List&lt;int&gt;` is false; `wrapped is ICollection&lt;int&gt;` is false.
+    /// // Useful when exercising an extension method's slow path in unit tests.
+    /// </code>
+    /// </example>
+    public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> source)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        // The actual yielding lives in a local function so the null-check
+        // above runs EAGERLY at call time. If yield-return appeared in the
+        // outer method body, the whole method would be compiled as an
+        // iterator and the throw would only fire when the caller starts
+        // enumerating — which would fail the null-source test.
+        return Iterator(source);
+
+        static IEnumerable<T> Iterator(IEnumerable<T> src)
+        {
+            foreach (var item in src)
+            {
+                yield return item;
+            }
+        }
+    }
 }
