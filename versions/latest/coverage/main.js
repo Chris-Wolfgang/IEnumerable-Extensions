@@ -290,7 +290,7 @@ var assemblies = [
   {
     "name": "Wolfgang.Extensions.IEnumerable",
     "classes": [
-      { "name": "Wolfgang.Extensions.IEnumerable.IEnumerableExtensions", "rp": "Wolfgang.Extensions.IEnumerable_IEnumerableExtensions.html", "cl": 46, "ucl": 0, "cal": 46, "tl": 258, "cb": 30, "tb": 30, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "Wolfgang.Extensions.IEnumerable.IEnumerableExtensions", "rp": "Wolfgang.Extensions.IEnumerable_IEnumerableExtensions.html", "cl": 52, "ucl": 0, "cal": 52, "tl": 305, "cb": 34, "tb": 34, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 

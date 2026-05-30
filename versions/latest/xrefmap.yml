@@ -118,3 +118,19 @@ references:
   fullName.vb: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle(Of T)(System.Collections.Generic.IEnumerable(Of T))
   nameWithType: IEnumerableExtensions.Shuffle<T>(IEnumerable<T>)
   nameWithType.vb: IEnumerableExtensions.Shuffle(Of T)(IEnumerable(Of T))
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable*
+  name: ToEnumerable
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_ToEnumerable_
+  commentId: Overload:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable
+  nameWithType: IEnumerableExtensions.ToEnumerable
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable``1(System.Collections.Generic.IEnumerable{``0})
+  name: ToEnumerable<T>(IEnumerable<T>)
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_ToEnumerable__1_System_Collections_Generic_IEnumerable___0__
+  commentId: M:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable``1(System.Collections.Generic.IEnumerable{``0})
+  name.vb: ToEnumerable(Of T)(IEnumerable(Of T))
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable<T>(System.Collections.Generic.IEnumerable<T>)
+  fullName.vb: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable(Of T)(System.Collections.Generic.IEnumerable(Of T))
+  nameWithType: IEnumerableExtensions.ToEnumerable<T>(IEnumerable<T>)
+  nameWithType.vb: IEnumerableExtensions.ToEnumerable(Of T)(IEnumerable(Of T))

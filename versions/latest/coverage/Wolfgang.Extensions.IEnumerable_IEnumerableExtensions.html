@@ -41,7 +41,7 @@
 <table>
 <tr>
 <th>Covered lines:</th>
-<td class="limit-width right" title="46">46</td>
+<td class="limit-width right" title="52">52</td>
 </tr>
 <tr>
 <th>Uncovered lines:</th>
@@ -49,15 +49,15 @@
 </tr>
 <tr>
 <th>Coverable lines:</th>
-<td class="limit-width right" title="46">46</td>
+<td class="limit-width right" title="52">52</td>
 </tr>
 <tr>
 <th>Total lines:</th>
-<td class="limit-width right" title="258">258</td>
+<td class="limit-width right" title="305">305</td>
 </tr>
 <tr>
 <th>Line coverage:</th>
-<td class="limit-width right" title="46 of 46">100%</td>
+<td class="limit-width right" title="52 of 52">100%</td>
 </tr>
 </table>
 </div>
@@ -71,15 +71,15 @@
 <table>
 <tr>
 <th>Covered branches:</th>
-<td class="limit-width right" title="30">30</td>
+<td class="limit-width right" title="34">34</td>
 </tr>
 <tr>
 <th>Total branches:</th>
-<td class="limit-width right" title="30">30</td>
+<td class="limit-width right" title="34">34</td>
 </tr>
 <tr>
 <th>Branch coverage:</th>
-<td class="limit-width right" title="30 of 30">100%</td>
+<td class="limit-width right" title="34 of 34">100%</td>
 </tr>
 </table>
 </div>
@@ -116,6 +116,8 @@
 <tr><td title="DoIterator()"><a href="#file0_line205" class="navigatetohash">DoIterator()</a></td><td>100%</td><td>2</td><td>2</td><td>100%</td></tr>
 <tr><td title="Shuffle(System.Collections.Generic.IEnumerable`1&lt;T&gt;)"><a href="#file0_line229" class="navigatetohash">Shuffle(...)</a></td><td>100%</td><td>4</td><td>4</td><td>100%</td></tr>
 <tr><td title="get_RandomSource()"><a href="#file0_line250" class="navigatetohash">get_RandomSource()</a></td><td>100%</td><td>1</td><td>1</td><td>100%</td></tr>
+<tr><td title="ToEnumerable(System.Collections.Generic.IEnumerable`1&lt;T&gt;)"><a href="#file0_line285" class="navigatetohash">ToEnumerable(...)</a></td><td>100%</td><td>2</td><td>2</td><td>100%</td></tr>
+<tr><td title="Iterator()"><a href="#file0_line299" class="navigatetohash">Iterator()</a></td><td>100%</td><td>2</td><td>2</td><td>100%</td></tr>
 </tbody>
 </table>
 </div>
@@ -382,11 +384,58 @@
 <tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line255"></a><code>255</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;private&nbsp;static&nbsp;Random&nbsp;CreateRandom()</code></td></tr>
 <tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line256"></a><code>256</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;&nbsp;new(unchecked((Environment.TickCount&nbsp;*&nbsp;31)&nbsp;+&nbsp;Thread.CurrentThread.ManagedThreadId));</code></td></tr>
 <tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line257"></a><code>257</code></td><td></td><td class="lightgray"><code>#endif</code></td></tr>
-<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line258"></a><code>258</code></td><td></td><td class="lightgray"><code>}</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line258"></a><code>258</code></td><td></td><td class="lightgray"><code></code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line259"></a><code>259</code></td><td></td><td class="lightgray"><code></code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line260"></a><code>260</code></td><td></td><td class="lightgray"><code></code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line261"></a><code>261</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;summary&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line262"></a><code>262</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;Wraps&nbsp;an&nbsp;&lt;see&nbsp;cref=&quot;IEnumerable{T}&quot;/&gt;&nbsp;in&nbsp;a&nbsp;lazy&nbsp;iterator&nbsp;so&nbsp;the&nbsp;returned</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line263"></a><code>263</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;sequence&nbsp;is&nbsp;guaranteed&nbsp;to&nbsp;NOT&nbsp;be&nbsp;a&nbsp;more&nbsp;concrete&nbsp;type&nbsp;(e.g.,&nbsp;&lt;see&nbsp;cref=&quot;List{T}&quot;/&gt;,</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line264"></a><code>264</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;see&nbsp;cref=&quot;System.Collections.Generic.ICollection{T}&quot;/&gt;,&nbsp;array).&nbsp;Useful&nbsp;in&nbsp;tests&nbsp;and</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line265"></a><code>265</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;in&nbsp;production&nbsp;code&nbsp;that&nbsp;wants&nbsp;to&nbsp;defeat&nbsp;type-checks&nbsp;for&nbsp;fast&nbsp;paths&nbsp;that</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line266"></a><code>266</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;pattern-match&nbsp;on&nbsp;the&nbsp;runtime&nbsp;type&nbsp;of&nbsp;the&nbsp;source.</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line267"></a><code>267</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;/summary&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line268"></a><code>268</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;typeparam&nbsp;name=&quot;T&quot;&gt;The&nbsp;type&nbsp;of&nbsp;the&nbsp;elements&nbsp;of&nbsp;source.&lt;/typeparam&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line269"></a><code>269</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;param&nbsp;name=&quot;source&quot;&gt;An&nbsp;&lt;see&nbsp;cref=&quot;IEnumerable{T}&quot;/&gt;&nbsp;to&nbsp;wrap.&lt;/param&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line270"></a><code>270</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;returns&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line271"></a><code>271</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;A&nbsp;new&nbsp;&lt;see&nbsp;cref=&quot;IEnumerable{T}&quot;/&gt;&nbsp;that&nbsp;yields&nbsp;the&nbsp;elements&nbsp;of&nbsp;&lt;paramref&nbsp;name=&quot;source&quot;/&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line272"></a><code>272</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;one&nbsp;at&nbsp;a&nbsp;time&nbsp;without&nbsp;exposing&nbsp;the&nbsp;concrete&nbsp;type&nbsp;of&nbsp;the&nbsp;underlying&nbsp;collection.</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line273"></a><code>273</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;/returns&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line274"></a><code>274</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;exception&nbsp;cref=&quot;ArgumentNullException&quot;&gt;&lt;paramref&nbsp;name=&quot;source&quot;/&gt;&nbsp;is&nbsp;&lt;see&nbsp;langword=&quot;null&quot;/&gt;.&lt;/exception&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line275"></a><code>275</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;example&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line276"></a><code>276</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;code&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line277"></a><code>277</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;var&nbsp;list&nbsp;=&nbsp;new&nbsp;List&amp;lt;int&amp;gt;&nbsp;{&nbsp;1,&nbsp;2,&nbsp;3&nbsp;};</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line278"></a><code>278</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;var&nbsp;wrapped&nbsp;=&nbsp;list.ToEnumerable();</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line279"></a><code>279</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;//&nbsp;`wrapped&nbsp;is&nbsp;List&amp;lt;int&amp;gt;`&nbsp;is&nbsp;false;&nbsp;`wrapped&nbsp;is&nbsp;ICollection&amp;lt;int&amp;gt;`&nbsp;is&nbsp;false.</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line280"></a><code>280</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;//&nbsp;Useful&nbsp;when&nbsp;exercising&nbsp;an&nbsp;extension&nbsp;method&#39;s&nbsp;slow&nbsp;path&nbsp;in&nbsp;unit&nbsp;tests.</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line281"></a><code>281</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;/code&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line282"></a><code>282</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;///&nbsp;&lt;/example&gt;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line283"></a><code>283</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;public&nbsp;static&nbsp;IEnumerable&lt;T&gt;&nbsp;ToEnumerable&lt;T&gt;(this&nbsp;IEnumerable&lt;T&gt;&nbsp;source)</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line284"></a><code>284</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;{</code></td></tr>
+<tr class="coverableline" title="Covered (35 visits, 2 of 2 branches are covered)" data-coverage="{'AllTestMethods': {'VC': '35', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">35</td><td class="rightmargin right"><a id="file0_line285"></a><code>285</code></td><td class="percentagebar percentagebar100"><i class="icon-fork"></i></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(source&nbsp;==&nbsp;null)</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line286"></a><code>286</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</code></td></tr>
+<tr class="coverableline" title="Covered (1 visits)" data-coverage="{'AllTestMethods': {'VC': '1', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">1</td><td class="rightmargin right"><a id="file0_line287"></a><code>287</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw&nbsp;new&nbsp;ArgumentNullException(nameof(source));</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line288"></a><code>288</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line289"></a><code>289</code></td><td></td><td class="lightgray"><code></code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line290"></a><code>290</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;The&nbsp;actual&nbsp;yielding&nbsp;lives&nbsp;in&nbsp;a&nbsp;local&nbsp;function&nbsp;so&nbsp;the&nbsp;null-check</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line291"></a><code>291</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;above&nbsp;runs&nbsp;EAGERLY&nbsp;at&nbsp;call&nbsp;time.&nbsp;If&nbsp;yield-return&nbsp;appeared&nbsp;in&nbsp;the</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line292"></a><code>292</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;outer&nbsp;method&nbsp;body,&nbsp;the&nbsp;whole&nbsp;method&nbsp;would&nbsp;be&nbsp;compiled&nbsp;as&nbsp;an</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line293"></a><code>293</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;iterator&nbsp;and&nbsp;the&nbsp;throw&nbsp;would&nbsp;only&nbsp;fire&nbsp;when&nbsp;the&nbsp;caller&nbsp;starts</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line294"></a><code>294</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;enumerating&nbsp;—&nbsp;which&nbsp;would&nbsp;fail&nbsp;the&nbsp;null-source&nbsp;test.</code></td></tr>
+<tr class="coverableline" title="Covered (34 visits)" data-coverage="{'AllTestMethods': {'VC': '34', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">34</td><td class="rightmargin right"><a id="file0_line295"></a><code>295</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;Iterator(source);</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line296"></a><code>296</code></td><td></td><td class="lightgray"><code></code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line297"></a><code>297</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;IEnumerable&lt;T&gt;&nbsp;Iterator(IEnumerable&lt;T&gt;&nbsp;src)</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line298"></a><code>298</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</code></td></tr>
+<tr class="coverableline" title="Covered (389 visits, 2 of 2 branches are covered)" data-coverage="{'AllTestMethods': {'VC': '389', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">389</td><td class="rightmargin right"><a id="file0_line299"></a><code>299</code></td><td class="percentagebar percentagebar100"><i class="icon-fork"></i></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foreach&nbsp;(var&nbsp;item&nbsp;in&nbsp;src)</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line300"></a><code>300</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</code></td></tr>
+<tr class="coverableline" title="Covered (169 visits)" data-coverage="{'AllTestMethods': {'VC': '169', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">169</td><td class="rightmargin right"><a id="file0_line301"></a><code>301</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yield&nbsp;return&nbsp;item;</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line302"></a><code>302</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</code></td></tr>
+<tr class="coverableline" title="Covered (21 visits)" data-coverage="{'AllTestMethods': {'VC': '21', 'LVS': 'green'}}"><td class="green">&nbsp;</td><td class="leftmargin rightmargin right">21</td><td class="rightmargin right"><a id="file0_line303"></a><code>303</code></td><td></td><td class="lightgreen"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line304"></a><code>304</code></td><td></td><td class="lightgray"><code>&nbsp;&nbsp;&nbsp;&nbsp;}</code></td></tr>
+<tr class="" title="Not coverable" data-coverage="{'AllTestMethods': {'VC': '', 'LVS': 'gray'}}"><td class="gray">&nbsp;</td><td class="leftmargin rightmargin right"></td><td class="rightmargin right"><a id="file0_line305"></a><code>305</code></td><td></td><td class="lightgray"><code>}</code></td></tr>
 </tbody>
 </table>
 </div>
-<div class="footer">Generated by: ReportGenerator 5.5.10.0<br />5/30/2026 - 2:27:01 AM<br /><a href="https://github.com/danielpalme/ReportGenerator">GitHub</a> | <a href="https://reportgenerator.io">reportgenerator.io</a></div></div>
+<div class="footer">Generated by: ReportGenerator 5.5.10.0<br />5/30/2026 - 1:32:35 PM<br /><a href="https://github.com/danielpalme/ReportGenerator">GitHub</a> | <a href="https://reportgenerator.io">reportgenerator.io</a></div></div>
 <div class="containerright">
 <div class="containerrightfixed">
 <h1>Methods/Properties</h1>
@@ -399,6 +448,8 @@
 <a href="#file0_line205" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - DoIterator()"><i class="icon-cube"></i>DoIterator()</a><br />
 <a href="#file0_line229" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - Shuffle(System.Collections.Generic.IEnumerable`1&lt;T&gt;)"><i class="icon-cube"></i>Shuffle(System.Collections.Generic.IEnumerable`1&lt;T&gt;)</a><br />
 <a href="#file0_line250" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - get_RandomSource()"><i class="icon-wrench"></i>get_RandomSource()</a><br />
+<a href="#file0_line285" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - ToEnumerable(System.Collections.Generic.IEnumerable`1&lt;T&gt;)"><i class="icon-cube"></i>ToEnumerable(System.Collections.Generic.IEnumerable`1&lt;T&gt;)</a><br />
+<a href="#file0_line299" class="navigatetohash percentagebar percentagebar100" title="Line coverage: 100% - Iterator()"><i class="icon-cube"></i>Iterator()</a><br />
 <br/></div>
 </div></div>
 <script type="text/javascript" src="class.js"></script>
