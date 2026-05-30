@@ -287,16 +287,19 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
-        return ToEnumerableIterator(source);
-    }
+        // The actual yielding lives in a local function so the null-check
+        // above runs EAGERLY at call time. If yield-return appeared in the
+        // outer method body, the whole method would be compiled as an
+        // iterator and the throw would only fire when the caller starts
+        // enumerating — which would fail the null-source test.
+        return Iterator(source);
 
-
-
-    private static IEnumerable<T> ToEnumerableIterator<T>(IEnumerable<T> source)
-    {
-        foreach (var item in source)
+        static IEnumerable<T> Iterator(IEnumerable<T> src)
         {
-            yield return item;
+            foreach (var item in src)
+            {
+                yield return item;
+            }
         }
     }
 }
