@@ -49,7 +49,7 @@ You can contribute in several ways:
 
 This project maintains **extremely high code quality standards** through multiple layers of static analysis and automated enforcement.
 
-### The 7 Analyzers
+### The 8 Analyzers
 
 All code is analyzed by these tools during build:
 
@@ -87,7 +87,20 @@ All code is analyzed by these tools during build:
    - Security vulnerability detection
    - Code smell identification
 
+8. **Microsoft.CodeAnalysis.PublicApiAnalyzers**
+   - Tracks the public API surface via `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt`
+   - Surfaces breaking changes (RS0016/RS0017) at compile time
+   - Activates per project when the Shipped/Unshipped files exist alongside the csproj
+
 ### Async-First Enforcement
+
+> **Note for this library.** Wolfgang.Extensions.IEnumerable is a purely
+> synchronous `IEnumerable<T>` extensions library — none of its public
+> methods are `async`. The rules below describe the analyzer baseline
+> that would catch async regressions if an async method were ever added.
+> Contributors adding new sync extension methods do not need to introduce
+> `async` / `await` / `CancellationToken` parameters.
+
 
 This library **prohibits synchronous blocking calls** via `BannedSymbols.txt`. The following APIs are **banned**:
 
@@ -217,8 +230,7 @@ View the complete configuration in [.editorconfig](.editorconfig).
 - Add relevant tests for new features or bug fixes.
 - Document any public APIs with XML documentation comments.
 - Ensure all analyzer warnings are addressed (they're treated as errors in Release builds).
-- Use async/await patterns - no blocking calls allowed.
-- Include `CancellationToken` parameters in async methods where appropriate.
+- The library is currently synchronous; new async methods (if any) must use async/await, avoid blocking calls, and include `CancellationToken` parameters where appropriate.
 
 ---
 

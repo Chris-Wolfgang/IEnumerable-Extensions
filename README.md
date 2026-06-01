@@ -80,7 +80,8 @@ that take an `action` / `predicate` also throw on a null callback.
 | `IsNullOrEmpty()` | Returns `true` when the sequence is `null` OR contains no elements. |
 | `None()` | Inverse of `Any()` — `true` when the sequence has no elements. |
 | `None(Func<T, bool> predicate)` | `true` when no element matches the predicate. |
-| `Shuffle()` | Returns a new sequence in random order (Fisher-Yates + thread-safe RNG). |
+| `Shuffle()` | Returns a new sequence in random order (Fisher-Yates + thread-safe RNG). Eager — the input is fully consumed before the method returns. |
+| `ToEnumerable()` | Wraps the source in a lazy iterator so the returned sequence is guaranteed not to be a more concrete type (`List<T>`, `ICollection<T>`, array). Useful in tests that need to exercise non-`ICollection` code paths. |
 
 ### Examples
 
@@ -106,6 +107,12 @@ new[] { 1, 2, 3 }.None(x => x < 0);                  // true
 
 // Shuffle
 var deck = Enumerable.Range(1, 52).Shuffle().ToList();
+
+// ToEnumerable — strip the concrete type for test fixtures that need to
+// exercise the non-ICollection slow path.
+IEnumerable<int> slowPath = new List<int> { 1, 2, 3 }.ToEnumerable();
+// slowPath is List<int>      // false
+// slowPath is ICollection<int> // false
 ```
 
 ---
