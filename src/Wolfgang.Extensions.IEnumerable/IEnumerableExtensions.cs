@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+// The namespace deliberately mirrors the BCL type it extends
+// (System.Collections.Generic.IEnumerable{T}). ReSharper's
+// InconsistentNaming inspection flags this because the last segment
+// is a type-name shape; the convention is intentional and matches
+// every other Wolfgang.Extensions.* library, so suppress the
+// inspection name actually triggered.
+// ReSharper disable once InconsistentNaming
 namespace Wolfgang.Extensions.IEnumerable;
 
 /// <summary>
 /// A collection of extension methods for IEnumerable{T}
 /// </summary>
-// ReSharper disable once InconsistentNaming
 public static class IEnumerableExtensions
 {
     /// <summary>
