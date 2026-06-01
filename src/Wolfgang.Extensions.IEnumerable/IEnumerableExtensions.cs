@@ -226,6 +226,14 @@ public static class IEnumerableExtensions
     /// and the result is materialized before this method returns. The returned
     /// sequence does NOT preserve deferred-execution semantics — call <c>.Shuffle()</c>
     /// inside a LINQ pipeline only when that buffering cost is acceptable.
+    /// <para>
+    /// The runtime type of the returned sequence is intentionally opaque — pattern
+    /// matches such as <c>result is <see cref="List{T}"/></c>,
+    /// <c>result is <see cref="System.Collections.Generic.ICollection{T}"/></c>, and
+    /// <c>result is T[]</c> all return false. This prevents callers from mutating
+    /// the shuffle's internal buffer and matches the type-opacity contract of
+    /// <see cref="ToEnumerable{T}"/>.
+    /// </para>
     /// </remarks>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <param name="source">An IEnumerable{T} whose elements will be randomly ordered.</param>
@@ -247,19 +255,49 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
-        // Fisher-Yates shuffle implementation as suggested in the PR review
-        var list = source.ToList();
-        var rng = RandomSource;
-
-        for (var i = list.Count - 1; i > 0; i--)
+        // Build a mutable T[] buffer the cheapest way for the runtime type:
+        //   - T[]            : Array.Copy into a new T[] of the same length
+        //                      (avoids List<T>'s capacity field + indirection)
+        //   - ICollection<T> : preallocate a T[] and call CopyTo (no enumerator
+        //                      allocation, no growth resizing)
+        //   - else           : source.ToArray() (LINQ's IEnumerable<T> fallback)
+        // After Fisher-Yates we return through a yield iterator so the T[]
+        // buffer does NOT leak through pattern-match checks at the call site.
+        T[] buffer;
+        if (source is T[] arr)
         {
-            var j = rng.Next(i + 1);
-            var temp = list[i];
-            list[i] = list[j];
-            list[j] = temp;
+            buffer = new T[arr.Length];
+            Array.Copy(arr, buffer, arr.Length);
+        }
+        else if (source is ICollection<T> coll)
+        {
+            buffer = new T[coll.Count];
+            coll.CopyTo(buffer, 0);
+        }
+        else
+        {
+            buffer = source.ToArray();
         }
 
-        return list;
+        var rng = RandomSource;
+
+        for (var i = buffer.Length - 1; i > 0; i--)
+        {
+            var j = rng.Next(i + 1);
+            var temp = buffer[i];
+            buffer[i] = buffer[j];
+            buffer[j] = temp;
+        }
+
+        return Iterator(buffer);
+
+        static IEnumerable<T> Iterator(T[] shuffled)
+        {
+            foreach (var item in shuffled)
+            {
+                yield return item;
+            }
+        }
     }
 
 #if NET6_0_OR_GREATER
