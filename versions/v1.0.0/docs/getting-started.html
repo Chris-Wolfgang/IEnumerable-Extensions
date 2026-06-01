@@ -79,6 +79,43 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="getting-started">Getting Started</h1>
 
+<p>This guide will help you install and start using Wolfgang.Extensions.IEnumerable in your .NET projects.</p>
+<h2 id="installation">Installation</h2>
+<h3 id="via-nuget-package-manager">Via NuGet Package Manager</h3>
+<pre><code class="lang-bash">dotnet add package Wolfgang.Extensions.IEnumerable
+</code></pre>
+<h2 id="basic-usage">Basic Usage</h2>
+<p>Add the using directive to your code:</p>
+<pre><code class="lang-csharp">using Wolfgang.Extensions.IEnumerable;
+</code></pre>
+<h3 id="foreach---terminal-iteration">ForEach - Terminal Iteration</h3>
+<pre><code class="lang-csharp">var numbers = new[] { 1, 2, 3, 4, 5 };
+numbers.ForEach(n =&gt; Console.WriteLine(n));
+</code></pre>
+<h3 id="do---passthrough-side-effects">Do - Passthrough Side Effects</h3>
+<pre><code class="lang-csharp">var results = items
+    .Do(x =&gt; Console.WriteLine($&quot;Processing: {x}&quot;))
+    .Where(x =&gt; x.IsActive)
+    .ToList();
+</code></pre>
+<h3 id="isempty--isnullorempty">IsEmpty / IsNullOrEmpty</h3>
+<pre><code class="lang-csharp">if (items.IsEmpty())
+{
+    Console.WriteLine(&quot;No items found&quot;);
+}
+
+IEnumerable&lt;string&gt;? data = GetData();
+if (data.IsNullOrEmpty())
+{
+    Console.WriteLine(&quot;Data is null or empty&quot;);
+}
+</code></pre>
+<h3 id="none---inverse-of-any">None - Inverse of Any</h3>
+<pre><code class="lang-csharp">bool noNegatives = numbers.None(n =&gt; n &lt; 0);
+</code></pre>
+<h3 id="shuffle---randomize-order">Shuffle - Randomize Order</h3>
+<pre><code class="lang-csharp">var shuffled = deck.Shuffle();
+</code></pre>
 
 </article>
           </div>

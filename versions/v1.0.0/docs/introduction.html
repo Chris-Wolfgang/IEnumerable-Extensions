@@ -79,6 +79,25 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="introduction">Introduction</h1>
 
+<p><strong>Wolfgang.Extensions.IEnumerable</strong> is a .NET library that provides a collection of useful extension methods for types that implement <code>IEnumerable&lt;T&gt;</code>.</p>
+<h2 id="available-extension-methods">Available Extension Methods</h2>
+<h3 id="foreach">ForEach</h3>
+<p>Executes the specified action on each item in the enumerable. This is a terminal operation that consumes the sequence.</p>
+<h3 id="do">Do</h3>
+<p>Executes a side-effect action on each element without transforming the elements. The original items are yielded unchanged, making it ideal for logging, metrics, or debugging within a pipeline.</p>
+<h3 id="isempty">IsEmpty</h3>
+<p>Efficiently determines whether a sequence contains no elements, with optimizations for <code>ICollection&lt;T&gt;</code>.</p>
+<h3 id="isnullorempty">IsNullOrEmpty</h3>
+<p>Safely checks whether a sequence is null or contains no elements in a single operation.</p>
+<h3 id="none-two-overloads">None (Two Overloads)</h3>
+<ul>
+<li><strong>None()</strong>: Determines whether a sequence contains no elements (inverse of <code>Any()</code>)</li>
+<li><strong>None(predicate)</strong>: Determines whether no element of a sequence satisfies a condition (inverse of <code>Any(predicate)</code>)</li>
+</ul>
+<h3 id="shuffle">Shuffle</h3>
+<p>Creates a new <code>IEnumerable&lt;T&gt;</code> containing the elements from the source in a random order using the Fisher-Yates shuffle algorithm.</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>To start using Wolfgang.Extensions.IEnumerable, see the <a href="getting-started.html">Getting Started</a> guide for installation instructions and basic examples.</p>
 
 </article>
           </div>

@@ -1,5 +1,5 @@
 {
-  "source_base_path": "C:/Users/cwolf/AppData/Local/Temp/ienum-rebuild/docfx_project",
+  "source_base_path": "D:/a/_temp/workdir-v1.0.0/docfx_project",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -9,47 +9,6 @@
           "relative_path": "index.json"
         }
       }
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "Wolfgang.Extensions.IEnumerable.IEnumerableExtensions",
-      "Summary": "<p sourcefile=\"api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.yml\" sourcestartlinenumber=\"1\">A collection of extension methods for IEnumerable{T}</p>\n"
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Wolfgang.Extensions.IEnumerable.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Wolfgang.Extensions.IEnumerable.html"
-        }
-      },
-      "version": "",
-      "Uid": null,
-      "IsMRef": true,
-      "Title": "Wolfgang.Extensions.IEnumerable",
-      "Summary": null
-    },
-    {
-      "type": "Toc",
-      "source_relative_path": "api/toc.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/toc.html"
-        },
-        ".json": {
-          "relative_path": "api/toc.json"
-        }
-      },
-      "version": ""
     },
     {
       "type": "Conceptual",
