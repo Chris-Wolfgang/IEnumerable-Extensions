@@ -15,10 +15,12 @@ Welcome to the documentation for **Wolfgang.Extensions.IEnumerable**, a comprehe
 Wolfgang.Extensions.IEnumerable provides essential extension methods that complement the standard LINQ operators. The library offers:
 
 ✅ **ForEach** - Execute actions on each element  
+✅ **Do** - Lazy passthrough side-effect action  
 ✅ **IsEmpty** - Check if a sequence is empty  
 ✅ **IsNullOrEmpty** - Safely check for null or empty sequences  
 ✅ **None** - Determine if no elements match criteria  
 ✅ **Shuffle** - Randomize collection order  
+✅ **ToEnumerable** - Strip the concrete type for slow-path testing  
 
 ## Quick Example
 
@@ -95,14 +97,19 @@ Instructions for setting up a development environment to contribute to the libra
 ## Extension Methods Reference
 
 ### ForEach&lt;T&gt;
-**Signature**: `void ForEach<T>(this IEnumerable<T> source, Action<T> action)`
+**Signature**: `void ForEach<T>(this IEnumerable<T>? source, Action<T> action)`
 
-Executes the specified action on each item in the enumerable. Optimized for `List<T>` instances.
+Eagerly executes the specified action on each item in the enumerable. Optimized for `List<T>` instances. Throws `ArgumentNullException` when `source` or `action` is null.
+
+### Do&lt;T&gt;
+**Signature**: `IEnumerable<T> Do<T>(this IEnumerable<T>? source, Action<T> action)`
+
+Lazy variant of `ForEach` — executes the action on each element and yields the element unchanged. Useful for taps in LINQ pipelines (e.g., logging). Throws `ArgumentNullException` when `source` or `action` is null.
 
 ### IsEmpty&lt;T&gt;
-**Signature**: `bool IsEmpty<T>(this IEnumerable<T> source)`
+**Signature**: `bool IsEmpty<T>(this IEnumerable<T>? source)`
 
-Efficiently determines whether a sequence contains no elements. Uses `ICollection<T>.Count` when available.
+Efficiently determines whether a sequence contains no elements. Uses `ICollection<T>.Count` when available. Throws `ArgumentNullException` when `source` is null.
 
 ### IsNullOrEmpty&lt;T&gt;
 **Signature**: `bool IsNullOrEmpty<T>(this IEnumerable<T>? source)`
@@ -111,15 +118,20 @@ Returns true if the source sequence is null or contains no elements. Does not th
 
 ### None&lt;T&gt;
 **Signature**: 
-- `bool None<T>(this IEnumerable<T> source)`
-- `bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate)`
+- `bool None<T>(this IEnumerable<T>? source)`
+- `bool None<T>(this IEnumerable<T>? source, Func<T, bool> predicate)`
 
-Determines whether a sequence contains no elements or no element satisfies a condition. The inverse of `Any()`.
+Determines whether a sequence contains no elements or no element satisfies a condition. The inverse of `Any()`. Throws `ArgumentNullException` when `source` (or `predicate`, for the overload) is null.
 
 ### Shuffle&lt;T&gt;
 **Signature**: `IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)`
 
-Creates a new collection containing elements in random order using the Fisher-Yates shuffle algorithm.
+Creates a new collection containing elements in random order using the Fisher-Yates shuffle algorithm. **Eager** — the entire input is consumed before the method returns. Throws `ArgumentNullException` when `source` is null.
+
+### ToEnumerable&lt;T&gt;
+**Signature**: `IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> source)`
+
+Wraps the source in a lazy iterator so that pattern-matching checks like `result is List<T>` or `result is ICollection<T>` return false. Primarily useful in unit tests for exercising the non-`ICollection` slow path of other extension methods. Throws `ArgumentNullException` when `source` is null.
 
 ## Contributing
 
@@ -138,5 +150,4 @@ This project is licensed under the MIT License. See the [LICENSE](https://github
 ---
 
 **Author**: Chris Wolfgang  
-**Copyright**: © 2026 Chris Wolfgang  
-**Version**: 1.0.0
+**Copyright**: © 2026 Chris Wolfgang
