@@ -5,7 +5,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_called_with_null_list_throws_ArgumentNullException()
+    public void Shuffle_called_with_null_source_throws_ArgumentNullException()
     {
         List<int> source = null!;
 
