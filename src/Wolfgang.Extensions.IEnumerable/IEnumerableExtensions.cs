@@ -36,8 +36,10 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(action));
         }
 
-        // This block should not be hit as the List<T>.ForEach should get selected by the compiler
-        // but adding it for performance reasons in case it does not
+        // Fast path: when a List<T> reaches this extension via an IEnumerable<T>-typed
+        // call site (where the static binding picks the extension, not List<T>.ForEach),
+        // delegate to the List's instance method. That avoids the IEnumerator<T>
+        // allocation taken by the generic foreach below.
         if (source is List<T> s)
         {
             s.ForEach(action);
@@ -195,28 +197,42 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(action));
         }
 
-        return DoIterator(source, action);
-    }
+        // The actual yielding lives in a static local function so that the
+        // argument-null checks above run EAGERLY at call time. If yield-return
+        // appeared in the outer method body, the whole method would compile
+        // as an iterator and the throws would only fire on first MoveNext —
+        // breaking the "null source/action throws at call site" contract.
+        // Same pattern as ToEnumerable<T> below.
+        return Iterator(source, action);
 
-
-
-    private static IEnumerable<T> DoIterator<T>(IEnumerable<T> source, Action<T> action)
-    {
-        foreach (var item in source)
+        static IEnumerable<T> Iterator(IEnumerable<T> src, Action<T> act)
         {
-            action(item);
-            yield return item;
+            foreach (var item in src)
+            {
+                act(item);
+                yield return item;
+            }
         }
     }
 
 
 
     /// <summary>
-    /// Creates a new IEnumerable{T} containing the elements from source in a random order
+    /// Creates a new sequence containing the elements from <paramref name="source"/>
+    /// in a random order, using a Fisher–Yates shuffle.
     /// </summary>
+    /// <remarks>
+    /// This method is <b>eager</b>: the entire <paramref name="source"/> is consumed
+    /// and the result is materialized before this method returns. The returned
+    /// sequence does NOT preserve deferred-execution semantics — call <c>.Shuffle()</c>
+    /// inside a LINQ pipeline only when that buffering cost is acceptable.
+    /// </remarks>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <param name="source">An IEnumerable{T} whose elements will be randomly ordered.</param>
-    /// <returns>A new IEnumerable{T} containing the elements from source in a random order.</returns>
+    /// <returns>
+    /// A new sequence containing every element of <paramref name="source"/> in a
+    /// random permutation. The input sequence is not mutated.
+    /// </returns>
     /// <exception cref="ArgumentNullException">source is null.</exception>
     /// <example>
     /// <code>
@@ -260,10 +276,13 @@ public static class IEnumerableExtensions
 
     /// <summary>
     /// Wraps an <see cref="IEnumerable{T}"/> in a lazy iterator so the returned
-    /// sequence is guaranteed to NOT be a more concrete type (e.g., <see cref="List{T}"/>,
-    /// <see cref="System.Collections.Generic.ICollection{T}"/>, array). Useful in tests and
-    /// in production code that wants to defeat type-checks for fast paths that
-    /// pattern-match on the runtime type of the source.
+    /// sequence is guaranteed not to be assignable to any more concrete
+    /// enumerable type. Specifically, pattern-matching checks such as
+    /// <c>result is <see cref="List{T}"/></c>,
+    /// <c>result is <see cref="System.Collections.Generic.ICollection{T}"/></c>,
+    /// and <c>result is T[]</c> all return false. Useful in tests (and rarely in
+    /// production code) that want to defeat fast paths which pattern-match on
+    /// the runtime type of the source.
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <param name="source">An <see cref="IEnumerable{T}"/> to wrap.</param>
