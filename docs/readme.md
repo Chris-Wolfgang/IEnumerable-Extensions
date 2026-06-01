@@ -124,12 +124,12 @@ Returns true if the source sequence is null or contains no elements. Does not th
 Determines whether a sequence contains no elements or no element satisfies a condition. The inverse of `Any()`. Throws `ArgumentNullException` when `source` (or `predicate`, for the overload) is null.
 
 ### Shuffle&lt;T&gt;
-**Signature**: `IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)`
+**Signature**: `IEnumerable<T> Shuffle<T>(this IEnumerable<T>? source)`
 
 Creates a new collection containing elements in random order using the Fisher-Yates shuffle algorithm. **Eager** — the entire input is consumed before the method returns. Throws `ArgumentNullException` when `source` is null.
 
 ### ToEnumerable&lt;T&gt;
-**Signature**: `IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> source)`
+**Signature**: `IEnumerable<T> ToEnumerable<T>(this IEnumerable<T>? source)`
 
 Wraps the source in a lazy iterator so that pattern-matching checks like `result is List<T>` or `result is ICollection<T>` return false. Primarily useful in unit tests for exercising the non-`ICollection` slow path of other extension methods. Throws `ArgumentNullException` when `source` is null.
 

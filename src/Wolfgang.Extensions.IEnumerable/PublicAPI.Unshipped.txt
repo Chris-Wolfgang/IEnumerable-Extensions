@@ -1,1 +1,5 @@
 #nullable enable
+*REMOVED*static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle<T>(this System.Collections.Generic.IEnumerable<T>! source) -> System.Collections.Generic.IEnumerable<T>!
+*REMOVED*static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable<T>(this System.Collections.Generic.IEnumerable<T>! source) -> System.Collections.Generic.IEnumerable<T>!
+static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle<T>(this System.Collections.Generic.IEnumerable<T>? source) -> System.Collections.Generic.IEnumerable<T>!
+static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable<T>(this System.Collections.Generic.IEnumerable<T>? source) -> System.Collections.Generic.IEnumerable<T>!

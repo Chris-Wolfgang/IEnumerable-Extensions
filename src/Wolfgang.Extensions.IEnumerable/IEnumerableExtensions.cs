@@ -240,7 +240,7 @@ public static class IEnumerableExtensions
     /// var shuffled = deck.Shuffle();
     /// </code>
     /// </example>
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T>? source)
     {
         if (source == null)
         {
@@ -299,7 +299,7 @@ public static class IEnumerableExtensions
     /// // Useful when exercising an extension method's slow path in unit tests.
     /// </code>
     /// </example>
-    public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> source)
+    public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T>? source)
     {
         if (source == null)
         {
