@@ -1,5 +1,5 @@
 {
-  "source_base_path": "D:/a/IEnumerable-Extensions/IEnumerable-Extensions/docfx_project",
+  "source_base_path": "C:/Users/cwolf/AppData/Local/Temp/ienum-rebuild/docfx_project",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -90,6 +90,16 @@
       "output": {
         ".html": {
           "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "public/version-picker.js",
+      "output": {
+        "resource": {
+          "relative_path": "public/version-picker.js"
         }
       },
       "version": ""

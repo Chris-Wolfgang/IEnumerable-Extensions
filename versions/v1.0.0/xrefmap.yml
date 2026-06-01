@@ -1,0 +1,104 @@
+### YamlMime:XRefMap
+sorted: true
+references:
+- uid: Wolfgang.Extensions.IEnumerable
+  name: Wolfgang.Extensions.IEnumerable
+  href: api/Wolfgang.Extensions.IEnumerable.html
+  commentId: N:Wolfgang.Extensions.IEnumerable
+  fullName: Wolfgang.Extensions.IEnumerable
+  nameWithType: Wolfgang.Extensions.IEnumerable
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions
+  name: IEnumerableExtensions
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html
+  commentId: T:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions
+  nameWithType: IEnumerableExtensions
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ForEach*
+  name: ForEach
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_ForEach_
+  commentId: Overload:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ForEach
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ForEach
+  nameWithType: IEnumerableExtensions.ForEach
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})
+  name: ForEach<T>(IEnumerable<T>?, Action<T>)
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_ForEach__1_System_Collections_Generic_IEnumerable___0__System_Action___0__
+  commentId: M:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})
+  name.vb: ForEach(Of T)(IEnumerable(Of T), Action(Of T))
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ForEach<T>(System.Collections.Generic.IEnumerable<T>?, System.Action<T>)
+  fullName.vb: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ForEach(Of T)(System.Collections.Generic.IEnumerable(Of T), System.Action(Of T))
+  nameWithType: IEnumerableExtensions.ForEach<T>(IEnumerable<T>?, Action<T>)
+  nameWithType.vb: IEnumerableExtensions.ForEach(Of T)(IEnumerable(Of T), Action(Of T))
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsEmpty*
+  name: IsEmpty
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_IsEmpty_
+  commentId: Overload:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsEmpty
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsEmpty
+  nameWithType: IEnumerableExtensions.IsEmpty
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsEmpty``1(System.Collections.Generic.IEnumerable{``0})
+  name: IsEmpty<T>(IEnumerable<T>?)
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_IsEmpty__1_System_Collections_Generic_IEnumerable___0__
+  commentId: M:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsEmpty``1(System.Collections.Generic.IEnumerable{``0})
+  name.vb: IsEmpty(Of T)(IEnumerable(Of T))
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsEmpty<T>(System.Collections.Generic.IEnumerable<T>?)
+  fullName.vb: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsEmpty(Of T)(System.Collections.Generic.IEnumerable(Of T))
+  nameWithType: IEnumerableExtensions.IsEmpty<T>(IEnumerable<T>?)
+  nameWithType.vb: IEnumerableExtensions.IsEmpty(Of T)(IEnumerable(Of T))
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsNullOrEmpty*
+  name: IsNullOrEmpty
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_IsNullOrEmpty_
+  commentId: Overload:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsNullOrEmpty
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsNullOrEmpty
+  nameWithType: IEnumerableExtensions.IsNullOrEmpty
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})
+  name: IsNullOrEmpty<T>(IEnumerable<T>?)
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_IsNullOrEmpty__1_System_Collections_Generic_IEnumerable___0__
+  commentId: M:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsNullOrEmpty``1(System.Collections.Generic.IEnumerable{``0})
+  name.vb: IsNullOrEmpty(Of T)(IEnumerable(Of T))
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsNullOrEmpty<T>(System.Collections.Generic.IEnumerable<T>?)
+  fullName.vb: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsNullOrEmpty(Of T)(System.Collections.Generic.IEnumerable(Of T))
+  nameWithType: IEnumerableExtensions.IsNullOrEmpty<T>(IEnumerable<T>?)
+  nameWithType.vb: IEnumerableExtensions.IsNullOrEmpty(Of T)(IEnumerable(Of T))
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None*
+  name: None
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_None_
+  commentId: Overload:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None
+  nameWithType: IEnumerableExtensions.None
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None``1(System.Collections.Generic.IEnumerable{``0})
+  name: None<T>(IEnumerable<T>?)
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_None__1_System_Collections_Generic_IEnumerable___0__
+  commentId: M:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None``1(System.Collections.Generic.IEnumerable{``0})
+  name.vb: None(Of T)(IEnumerable(Of T))
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None<T>(System.Collections.Generic.IEnumerable<T>?)
+  fullName.vb: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None(Of T)(System.Collections.Generic.IEnumerable(Of T))
+  nameWithType: IEnumerableExtensions.None<T>(IEnumerable<T>?)
+  nameWithType.vb: IEnumerableExtensions.None(Of T)(IEnumerable(Of T))
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})
+  name: None<T>(IEnumerable<T>?, Func<T, bool>)
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_None__1_System_Collections_Generic_IEnumerable___0__System_Func___0_System_Boolean__
+  commentId: M:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})
+  name.vb: None(Of T)(IEnumerable(Of T), Func(Of T, Boolean))
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None<T>(System.Collections.Generic.IEnumerable<T>?, System.Func<T, bool>)
+  fullName.vb: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None(Of T)(System.Collections.Generic.IEnumerable(Of T), System.Func(Of T, Boolean))
+  nameWithType: IEnumerableExtensions.None<T>(IEnumerable<T>?, Func<T, bool>)
+  nameWithType.vb: IEnumerableExtensions.None(Of T)(IEnumerable(Of T), Func(Of T, Boolean))
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle*
+  name: Shuffle
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_Shuffle_
+  commentId: Overload:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle
+  isSpec: "True"
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle
+  nameWithType: IEnumerableExtensions.Shuffle
+- uid: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle``1(System.Collections.Generic.IEnumerable{``0})
+  name: Shuffle<T>(IEnumerable<T>)
+  href: api/Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.html#Wolfgang_Extensions_IEnumerable_IEnumerableExtensions_Shuffle__1_System_Collections_Generic_IEnumerable___0__
+  commentId: M:Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle``1(System.Collections.Generic.IEnumerable{``0})
+  name.vb: Shuffle(Of T)(IEnumerable(Of T))
+  fullName: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle<T>(System.Collections.Generic.IEnumerable<T>)
+  fullName.vb: Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle(Of T)(System.Collections.Generic.IEnumerable(Of T))
+  nameWithType: IEnumerableExtensions.Shuffle<T>(IEnumerable<T>)
+  nameWithType.vb: IEnumerableExtensions.Shuffle(Of T)(IEnumerable(Of T))
