@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net462;net47;net471;net472;net48;net481;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
-		<Version>1.2.0</Version>
 		<LangVersion>latest</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<IsPackable>false</IsPackable>
@@ -14,8 +13,6 @@
 	<!-- Common packages for all frameworks -->
 	<ItemGroup>
 		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.assert" Version="2.9.3" />
-		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
 	</ItemGroup>
 
 	<!-- .NET Framework 4.6.2 - 4.8.1 specific packages -->
@@ -86,10 +83,15 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<!-- .NET 8.0 - 10.0 specific packages (latest versions) -->
+	<!-- .NET 8.0 - 10.0 specific packages (latest versions).
+	     xunit.runner.visualstudio is pinned to [2.8.2] to remain compatible
+	     with xunit v2.9.3 — v3 of the runner targets xunit.v3 and would
+	     break the v2 test surface. The other TFM groups above pin
+	     2.4.5 / 2.5.3 / 2.8.2 for the same reason; this keeps every
+	     TFM on the v2 runner family. -->
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0'	">
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+		<PackageReference Include="xunit.runner.visualstudio" Version="[2.8.2]">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

@@ -48,8 +48,13 @@ public class ForEachTests
 
 
     [Fact]
-    public void ForEach_when_called_on_List_does_not_override_existing_ForEach_on_List()
+    public void ForEach_when_called_on_a_concrete_List_invokes_the_instance_method_not_the_extension()
     {
+        // Documents an intentional non-shadowing property: when `source` is statically
+        // typed as `List<T>`, C# resolves `source.ForEach(...)` to `List<T>.ForEach`
+        // (the BCL instance method) rather than to this library's extension. Our
+        // extension only takes effect when the source is typed as `IEnumerable<T>` —
+        // see the next test for that case.
         var source = new List<int> { 1, 2, 3, 4, 5 };
         var result = new List<int>();
         source.ForEach(i => result.Add(i * 2));
