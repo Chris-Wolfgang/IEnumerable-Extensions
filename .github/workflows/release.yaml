@@ -562,7 +562,6 @@ jobs:
           retention-days: 90
           if-no-files-found: warn
 
-  # Publish to NuGet (only if validation passed)
   # Verify the documentation builds cleanly BEFORE publishing the release —
   # initiative D8. Builds DocFX without deploying so a docs failure blocks
   # publish-nuget rather than landing after the package is already live.
@@ -660,6 +659,7 @@ jobs:
           }
           Write-Host "Documentation built successfully - release may proceed"
 
+  # Publish to NuGet (only if validation passed)
   publish-nuget:
     name: Publish to NuGet.org
     needs: [pack-and-validate, verify-docs-build]
