@@ -41,6 +41,7 @@
     <Project Path="examples/IsNullOrEmpty.Example/IsNullOrEmpty.Example.csproj" />
     <Project Path="examples/None.Example/None.Example.csproj" />
     <Project Path="examples/Shuffle.Example/Shuffle.Example.csproj" />
+    <Project Path="examples/ToEnumerable.Example/ToEnumerable.Example.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Wolfgang.Extensions.IEnumerable/Wolfgang.Extensions.IEnumerable.csproj" />

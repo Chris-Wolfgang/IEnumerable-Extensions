@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+// The namespace deliberately mirrors the BCL type it extends
+// (System.Collections.Generic.IEnumerable{T}). ReSharper's
+// InconsistentNaming inspection flags this because the last segment
+// is a type-name shape; the convention is intentional and matches
+// every other Wolfgang.Extensions.* library, so suppress the
+// inspection name actually triggered.
+// ReSharper disable once InconsistentNaming
 namespace Wolfgang.Extensions.IEnumerable;
 
 /// <summary>
 /// A collection of extension methods for IEnumerable{T}
 /// </summary>
-// ReSharper disable once InconsistentNaming
 public static class IEnumerableExtensions
 {
     /// <summary>
@@ -36,8 +42,10 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(action));
         }
 
-        // This block should not be hit as the List<T>.ForEach should get selected by the compiler
-        // but adding it for performance reasons in case it does not
+        // Fast path: when a List<T> reaches this extension via an IEnumerable<T>-typed
+        // call site (where the static binding picks the extension, not List<T>.ForEach),
+        // delegate to the List's instance method. That avoids the IEnumerator<T>
+        // allocation taken by the generic foreach below.
         if (source is List<T> s)
         {
             s.ForEach(action);
@@ -195,28 +203,50 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(action));
         }
 
-        return DoIterator(source, action);
-    }
+        // The actual yielding lives in a static local function so that the
+        // argument-null checks above run EAGERLY at call time. If yield-return
+        // appeared in the outer method body, the whole method would compile
+        // as an iterator and the throws would only fire on first MoveNext —
+        // breaking the "null source/action throws at call site" contract.
+        // Same pattern as ToEnumerable<T> below.
+        return Iterator(source, action);
 
-
-
-    private static IEnumerable<T> DoIterator<T>(IEnumerable<T> source, Action<T> action)
-    {
-        foreach (var item in source)
+        static IEnumerable<T> Iterator(IEnumerable<T> src, Action<T> act)
         {
-            action(item);
-            yield return item;
+            foreach (var item in src)
+            {
+                act(item);
+                yield return item;
+            }
         }
     }
 
 
 
     /// <summary>
-    /// Creates a new IEnumerable{T} containing the elements from source in a random order
+    /// Creates a new sequence containing the elements from <paramref name="source"/>
+    /// in a random order, using a Fisher–Yates shuffle.
     /// </summary>
+    /// <remarks>
+    /// This method is <b>eager</b>: the entire <paramref name="source"/> is consumed
+    /// and the result is materialized before this method returns. The returned
+    /// sequence does NOT preserve deferred-execution semantics — call <c>.Shuffle()</c>
+    /// inside a LINQ pipeline only when that buffering cost is acceptable.
+    /// <para>
+    /// The runtime type of the returned sequence is intentionally opaque — pattern
+    /// matches such as <c>result is <see cref="List{T}"/></c>,
+    /// <c>result is <see cref="System.Collections.Generic.ICollection{T}"/></c>, and
+    /// <c>result is T[]</c> all return false. This prevents callers from mutating
+    /// the shuffle's internal buffer and matches the type-opacity contract of
+    /// <see cref="ToEnumerable{T}"/>.
+    /// </para>
+    /// </remarks>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <param name="source">An IEnumerable{T} whose elements will be randomly ordered.</param>
-    /// <returns>A new IEnumerable{T} containing the elements from source in a random order.</returns>
+    /// <returns>
+    /// A new sequence containing every element of <paramref name="source"/> in a
+    /// random permutation. The input sequence is not mutated.
+    /// </returns>
     /// <exception cref="ArgumentNullException">source is null.</exception>
     /// <example>
     /// <code>
@@ -224,26 +254,56 @@ public static class IEnumerableExtensions
     /// var shuffled = deck.Shuffle();
     /// </code>
     /// </example>
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T>? source)
     {
         if (source == null)
         {
             throw new ArgumentNullException(nameof(source));
         }
 
-        // Fisher-Yates shuffle implementation as suggested in the PR review
-        var list = source.ToList();
-        var rng = RandomSource;
-
-        for (var i = list.Count - 1; i > 0; i--)
+        // Build a mutable T[] buffer the cheapest way for the runtime type:
+        //   - T[]            : Array.Copy into a new T[] of the same length
+        //                      (avoids List<T>'s capacity field + indirection)
+        //   - ICollection<T> : preallocate a T[] and call CopyTo (no enumerator
+        //                      allocation, no growth resizing)
+        //   - else           : source.ToArray() (LINQ's IEnumerable<T> fallback)
+        // After Fisher-Yates we return through a yield iterator so the T[]
+        // buffer does NOT leak through pattern-match checks at the call site.
+        T[] buffer;
+        if (source is T[] arr)
         {
-            var j = rng.Next(i + 1);
-            var temp = list[i];
-            list[i] = list[j];
-            list[j] = temp;
+            buffer = new T[arr.Length];
+            Array.Copy(arr, buffer, arr.Length);
+        }
+        else if (source is ICollection<T> coll)
+        {
+            buffer = new T[coll.Count];
+            coll.CopyTo(buffer, 0);
+        }
+        else
+        {
+            buffer = source.ToArray();
         }
 
-        return list;
+        var rng = RandomSource;
+
+        for (var i = buffer.Length - 1; i > 0; i--)
+        {
+            var j = rng.Next(i + 1);
+            var temp = buffer[i];
+            buffer[i] = buffer[j];
+            buffer[j] = temp;
+        }
+
+        return Iterator(buffer);
+
+        static IEnumerable<T> Iterator(T[] shuffled)
+        {
+            foreach (var item in shuffled)
+            {
+                yield return item;
+            }
+        }
     }
 
 #if NET6_0_OR_GREATER
@@ -260,10 +320,13 @@ public static class IEnumerableExtensions
 
     /// <summary>
     /// Wraps an <see cref="IEnumerable{T}"/> in a lazy iterator so the returned
-    /// sequence is guaranteed to NOT be a more concrete type (e.g., <see cref="List{T}"/>,
-    /// <see cref="System.Collections.Generic.ICollection{T}"/>, array). Useful in tests and
-    /// in production code that wants to defeat type-checks for fast paths that
-    /// pattern-match on the runtime type of the source.
+    /// sequence is guaranteed not to be assignable to any more concrete
+    /// enumerable type. Specifically, pattern-matching checks such as
+    /// <c>result is <see cref="List{T}"/></c>,
+    /// <c>result is <see cref="System.Collections.Generic.ICollection{T}"/></c>,
+    /// and <c>result is T[]</c> all return false. Useful in tests (and rarely in
+    /// production code) that want to defeat fast paths which pattern-match on
+    /// the runtime type of the source.
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <param name="source">An <see cref="IEnumerable{T}"/> to wrap.</param>
@@ -280,7 +343,7 @@ public static class IEnumerableExtensions
     /// // Useful when exercising an extension method's slow path in unit tests.
     /// </code>
     /// </example>
-    public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> source)
+    public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T>? source)
     {
         if (source == null)
         {
