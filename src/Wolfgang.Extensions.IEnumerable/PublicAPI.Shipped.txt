@@ -5,6 +5,6 @@ static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsEmpty<T>(this Sys
 static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.IsNullOrEmpty<T>(this System.Collections.Generic.IEnumerable<T>? source) -> bool
 static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None<T>(this System.Collections.Generic.IEnumerable<T>? source) -> bool
 static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.None<T>(this System.Collections.Generic.IEnumerable<T>? source, System.Func<T, bool>! predicate) -> bool
-static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle<T>(this System.Collections.Generic.IEnumerable<T>! source) -> System.Collections.Generic.IEnumerable<T>!
-static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable<T>(this System.Collections.Generic.IEnumerable<T>! source) -> System.Collections.Generic.IEnumerable<T>!
+static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Shuffle<T>(this System.Collections.Generic.IEnumerable<T>? source) -> System.Collections.Generic.IEnumerable<T>!
+static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.ToEnumerable<T>(this System.Collections.Generic.IEnumerable<T>? source) -> System.Collections.Generic.IEnumerable<T>!
 Wolfgang.Extensions.IEnumerable.IEnumerableExtensions

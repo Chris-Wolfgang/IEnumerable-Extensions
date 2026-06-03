@@ -19,6 +19,75 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [1.4.0] - 2026-06-03
+
+### Added
+
+- `examples/ToEnumerable.Example/` — new example project demonstrating
+  the `ToEnumerable<T>` type-opacity contract, mirroring the per-method
+  example layout used for the other public methods.
+- New benchmark suites: `IsNullOrEmptyBenchmarks` (fills the null-source
+  short-circuit gap left by `IsEmptyBenchmarks`), `ToEnumerableBenchmarks`
+  (wrap-only overhead), and `ToEnumerableEnumerationBenchmarks`
+  (wrap + enumeration cost with apples-to-apples baselines).
+- `Shuffle<T>` now has three internal fast paths chosen by the runtime
+  source type, removing the previous "always allocate a `List<T>`" cost:
+  - `T[]` source → `Array.Copy` into a new `T[]`
+  - `ICollection<T>` source → preallocate `T[]` + `CopyTo` (no enumerator
+    allocation, no growth resizing)
+  - pure `IEnumerable<T>` → `source.ToArray()` fallback
+
+### Changed
+
+- **Behavior**: `Shuffle<T>()` return type is now opaque. Pattern matches
+  like `result is List<T>`, `result is ICollection<T>`, and `result is T[]`
+  all return `false`. Previously the method returned its internal
+  `List<T>` buffer cast to `IEnumerable<T>`, letting callers downcast and
+  mutate the buffer. Shuffled values, order randomness, eagerness, and
+  exception contract are unchanged.
+- **Public API**: `Shuffle<T>(this IEnumerable<T>?)` and
+  `ToEnumerable<T>(this IEnumerable<T>?)` — parameter nullability aligned
+  with every other public method on `IEnumerableExtensions`. Annotation
+  change only; runtime behavior unchanged (both still throw
+  `ArgumentNullException` on a null source). Strictly additive — callers
+  passing `IEnumerable<T>?` sources no longer need the `!` null-forgiving
+  operator.
+- `Do<T>()` internal iterator refactored to a `static` local function
+  (matching the v1.3.0 `ToEnumerable<T>` pattern). No public surface
+  change; the eager null-checks still fire at call time.
+- Test csproj: pin `xunit.runner.visualstudio` to `[2.8.2]` on net8/9/10
+  matching every other TFM group, keeping all targets on the xunit v2
+  runner family.
+- csproj indentation normalized to 2 spaces across every project file,
+  matching `.editorconfig`'s `[*.csproj] indent_size = 2`.
+- Workflow drift sync from `Chris-Wolfgang/repo-template`:
+  - `docfx.yaml` — adds the `overlay_canonical_docs_assets` workflow
+    input + step so rebuilds of older tags can backfill the canonical
+    version-picker UI onto pre-picker docs.
+  - `codeql.yaml`, `release.yaml` — cosmetic alignment.
+
+### Fixed
+
+- `docs/readme.md` IsEmpty/IsNullOrEmpty section structure + signatures
+  updated to match the live public surface.
+- `tests/ForEachTests.cs` — vacuous-looking test renamed to
+  `ForEach_when_called_on_a_concrete_List_invokes_the_instance_method_not_the_extension`
+  with an explanatory comment, making clear it documents an intentional
+  NON-shadowing property of the extension (the previous name implied it
+  was testing the extension).
+
+### Security
+
+- `docfx_project/public/version-picker.js` — defensive scheme allowlist
+  on dropdown navigation. The picker now refuses to navigate to anything
+  that isn't a root-relative path (`/...`) or an explicit `http(s)://`
+  URL. Closes an XSS vector where a compromised `versions.json` could
+  slip a `javascript:` or `data:` URL into the dropdown and execute
+  script in the docs origin.
+- `docfx_project/public/version-picker.js` — CNAME path-prefix handling
+  fix: stop stripping the first path segment on custom-domain setups
+  that legitimately serve docs under `/<prefix>/...`.
+
 ## [1.3.0] - 2026-05-30
 
 ### Added
@@ -143,7 +212,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fisher-Yates `Shuffle` implementation with thread-safe RNG.
 - Application and NuGet package icons.
 
-[Unreleased]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/Chris-Wolfgang/IEnumerable-Extensions/compare/v1.1.0...v1.2.0
