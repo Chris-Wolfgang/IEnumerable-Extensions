@@ -28,14 +28,16 @@
       {
         "files": [
           "images/**",
-          "public/**"
+          "public/**",
+          "versions.json"
         ]
       }
     ],
     "output": "_site",
     "template": [
+      "default",
       "modern",
-      "default"
+      "modern-dark"
     ],
     "globalMetadata": {
       "_appName": "Wolfgang.Extensions.IEnumerable",
