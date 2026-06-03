@@ -1,11 +1,23 @@
+using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
 
 namespace Wolfgang.Extensions.IEnumerable.Benchmarks;
 
 /// <summary>
 /// Measures the wrapping overhead of <c>ToEnumerable&lt;T&gt;()</c> in isolation
-/// — return-the-IEnumerable, no enumeration. Baseline is <c>Identity_Array</c>
-/// (returning the source array directly).
+/// — wrap the source and return a materialized scalar so the BDN validator
+/// accepts the result. Baseline is <c>Identity_Array</c>, which returns the
+/// identity hash of the source array (no wrap, same shape of measurement).
+/// <para>
+/// Why <see cref="RuntimeHelpers.GetHashCode(object)"/>: BDN rejects benchmarks
+/// returning an unconsumed <see cref="IEnumerable{T}"/> (deferred-execution
+/// result). A naive <c>is object</c> null check would satisfy the validator
+/// but is constant-foldable to <c>true</c> by the JIT — it could prove the
+/// wrapper is non-null and elide the <see cref="IEnumerableExtensions.ToEnumerable{T}"/>
+/// call entirely. <see cref="RuntimeHelpers.GetHashCode(object)"/> reads the
+/// object header of the wrapper instance, which forces materialization and
+/// keeps the call live without pulling enumeration cost into the measurement.
+/// </para>
 /// </summary>
 [MemoryDiagnoser]
 [RankColumn]
@@ -24,16 +36,16 @@ public class ToEnumerableBenchmarks
     }
 
     [Benchmark(Baseline = true)]
-    public IEnumerable<int> Identity_Array() => _array;
+    public int Identity_Array() => RuntimeHelpers.GetHashCode(_array);
 
     [Benchmark]
-    public IEnumerable<int> ToEnumerable_Array() => _array.ToEnumerable();
+    public int ToEnumerable_Array() => RuntimeHelpers.GetHashCode(_array.ToEnumerable());
 
     [Benchmark]
-    public IEnumerable<int> ToEnumerable_List() => _list.ToEnumerable();
+    public int ToEnumerable_List() => RuntimeHelpers.GetHashCode(_list.ToEnumerable());
 
     [Benchmark]
-    public IEnumerable<int> ToEnumerable_Yield() => _yield.ToEnumerable();
+    public int ToEnumerable_Yield() => RuntimeHelpers.GetHashCode(_yield.ToEnumerable());
 
     private static IEnumerable<int> YieldRange(int count)
     {
