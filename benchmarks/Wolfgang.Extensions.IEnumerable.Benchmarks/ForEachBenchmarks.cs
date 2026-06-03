@@ -74,6 +74,21 @@ public class ForEachBenchmarks
         return sum;
     }
 
+    // LINQ has no terminal-ForEach operator, so the closest equivalent is
+    // materializing the source via .ToList() and iterating that. Included as
+    // a "what does eager-materialize-then-iterate cost" reference number.
+    [Benchmark]
+    public long Linq_ToList_Then_Foreach()
+    {
+        long sum = 0;
+        var materialized = _listAsEnumerable.ToList();
+        foreach (var item in materialized)
+        {
+            sum += item;
+        }
+        return sum;
+    }
+
     private static IEnumerable<int> YieldRange(int count)
     {
         for (var i = 0; i < count; i++)
