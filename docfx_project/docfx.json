@@ -27,6 +27,7 @@
     "resource": [
       {
         "files": [
+          "logo.svg",
           "images/**",
           "public/**",
           "versions.json"
