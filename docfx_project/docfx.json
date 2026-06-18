@@ -5,7 +5,7 @@
       "src": [
         {
           "files": [
-			"src/**/*.csproj"
+            "src/**/*.csproj"
           ],
           "src": "../"
         }
@@ -16,9 +16,9 @@
   "build": {
     "content": [
       {
-		"files": [
-			"**/*.{md,yml}"
-		],
+        "files": [
+          "**/*.{md,yml}"
+        ],
         "exclude": [
           "_site/**"
         ]
@@ -28,6 +28,9 @@
       {
         "files": [
           "logo.svg",
+          "apple-touch-icon.png",
+          "favicon.ico",
+          "favicon.svg",
           "images/**",
           "logo.svg",
           "public/**",
@@ -45,6 +48,7 @@
       "_appName": "Wolfgang.Extensions.IEnumerable",
       "_appTitle": "Wolfgang.Extensions.IEnumerable Documentation",
       "_appLogoPath": "logo.svg",
+      "_appFaviconPath": "favicon.svg",
       "_enableSearch": true,
       "_appFooter": "Made with DocFX <script>(function(){var r='/';if(window.location.hostname.endsWith('.github.io')){var s=window.location.pathname.split('/').filter(Boolean);if(s.length)r='/'+s[0]+'/';}var t=document.createElement('script');t.src=r+'public/version-picker.js';t.async=true;document.head.appendChild(t);})();</script>",
       "_baseUrl": "https://Chris-Wolfgang.github.io/IEnumerable-Extensions/",
