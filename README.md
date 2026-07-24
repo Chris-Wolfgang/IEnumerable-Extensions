@@ -117,15 +117,13 @@ IEnumerable<int> slowPath = new List<int> { 1, 2, 3 }.ToEnumerable();
 
 ---
 
-## 🎯 Target Frameworks
+## 🎯 Supported Frameworks
 
-| Framework | Versions |
-|-----------|----------|
-| .NET Framework | .NET 4.6.2 |
-| .NET Standard | .NET Standard 2.0 |
-| .NET | .NET 8.0, .NET 10.0 |
+This library targets:
 
----
+- **.NET Framework:** 4.6.2
+
+See the [NuGet package page](https://www.nuget.org/packages/Wolfgang.Extensions.IEnumerable/) for the authoritative per-TFM compatibility matrix.
 
 ## 🛠️ Building from Source
 
