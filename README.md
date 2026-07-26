@@ -4,7 +4,7 @@ A collection of extension methods for `IEnumerable<T>` in .NET.
 
 [![NuGet](https://img.shields.io/nuget/v/Wolfgang.Extensions.IEnumerable.svg?logo=nuget&label=NuGet)](https://www.nuget.org/packages/Wolfgang.Extensions.IEnumerable)
 [![NuGet downloads](https://img.shields.io/nuget/dt/Wolfgang.Extensions.IEnumerable.svg?logo=nuget&label=downloads)](https://www.nuget.org/packages/Wolfgang.Extensions.IEnumerable)
-[![PR build](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/IEnumerable-Extensions/pr.yaml?branch=main&label=PR%20build&logo=github)](https://github.com/Chris-Wolfgang/IEnumerable-Extensions/actions/workflows/pr.yaml)
+[![PR build](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/IEnumerable-Extensions/pr.yaml?event=pull_request_target&label=PR%20build&logo=github)](https://github.com/Chris-Wolfgang/IEnumerable-Extensions/actions/workflows/pr.yaml)
 [![Release](https://img.shields.io/github/actions/workflow/status/Chris-Wolfgang/IEnumerable-Extensions/release.yaml?label=release&logo=github)](https://github.com/Chris-Wolfgang/IEnumerable-Extensions/actions/workflows/release.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-Multi--Targeted-purple.svg)](https://dotnet.microsoft.com/)
@@ -117,15 +117,15 @@ IEnumerable<int> slowPath = new List<int> { 1, 2, 3 }.ToEnumerable();
 
 ---
 
-## 🎯 Target Frameworks
+## 🎯 Supported Frameworks
 
-| Framework | Versions |
-|-----------|----------|
-| .NET Framework | .NET 4.6.2 |
-| .NET Standard | .NET Standard 2.0 |
-| .NET | .NET 8.0, .NET 10.0 |
+This library targets:
 
----
+- **.NET Framework:** 4.6.2
+- **.NET Standard:** 2.0
+- **.NET:** 8.0, 10.0
+
+See the [NuGet package page](https://www.nuget.org/packages/Wolfgang.Extensions.IEnumerable/) for the authoritative per-TFM compatibility matrix.
 
 ## 🛠️ Building from Source
 
