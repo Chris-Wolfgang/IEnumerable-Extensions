@@ -121,6 +121,7 @@ jobs:
             "coverlet.runsettings"
             "*.globalconfig"
             "*.ruleset"
+            "*.DotSettings"
             ".github/workflows/*.yml"
             ".github/workflows/*.yaml"
           )
