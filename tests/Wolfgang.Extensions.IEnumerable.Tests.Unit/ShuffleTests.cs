@@ -127,9 +127,9 @@ public class ShuffleTests
     [Fact]
     public void Shuffle_with_ICollection_source_exercises_collection_fast_path()
     {
-        // Custom ICollection<T> that is NOT a List<T>, T[], or any LINQ-recognized
-        // collection — forces the `source is ICollection<T>` branch in Shuffle.
-        var source = new CountingCollection<int>(new[] { 1, 2, 3, 4, 5 });
+        // An ICollection<T> that is not a T[] — forces the `source is ICollection<T>`
+        // branch in Shuffle (Count + CopyTo) rather than the array copy or ToArray fallback.
+        var source = new LinkedList<int>(new[] { 1, 2, 3, 4, 5 });
 
         var result = source.Shuffle().ToArray();
 
@@ -149,35 +149,5 @@ public class ShuffleTests
         var result = source.Shuffle().ToArray();
 
         Assert.Equal(5, result.Length);
-    }
-
-
-
-    private sealed class CountingCollection<T> : ICollection<T>
-    {
-        private readonly List<T> _inner;
-
-        public CountingCollection(IEnumerable<T> items)
-        {
-            _inner = new List<T>(items);
-        }
-
-        public int Count => _inner.Count;
-
-        public bool IsReadOnly => true;
-
-        public void Add(T item) => throw new NotSupportedException();
-
-        public void Clear() => throw new NotSupportedException();
-
-        public bool Contains(T item) => _inner.Contains(item);
-
-        public void CopyTo(T[] array, int arrayIndex) => _inner.CopyTo(array, arrayIndex);
-
-        public IEnumerator<T> GetEnumerator() => _inner.GetEnumerator();
-
-        public bool Remove(T item) => throw new NotSupportedException();
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _inner.GetEnumerator();
     }
 }
