@@ -310,7 +310,7 @@ public static class IEnumerableExtensions
     private static Random RandomSource => Random.Shared;
 #else
     private static readonly ThreadLocal<Random> SThreadLocalRandom = new(CreateRandom);
-    private static Random RandomSource => SThreadLocalRandom.Value!;
+    private static Random RandomSource => SThreadLocalRandom.Value;
 
     private static Random CreateRandom()
         => new(unchecked((Environment.TickCount * 31) + Thread.CurrentThread.ManagedThreadId));
