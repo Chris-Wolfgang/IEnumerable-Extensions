@@ -91,7 +91,7 @@ public class DoTests
 
         Assert.False(enumerated);
 
-        tapped.ToList();
+        _ = tapped.ToList();
 
         Assert.True(enumerated);
     }
