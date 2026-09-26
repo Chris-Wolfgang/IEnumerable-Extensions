@@ -24,7 +24,7 @@ ProcessOrders(orders: null);
 ProcessOrders(Array.Empty<Order>());
 ProcessOrders(new[] { new Order("ORD-001", 29.99m), new Order("ORD-002", 49.99m) });
 
-static void ProcessOrders(IEnumerable<Order>? orders)
+static void ProcessOrders(IReadOnlyCollection<Order>? orders)
 {
     if (orders.IsNullOrEmpty())
     {
