@@ -7,7 +7,7 @@ Console.WriteLine("=== IsEmpty Example ===");
 Console.WriteLine();
 
 // Check an empty list
-var emptyList = new List<string>();
+IReadOnlyList<string> emptyList = new List<string>();
 Console.WriteLine($"Empty list is empty: {emptyList.IsEmpty()}");
 
 // Check a populated list
@@ -37,8 +37,10 @@ else
     searchResults.ForEach(p => Console.WriteLine($"  Found: {p}"));
 }
 
-static IEnumerable<string> SearchProducts(string query)
+static IReadOnlyList<string> SearchProducts(string query)
 {
     var products = new[] { "Widget", "Gadget", "Doohickey" };
-    return products.Where(p => p.Contains(query, StringComparison.OrdinalIgnoreCase));
+    return products
+        .Where(p => p.Contains(query, StringComparison.OrdinalIgnoreCase))
+        .ToList();
 }
