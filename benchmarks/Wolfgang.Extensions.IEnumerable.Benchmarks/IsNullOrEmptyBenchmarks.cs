@@ -13,7 +13,7 @@ namespace Wolfgang.Extensions.IEnumerable.Benchmarks;
 public class IsNullOrEmptyBenchmarks
 {
     private IEnumerable<int>? _null;
-    private List<int> _emptyList = null!;
+    private List<int>? _emptyList;
     private List<int> _populatedList = null!;
     private IEnumerable<int> _emptyYield = null!;
     private IEnumerable<int> _populatedYield = null!;
