@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
+
 namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 public class DoTests
@@ -91,7 +96,7 @@ public class DoTests
 
         Assert.False(enumerated);
 
-        tapped.ToList();
+        _ = tapped.ToList();
 
         Assert.True(enumerated);
     }
