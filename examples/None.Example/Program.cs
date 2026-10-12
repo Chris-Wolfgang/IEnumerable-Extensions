@@ -8,7 +8,7 @@ Console.WriteLine("=== None Example ===");
 Console.WriteLine();
 
 // None() — check if sequence is empty
-var emptyList = new List<int>();
+IReadOnlyList<int> emptyList = new List<int>();
 var numbers = new[] { 1, 2, 3, 4, 5 };
 
 Console.WriteLine($"Empty list has none: {emptyList.None()}");
@@ -39,12 +39,31 @@ else
 }
 
 // Compare with Any — None reads more naturally in some cases
-var errors = new List<string>();
+var errors = Validate(users);
 
 // Instead of: if (!errors.Any())
 if (errors.None())
 {
     Console.WriteLine("No errors found — validation passed.");
+}
+else
+{
+    errors.ForEach(e => Console.WriteLine(e));
+}
+
+static IReadOnlyList<string> Validate(IEnumerable<User> users)
+{
+    var errors = new List<string>();
+
+    foreach (var user in users)
+    {
+        if (!user.IsVerified)
+        {
+            errors.Add($"{user.Name} <{user.Email}> is not verified.");
+        }
+    }
+
+    return errors;
 }
 
 internal record User(string Name, string Email, bool IsVerified);
