@@ -91,10 +91,8 @@ public class ToEnumerableTests
 
         // Intentional double-enumeration: the test verifies the returned iterator
         // is re-entrant (calling GetEnumerator() twice yields the same elements).
-#pragma warning disable CA1851 // Possible multiple enumerations
-        var firstPass = enumerable.ToArray();
-        var secondPass = enumerable.ToArray();
-#pragma warning restore CA1851
+        var firstPass = Drain(enumerable);
+        var secondPass = Drain(enumerable);
 
         Assert.Equal(firstPass, secondPass);
     }
@@ -117,6 +115,9 @@ public class ToEnumerableTests
         Assert.Equal([1, 2, 3], materialized);
     }
 
+
+
+    private static int[] Drain(IEnumerable<int> source) => source.ToArray();
 
 
     private static IEnumerable<int> CreateTrackingSequence(Action onYield)
