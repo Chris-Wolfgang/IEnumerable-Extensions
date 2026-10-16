@@ -127,12 +127,13 @@ public class DoTests
     public void Do_when_action_throws_propagates_exception()
     {
         var source = new[] { 1, 2, 3 };
+        var calls = 0;
 
         Assert.Throws<InvalidOperationException>
         (
-            () => source.ToEnumerable().Do(x =>
+            () => source.ToEnumerable().Do(_ =>
             {
-                if (x == 2)
+                if (++calls == 2)
                 {
                     throw new InvalidOperationException("test");
                 }
