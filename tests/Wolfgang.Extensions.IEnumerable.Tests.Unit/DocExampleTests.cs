@@ -26,9 +26,7 @@ public class DocExampleTests
     {
         var examples = await ReadExamplesAsync();
 
-        var failures = examples
-            .SelectMany(example => Compile(example).Select(error => $"{error}{Environment.NewLine}{example}"))
-            .ToArray();
+        var failures = FindFailures(examples);
 
         Assert.True
         (
@@ -60,12 +58,43 @@ public class DocExampleTests
 
 
     [Fact]
+    public void FindFailures_when_snippet_does_not_compile_reports_the_diagnostic_and_the_snippet()
+    {
+        const string snippet = "source.NoSuchExtension();";
+
+        var failures = FindFailures(new[] { snippet });
+
+        var failure = Assert.Single(failures);
+        Assert.Contains("NoSuchExtension", failure);
+        Assert.Contains(snippet, failure);
+    }
+
+
+
+    [Fact]
+    public void FindFailures_when_snippets_compile_reports_nothing()
+    {
+        var failures = FindFailures(new[] { "var empty = source.IsEmpty();" });
+
+        Assert.Empty(failures);
+    }
+
+
+
+    [Fact]
     public void Compile_when_snippet_calls_a_missing_method_reports_an_error()
     {
         var errors = Compile("source.NoSuchExtension();");
 
         Assert.NotEmpty(errors);
     }
+
+
+
+    private static string[] FindFailures(IEnumerable<string> examples)
+        => examples
+            .SelectMany(example => Compile(example).Select(error => $"{error}{Environment.NewLine}{example}"))
+            .ToArray();
 
 
 
