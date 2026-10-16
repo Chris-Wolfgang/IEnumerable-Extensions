@@ -66,6 +66,18 @@ jobs:
           path: hashes.txt
           if-no-files-found: error
 
+      # The built files themselves, so a hash mismatch can be diagnosed byte by byte
+      # instead of only seeing that two digests differ.
+      - name: Upload built assemblies
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: output-${{ matrix.os }}
+          path: |
+            src/**/bin/Release/**/*.dll
+            src/**/bin/Release/**/*.pdb
+          retention-days: 7
+          if-no-files-found: error
+
   compare:
     name: Compare Linux and Windows output
     needs: hash
