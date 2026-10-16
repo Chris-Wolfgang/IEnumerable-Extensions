@@ -15,7 +15,7 @@ public class DoBenchmarks
     private int[] _data = null!;
 
     [Params(100, 10_000, 1_000_000)]
-    public int Size { get; set; }
+    public int Size;
 
     [GlobalSetup]
     public void Setup() => _data = Enumerable.Range(0, Size).ToArray();
