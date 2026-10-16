@@ -9,6 +9,7 @@
     <File Path="Directory.Build.props" />
     <File Path="LICENSE" />
     <File Path="README.md" />
+    <File Path="REPRODUCIBLE-BUILD.md" />
     <File Path="SECURITY.md" />
   </Folder>
   <Folder Name="/.root/.github/">
@@ -30,6 +31,7 @@
     <File Path=".github/workflows/docfx.yaml" />
     <File Path=".github/workflows/pr.yaml" />
     <File Path=".github/workflows/release.yaml" />
+    <File Path=".github/workflows/reproducible-build.yaml" />
     <File Path=".github/workflows/stryker.yaml" />
   </Folder>
   <Folder Name="/.root/ISSUE_TEMPLATE/">
