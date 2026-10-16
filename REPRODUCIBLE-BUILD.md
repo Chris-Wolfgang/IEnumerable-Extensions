@@ -10,7 +10,7 @@ Linux and Windows output are **not** compared with each other and are not byte-i
 
 ## Verify a release yourself
 
-1. Check out the release tag and use the .NET SDK version and operating system the release workflow used (ubuntu-latest).
+1. Check out the release tag and use the .NET SDK version and operating system the release workflow used (its `pack-and-validate` job runs on `windows-latest`).
 2. Build each `src/` project with `dotnet build -c Release -p:ContinuousIntegrationBuild=true`.
 3. Extract the published `.nupkg` (it is a zip) and compare `sha256sum` of each `lib/<tfm>/*.dll` with the file your build wrote to `bin/Release/<tfm>/`.
 
