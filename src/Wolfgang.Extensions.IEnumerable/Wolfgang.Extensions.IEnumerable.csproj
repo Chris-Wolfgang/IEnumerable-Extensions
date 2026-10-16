@@ -22,6 +22,12 @@
     <SignAssembly>False</SignAssembly>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <PackageIcon>icon.png</PackageIcon>
+    <!-- Package validation (ApiCompat) compares every pack against the last PUBLISHED version, so an
+         unintended binary-breaking change fails dotnet pack, including the release workflow's pack step.
+         Keep the baseline at the last published version, not the version being built; waive an
+         intentional break with a CompatibilitySuppressions.xml entry. -->
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>1.4.0</PackageValidationBaselineVersion>
   </PropertyGroup>
 
   <ItemGroup>
