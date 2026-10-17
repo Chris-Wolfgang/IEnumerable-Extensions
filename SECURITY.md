@@ -74,3 +74,19 @@ Facts a maintainer would need at 2am if the release identity is compromised. Gen
 - **Owner**: @Chris-Wolfgang.
 - **Downstream consumers**: not tracked in this repository; any project that references `Wolfgang.Extensions.IEnumerable` from nuget.org is affected, and the package's "Used by" tab lists the public ones. Unknown external consumers may exist.
 - **Package coordinates for unlisting**: `Wolfgang.Extensions.IEnumerable` — https://www.nuget.org/packages/Wolfgang.Extensions.IEnumerable/ (the repository publishes this single package).
+
+## Verifying a release
+
+Each GitHub Release carries the packed `.nupkg` and `.snupkg`, a CycloneDX SBOM named `Wolfgang.Extensions.IEnumerable.bom.json`, and the coverage report. The release workflow also records a SLSA build-provenance attestation for each `.nupkg`, signed with the workflow's OIDC identity, so there is no signing key to trust or rotate.
+
+**Provenance.** With the [GitHub CLI](https://cli.github.com/) (`gh`), download the `.nupkg` from the release (or from nuget.org) and run:
+
+```bash
+gh attestation verify Wolfgang.Extensions.IEnumerable.<version>.nupkg   --repo Chris-Wolfgang/IEnumerable-Extensions   --signer-workflow Chris-Wolfgang/IEnumerable-Extensions/.github/workflows/release.yaml
+```
+
+This checks that the file's SHA-256 digest was attested by `release.yaml` in this repository, and shows the commit and workflow run that produced it. Only releases cut after the attestation step was added have one: **v1.4.0 (2026-06-03) predates it**, and `gh attestation verify` returns `HTTP 404` for it.
+
+**SBOM.** The SBOM lists the package's dependency components. It is a published inventory, **not** signed or attested, so treat it as informational. To cross-check it, check out the release tag, restore the CycloneDX version pinned in `.config/dotnet-tools.json` (or install `dotnet-CycloneDX`), run `dotnet CycloneDX src/Wolfgang.Extensions.IEnumerable/Wolfgang.Extensions.IEnumerable.csproj --json`, and compare the `components` arrays by name and version. `serialNumber` and `metadata.timestamp` differ on every run and should be ignored. Regenerating the v1.4.0 SBOM this way produced the same 17 components as the published file.
+
+**Package signature.** The package is not author-signed yet (`nuget verify` has nothing to check); that is blocked on a code-signing certificate and tracked in #245.
