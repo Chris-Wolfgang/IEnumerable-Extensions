@@ -91,8 +91,10 @@ public class ToEnumerableTests
 
         // Intentional double-enumeration: the test verifies the returned iterator
         // is re-entrant (calling GetEnumerator() twice yields the same elements).
+        // ReSharper disable PossibleMultipleEnumeration - enumerating the same sequence twice is what this test checks
         var firstPass = Drain(enumerable);
         var secondPass = Drain(enumerable);
+        // ReSharper restore PossibleMultipleEnumeration
 
         Assert.Equal(firstPass, secondPass);
     }
