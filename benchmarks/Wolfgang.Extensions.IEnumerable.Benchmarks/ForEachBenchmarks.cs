@@ -16,7 +16,7 @@ public class ForEachBenchmarks
     private IEnumerable<int> _yieldEnumerable = null!;
 
     [Params(100, 10_000, 1_000_000)]
-    public int Size;
+    public int Size { get; set; }
 
     [GlobalSetup]
     public void Setup()

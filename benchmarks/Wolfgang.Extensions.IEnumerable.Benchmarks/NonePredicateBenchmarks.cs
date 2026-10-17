@@ -14,7 +14,7 @@ public class NonePredicateBenchmarks
     private int[] _data = null!;
 
     [Params(100, 10_000, 1_000_000)]
-    public int Size;
+    public int Size { get; set; }
 
     [GlobalSetup]
     public void Setup() => _data = Enumerable.Range(0, Size).ToArray();

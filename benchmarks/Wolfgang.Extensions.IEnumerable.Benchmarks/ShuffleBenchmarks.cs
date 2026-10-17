@@ -30,7 +30,7 @@ public class ShuffleBenchmarks
     private IEnumerable<int> _yield = null!;
 
     [Params(100, 1000, 10000)]
-    public int Size;
+    public int Size { get; set; }
 
     [GlobalSetup]
     public void Setup()
