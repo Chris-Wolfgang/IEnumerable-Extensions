@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+// ReSharper disable once RedundantUsingDirective - required on net462/netstandard2.0; only redundant on net8.0+, which is the target InspectCode analyses
 using System.Threading;
 
 // The namespace deliberately mirrors the BCL type it extends

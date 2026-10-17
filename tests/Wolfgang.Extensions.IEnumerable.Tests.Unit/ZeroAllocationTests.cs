@@ -27,6 +27,7 @@ public class ZeroAllocationTests
     private static readonly int[] _array = { 1, 2, 3 };
     private static readonly int[] _emptyArray = Array.Empty<int>();
     private static readonly List<int> _list = new() { 1, 2, 3 };
+    // ReSharper disable once CollectionNeverUpdated.Local - an empty list is the fixture
     private static readonly List<int> _emptyList = new();
     private static readonly Action<int> _noOp = static _ => { };
 
