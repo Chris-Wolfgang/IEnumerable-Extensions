@@ -1,9 +1,0 @@
-# Analyzer rules relaxed for benchmark projects
-
-[*.cs]
-
-# UnusedAutoPropertyAccessor.Global fires on BenchmarkDotNet [Params] properties whose setters
-# BDN invokes reflectively from the harness rather than from user code, so the accessor is not
-# really "never used". Scoped to benchmarks/, where the pattern is universal. (A public field
-# instead of a property avoids this rule but trips S1104, so the property is the right shape.)
-resharper_unused_auto_property_accessor_global_highlighting = none
