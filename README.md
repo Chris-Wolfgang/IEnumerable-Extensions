@@ -106,7 +106,7 @@ new int[0].IsEmpty();                                // true
 new[] { 1, 2, 3 }.None();                            // false
 new[] { 1, 2, 3 }.None(x => x < 0);                  // true
 
-// Shuffle
+// Shuffle (on .NET 10 this is ambiguous with System.Linq - see "Shuffle on .NET 10" below)
 var deck = Enumerable.Range(1, 52).Shuffle().ToList();
 
 // ToEnumerable — strip the concrete type for test fixtures that need to
@@ -115,6 +115,18 @@ IEnumerable<int> slowPath = new List<int> { 1, 2, 3 }.ToEnumerable();
 // slowPath is List<int>      // false
 // slowPath is ICollection<int> // false
 ```
+
+### Shuffle on .NET 10
+
+.NET 10 added `System.Linq.Enumerable.Shuffle<TSource>(IEnumerable<TSource>)`. In a file that has both `using System.Linq;` and `using Wolfgang.Extensions.IEnumerable;`, a call such as `deck.Shuffle()` is ambiguous and fails to compile with `CS0121` when targeting net10.0. Older target frameworks are not affected. Either call this library's method explicitly:
+
+```csharp
+using Wolfgang.Extensions.IEnumerable;
+
+var shuffled = IEnumerableExtensions.Shuffle(deck);   // this library's Shuffle
+```
+
+or alias the class (`using Ext = Wolfgang.Extensions.IEnumerable.IEnumerableExtensions;` then `Ext.Shuffle(deck)`), or drop `using System.Linq;` from files that do not need it. The two methods may not behave identically: this library's `Shuffle` is eager and returns an opaque iterator, so check the BCL method's contract before switching to it.
 
 ---
 
