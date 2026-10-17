@@ -42,6 +42,15 @@ dotnet_diagnostic.SA0001.severity = none
 # Enable .NET analyzers with conservative defaults
 dotnet_analyzer_diagnostic.severity = suggestion
 
+# The blanket suggestion above also demotes the trimming / Native AOT / single-file analyzers
+# (IL2xxx, IL3xxx). Those only matter once a project opts in (IsTrimmable / IsAotCompatible),
+# and then a suggestion is invisible: the build is "clean" while the promise to consumers is
+# unverified. Re-elevate just those categories so a trim- or AOT-unsafe change surfaces as a
+# warning (an error in Release). Projects that do not opt in never run these analyzers.
+dotnet_analyzer_diagnostic.category-Trimming.severity = warning
+dotnet_analyzer_diagnostic.category-AOT.severity = warning
+dotnet_analyzer_diagnostic.category-SingleFile.severity = warning
+
 # IDE (Code Style) Rules
 dotnet_diagnostic.IDE0005.severity = suggestion   # Remove unnecessary usings
 # Allow var usage - modern C# style
