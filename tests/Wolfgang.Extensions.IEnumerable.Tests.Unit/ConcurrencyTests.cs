@@ -34,10 +34,9 @@ public class ConcurrencyTests
             {
                 for (var i = 0; i < IterationsPerThread; i++)
                 {
-                    if (!IsPermutationOfRange(source.Shuffle().ToArray(), ItemCount))
-                    {
-                        Interlocked.Increment(ref invalidResults);
-                    }
+                    // Adds 0 for a valid permutation. One executed statement, rather than a branch that
+                    // only runs when the test is failing.
+                    Interlocked.Add(ref invalidResults, IsPermutationOfRange(source.Shuffle().ToArray(), ItemCount) ? 0 : 1);
                 }
             }
         );
@@ -107,10 +106,7 @@ public class ConcurrencyTests
             {
                 for (var i = 0; i < IterationsPerThread; i++)
                 {
-                    if (shared.Count() != ItemCount)
-                    {
-                        Interlocked.Increment(ref wrongLengths);
-                    }
+                    Interlocked.Add(ref wrongLengths, shared.Count() == ItemCount ? 0 : 1);
                 }
             }
         );
