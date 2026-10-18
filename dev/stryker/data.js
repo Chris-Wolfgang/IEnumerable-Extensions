@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1791699787521,
+  "lastUpdate": 1792304489310,
   "repoUrl": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions",
   "entries": {
     "Mutation score": [
@@ -75,6 +75,33 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/f6ac35722b027ff86c5866793559c57edf3f5a1e"
         },
         "date": 1791699783717,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score",
+            "value": 79.49,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "be8c1af15912e6cc27ed3841710ef86441c44e04",
+          "message": "docs: consumer-side build verification with a measured v1.4.0 worked example (#532)\n\n* test: concurrency stress tests for Shuffle's shared random and shared-source enumeration (#190)\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* test: property-based tests with CsCheck against LINQ on net8+ (#185)\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* docs: consumer-side build verification, with a measured v1.4.0 worked example (#207)\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n* test: execute every line of ConcurrencyTests when the tests pass - the failure-only increments broke the 100% test coverage gate\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Sonnet 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-10-18T01:19:11Z",
+          "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/be8c1af15912e6cc27ed3841710ef86441c44e04"
+        },
+        "date": 1792304486392,
         "tool": "customBiggerIsBetter",
         "benches": [
           {
