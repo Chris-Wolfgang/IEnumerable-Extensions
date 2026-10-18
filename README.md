@@ -130,6 +130,15 @@ or alias the class (`using Ext = Wolfgang.Extensions.IEnumerable.IEnumerableExte
 
 ---
 
+## 🔐 Verify the build
+
+Releases publish a CycloneDX SBOM, releases cut after the attestation step was added also carry a SLSA build-provenance attestation (v1.4.0 predates it), and the assemblies are built deterministically, so you can check that a published package matches this repository:
+
+- **Provenance and SBOM:** see [Verifying a release](SECURITY.md#verifying-a-release) in `SECURITY.md`.
+- **Rebuilding from source:** see [REPRODUCIBLE-BUILD.md](REPRODUCIBLE-BUILD.md) for the exact steps, a measured worked example (what a near-match looks like) and how to report a discrepancy.
+
+---
+
 ## 🎯 Supported Frameworks
 
 This library targets:
