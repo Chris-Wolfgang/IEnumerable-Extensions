@@ -1,5 +1,5 @@
 # Sequential PR validation workflow with coverage gating
-# Stage 1: Linux tests with 90% coverage requirement
+# Stage 1: Linux tests with 95% coverage requirement
 # Stage 2: Windows .NET (5.0-10.0) and .NET Framework (4.6.2-4.8.1) tests (only if Linux passes)
 # Stage 3: macOS tests (only if Stage 2 passes)
 #
@@ -27,7 +27,7 @@ permissions:
 
 env:
   # Minimum line coverage for PRODUCTION assemblies (anything under src/).
-  CODECOV_MINIMUM: 90
+  CODECOV_MINIMUM: 95
   # Minimum line coverage for TEST assemblies (anything under tests/).
   # Test code that never executes has no purpose — an uncovered helper, fake, or
   # branch in a test project is dead code and should be exercised or deleted.
@@ -369,7 +369,27 @@ jobs:
           # SARIF level=error fails the job; warnings still upload (visible in
           # Security → Code scanning) but don't gate merge — raise to `error`
           # later when the noise floor is acceptable.
-          count=$(jq '[.runs[].results[] | select(.level=="error")] | length' inspect.sarif)
+          #
+          # A check that could not run must fail, not pass. An empty or unreadable report would
+          # otherwise leave `count` empty, `[ "" -gt 0 ]` would fail inside the `if` condition (where
+          # a failure is swallowed), and the step would fall through to "No InspectCode findings".
+          set -euo pipefail
+          if [ ! -s inspect.sarif ]; then
+            echo "::error::inspect.sarif is missing or empty - InspectCode produced no report, so the gate cannot run."
+            exit 1
+          fi
+          if ! command -v jq > /dev/null 2>&1; then
+            echo "::error::jq is not available, so the SARIF cannot be read."
+            exit 1
+          fi
+          count=$(jq '[.runs[].results[] | select(.level=="error")] | length' inspect.sarif) || {
+            echo "::error::inspect.sarif could not be parsed as a SARIF report, so the gate cannot run."
+            exit 1
+          }
+          if ! printf '%s' "$count" | grep -qE '^[0-9]+$'; then
+            echo "::error::Could not read a finding count from inspect.sarif (got '$count')."
+            exit 1
+          fi
           if [ "$count" -gt 0 ]; then
             echo "::error::$count InspectCode error-severity finding(s) — see Security → Code scanning"
             exit 1
@@ -751,7 +771,7 @@ jobs:
             -targetdir:"CoverageReport" \
             -reporttypes:"Html;TextSummary;MarkdownSummaryGithub;CsvSummary"
 
-      - name: Enforce 90% coverage threshold
+      - name: Enforce 95% coverage threshold
         if: steps.check-coverage.outputs.has-coverage == 'true'
         run: |
           if [ ! -f CoverageReport/Summary.txt ]; then
@@ -764,7 +784,7 @@ jobs:
           echo ""
 
           failed_projects=""
-          threshold=${CODECOV_MINIMUM:-90}
+          threshold=${CODECOV_MINIMUM:-95}
           test_threshold=${CODECOV_TEST_MINIMUM:-100}
           matched_count=0
 
@@ -1005,6 +1025,14 @@ jobs:
           $testProjects | ForEach-Object { Write-Host $_.FullName -ForegroundColor White }
           Write-Host ""
 
+          # Assemblies that ran a COVERAGE-COLLECTING framework in this job (net5.0 and later).
+          # net4x and netcoreapp3.1 are tested below without the XPlat collector by design, so a
+          # project that targets only those is never expected to have a coverage row. The coverage
+          # steps below require a row for every name recorded here, so a project whose collection
+          # silently broke (a dropped coverlet.collector reference) fails the gate instead of
+          # dropping out of it. Mirrors Stage 1's ledger.
+          $ranAssemblies = @()
+
           foreach ($testProj in $testProjects) {
             Write-Host "==========================================" -ForegroundColor Cyan
             Write-Host "Testing project: $($testProj.FullName)" -ForegroundColor Cyan
@@ -1133,15 +1161,33 @@ jobs:
                 exit 1
               }
             }
+
+            # Same assembly-name rule as the coverage gate below.
+            if (@($frameworks | Where-Object { $_ -match '^net([5-9]|[1-9][0-9]+)\.' }).Count -gt 0) {
+              $asmMatch = [regex]::Match((Get-Content $testProj.FullName -Raw), '<AssemblyName>([^<]+)</AssemblyName>')
+              $ranAssemblies += $(if ($asmMatch.Success) { $asmMatch.Groups[1].Value.Trim() } else { $testProj.BaseName })
+            }
             Write-Host ""
           }
+
+          $ranFile = Join-Path $env:RUNNER_TEMP 'stage2-ran-test-assemblies.txt'
+          Set-Content -Path $ranFile -Value $ranAssemblies
+          Write-Host "Recorded $($ranAssemblies.Count) test assembly/assemblies with coverage: $($ranAssemblies -join ', ')"
 
       - name: Check for coverage files
         id: check-coverage
         run: |
+          $ranFile = Join-Path $env:RUNNER_TEMP 'stage2-ran-test-assemblies.txt'
+          $ran = @()
+          if (Test-Path $ranFile) { $ran = @(Get-Content $ranFile | Where-Object { $_ -and $_.Trim() }) }
           if (Get-ChildItem -Path TestResults -Recurse -Filter coverage.cobertura.xml -ErrorAction SilentlyContinue) {
             echo "has-coverage=true" >> $env:GITHUB_OUTPUT
             Write-Host "✅ Coverage files found"
+          } elseif ($ran.Count -gt 0) {
+            # A coverage-collecting framework ran, so absence of coverage means collection broke.
+            # Skipping here would report green while measuring nothing.
+            Write-Host "::error::Tests ran but produced no coverage files - the coverage gate cannot be evaluated. Test assemblies that ran: $($ran -join ', ')"
+            exit 1
           } else {
             echo "has-coverage=false" >> $env:GITHUB_OUTPUT
             Write-Host "ℹ️  No coverage files found - skipping coverage report generation"
@@ -1162,7 +1208,7 @@ jobs:
             -targetdir:"CoverageReport" `
             -reporttypes:"Html;TextSummary;MarkdownSummaryGithub;CsvSummary"
 
-      - name: Enforce 90% coverage threshold
+      - name: Enforce 95% coverage threshold
         if: steps.check-coverage.outputs.has-coverage == 'true'
         shell: pwsh
         run: |
@@ -1175,7 +1221,7 @@ jobs:
           Get-Content "CoverageReport/Summary.txt"
           Write-Host ""
 
-          $threshold     = if ($env:CODECOV_MINIMUM) { [int]$env:CODECOV_MINIMUM } else { 90 }
+          $threshold     = if ($env:CODECOV_MINIMUM) { [int]$env:CODECOV_MINIMUM } else { 95 }
           $testThreshold = if ($env:CODECOV_TEST_MINIMUM) { [int]$env:CODECOV_TEST_MINIMUM } else { 100 }
           $failedProjects = @()
           $matchedCount   = 0
@@ -1250,6 +1296,21 @@ jobs:
           if ($matchedCount -eq 0) {
             Write-Error "❌ Coverage parser matched 0 modules in Summary.txt — regex or report format is out of sync. Refusing to silently pass the gate."
             exit 1
+          }
+
+          # Every test assembly that ran must appear in the report. A missing row means its coverage
+          # was never collected, and an unmeasured assembly must not pass. Module rows start in
+          # column 1; every other line in Summary.txt is indented.
+          $ranFile = Join-Path $env:RUNNER_TEMP 'stage2-ran-test-assemblies.txt'
+          if (Test-Path $ranFile) {
+            $reportRows = @(Get-Content "CoverageReport/Summary.txt" | Where-Object { $_ -match '^\S' } | ForEach-Object { ($_ -split '\s+')[0] })
+            foreach ($asm in @(Get-Content $ranFile | Where-Object { $_ -and $_.Trim() } | Sort-Object -Unique)) {
+              if ($reportRows -notcontains $asm) {
+                Write-Host "Checking test module: '$asm' - Coverage: none collected"
+                Write-Host "  ❌ FAIL: tests ran but no coverage was recorded (is coverlet.collector referenced?)" -ForegroundColor Red
+                $failedProjects += "$asm (no coverage data)"
+              }
+            }
           }
 
           if ($failedProjects.Count -gt 0) {
@@ -1571,7 +1632,7 @@ jobs:
             echo "ℹ️  No coverage files found - skipping report generation"
           fi
 
-      - name: Enforce 90% coverage threshold
+      - name: Enforce 95% coverage threshold
         run: |
           # If no cobertura files were produced (no tests, all test projects
           # skipped, etc.), the preceding step explicitly skipped report
@@ -1591,7 +1652,7 @@ jobs:
           cat CoverageReport/Summary.txt
           echo ""
 
-          THRESHOLD=${CODECOV_MINIMUM:-90}
+          THRESHOLD=${CODECOV_MINIMUM:-95}
           TEST_THRESHOLD=${CODECOV_TEST_MINIMUM:-100}
           FAILED=0
           MATCHED=0
@@ -1693,7 +1754,7 @@ jobs:
           echo "=========================================="
           echo "✅ ALL STAGES PASSED"
           echo "=========================================="
-          echo "Stage 1: Linux tests + 90% coverage ✅"
+          echo "Stage 1: Linux tests + 95% coverage ✅"
           echo "Stage 2: Windows .NET Core & .NET Framework tests ✅"
           echo "Stage 3: macOS tests ✅"
           echo ""
