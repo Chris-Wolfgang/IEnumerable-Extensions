@@ -97,7 +97,7 @@ public class ConcurrencyTests
     [Fact]
     public async Task Enumerating_one_shared_ToEnumerable_result_from_many_threads_yields_the_full_sequence_each_time()
     {
-        var shared = Enumerable.Range(0, ItemCount).ToArray().ToEnumerable();
+        var shared = Enumerable.Range(0, ItemCount).ToEnumerable();
 
         var wrongLengths = 0;
         await RunOnDedicatedThreadsAsync
@@ -106,6 +106,7 @@ public class ConcurrencyTests
             {
                 for (var i = 0; i < IterationsPerThread; i++)
                 {
+                    // ReSharper disable once PossibleMultipleEnumeration - enumerating one shared sequence repeatedly, from many threads, is what this test checks
                     Interlocked.Add(ref wrongLengths, shared.Count() == ItemCount ? 0 : 1);
                 }
             }
@@ -120,7 +121,7 @@ public class ConcurrencyTests
     public async Task Do_when_one_shared_result_is_enumerated_from_many_threads_runs_the_action_once_per_item_per_enumeration()
     {
         var calls = 0;
-        var shared = Enumerable.Range(0, ItemCount).ToArray().Do(_ => Interlocked.Increment(ref calls));
+        var shared = Enumerable.Range(0, ItemCount).Do(_ => Interlocked.Increment(ref calls));
 
         await RunOnDedicatedThreadsAsync
         (
@@ -128,6 +129,7 @@ public class ConcurrencyTests
             {
                 for (var i = 0; i < IterationsPerThread; i++)
                 {
+                    // ReSharper disable once PossibleMultipleEnumeration - enumerating one shared sequence repeatedly, from many threads, is what this test checks
                     _ = shared.ToArray();
                 }
             }
@@ -187,6 +189,7 @@ public class ConcurrencyTests
                 (
                     () =>
                     {
+                        // ReSharper disable once AccessToDisposedClosure - every task is awaited below before the barrier is disposed
                         barrier.SignalAndWait();
                         body();
                     },
