@@ -89,6 +89,7 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
+        // Stryker disable once Block : the collection shortcut matters on .NET Framework, where LINQ enumerates a collection (the CountOnlyCollection tests fail there without it); on .NET Core LINQ has the same shortcut, so it is indistinguishable on the net10.0 target Stryker runs
         if (source is ICollection<T> s)
         {
             return s.Count == 0;
@@ -125,6 +126,7 @@ public static class IEnumerableExtensions
             return true;
         }
 
+        // Stryker disable once Block : the collection shortcut matters on .NET Framework, where LINQ enumerates a collection (the CountOnlyCollection tests fail there without it); on .NET Core LINQ has the same shortcut, so it is indistinguishable on the net10.0 target Stryker runs
         if (source is ICollection<T> collection)
         {
             return collection.Count == 0;
@@ -299,6 +301,7 @@ public static class IEnumerableExtensions
 
         var rng = RandomSource;
 
+        // Stryker disable once Equality : at i == 0 the swap is element 0 with itself, so i >= 0 is indistinguishable
         for (var i = buffer.Length - 1; i > 0; i--)
         {
             var j = rng.Next(i + 1);
