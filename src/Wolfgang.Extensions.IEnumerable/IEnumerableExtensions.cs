@@ -64,6 +64,12 @@ public static class IEnumerableExtensions
     /// <summary>
     /// Gets a value indicating whether a sequence contains no elements.
     /// </summary>
+    /// <remarks>
+    /// When <paramref name="source"/> is an <see cref="ICollection{T}"/> (an array, a <see cref="List{T}"/>, and
+    /// so on) the answer is read from its <c>Count</c> and the sequence is not enumerated. For any other
+    /// sequence the result, the exceptions and the disposal of the enumerator are the same as for
+    /// <c>!source.Any()</c>: at most one element is pulled.
+    /// </remarks>
     /// <param name="source">The IEnumerable{T} to check.</param>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <returns>
@@ -96,6 +102,11 @@ public static class IEnumerableExtensions
     /// <summary>
     /// Gets a value indicating whether a sequence is null or contains no elements.
     /// </summary>
+    /// <remarks>
+    /// A <see langword="null"/> <paramref name="source"/> returns <see langword="true"/>. Otherwise this behaves
+    /// like <see cref="IsEmpty{T}"/>: a collection is answered from its <c>Count</c> without being enumerated,
+    /// and any other sequence behaves like <c>!source.Any()</c>.
+    /// </remarks>
     /// <param name="source">The IEnumerable{T} to check.</param>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <returns>
