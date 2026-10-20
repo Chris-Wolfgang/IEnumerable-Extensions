@@ -11,8 +11,11 @@
     OS. The PDB checksum and the module version id are derived from it, which makes
     the DLL differ as well even though the compiled IL is identical.
 
-    Rewriting the generated files to LF before compilation removes the only input
-    that differed, so the same commit packs to identical bytes on every OS.
+    Rewriting the generated files to LF before compilation removes that input.
+    Together with the pinned .NET Framework reference assemblies (Directory.Build.props),
+    the same commit builds byte-identical DLLs and PDBs on every OS, which is what
+    reproducible-build.yaml compares. NuGet packages are not covered: their ZIP entries
+    carry timestamps that this does not normalise.
     Packable projects only: tests and tools are never compared across operating systems.
   -->
   <UsingTask TaskName="NormalizeGeneratedLineEndings"
