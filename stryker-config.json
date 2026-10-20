@@ -11,9 +11,9 @@
       "progress"
     ],
     "thresholds": {
-      "high": 90,
-      "low": 80,
-      "break": 79
+      "high": 100,
+      "low": 97,
+      "break": 95
     }
   }
 }
