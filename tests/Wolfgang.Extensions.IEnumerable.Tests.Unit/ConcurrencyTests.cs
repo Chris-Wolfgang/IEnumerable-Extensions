@@ -96,7 +96,7 @@ public class ConcurrencyTests
 
 
     [Fact]
-    public async Task Enumerating_one_shared_ToEnumerable_result_from_many_threads_yields_the_full_sequence_each_time()
+    public async Task ToEnumerable_when_one_result_is_enumerated_from_many_threads_yields_the_full_sequence_each_time()
     {
         var shared = Enumerable.Range(0, ItemCount).ToArray().ToEnumerable();
 
