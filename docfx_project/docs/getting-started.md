@@ -60,3 +60,10 @@ bool noNegatives = numbers.None(n => n < 0);
 ```csharp
 var shuffled = deck.Shuffle();
 ```
+
+### ToEnumerable - Hide the Concrete Collection Type
+
+```csharp
+// `wrapped is List<int>` is false, so ICollection<T> fast paths are bypassed (useful in tests)
+IEnumerable<int> wrapped = new List<int> { 1, 2, 3 }.ToEnumerable();
+```

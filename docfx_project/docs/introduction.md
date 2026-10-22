@@ -23,6 +23,9 @@ Safely checks whether a sequence is null or contains no elements in a single ope
 ### Shuffle
 Creates a new `IEnumerable<T>` containing the elements from the source in a random order using the Fisher-Yates shuffle algorithm.
 
+### ToEnumerable
+Wraps the source in a lazy iterator so that pattern-matching checks (`result is List<T>`, `result is ICollection<T>`, `result is T[]`) return false. Primarily useful in unit tests that need to exercise the non-`ICollection` path of another extension method.
+
 ## Getting Started
 
 To start using Wolfgang.Extensions.IEnumerable, see the [Getting Started](getting-started.md) guide for installation instructions and basic examples.
