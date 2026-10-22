@@ -8,7 +8,7 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 public class ShuffleTests
 {
     [Fact]
-    public void Shuffle_called_with_null_source_throws_ArgumentNullException()
+    public void Shuffle_when_source_is_null_throws_ArgumentNullException()
     {
         List<int> source = null!;
 
@@ -20,7 +20,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_returns_a_permutation_of_the_input_with_the_same_multiset_of_elements()
+    public void Shuffle_when_source_has_items_returns_a_permutation_with_the_same_multiset_of_elements()
     {
         // Multiset equality — every input element appears exactly once in the output,
         // and the output has the same length. No order assertion (would be flaky:
@@ -36,7 +36,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_with_large_input_moves_at_least_one_element_from_its_original_index()
+    public void Shuffle_when_source_is_large_moves_at_least_one_element_from_its_original_index()
     {
         // Statistical "did anything actually shuffle?" check on a 100-element input.
         // Probability all 100 elements stay in place = 1/100! ≈ 10^-158 — effectively
@@ -52,7 +52,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_does_not_mutate_the_input_list_in_place()
+    public void Shuffle_when_source_is_a_List_does_not_mutate_it_in_place()
     {
         // Pass a real List<T> (not a wrapped iterator) so that an in-place
         // Fisher-Yates implementation that forgets to copy would be observable.
@@ -67,7 +67,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_with_empty_source_returns_empty()
+    public void Shuffle_when_source_is_empty_returns_empty()
     {
         var source = Array.Empty<int>();
 
@@ -79,7 +79,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_with_single_element_returns_same_element()
+    public void Shuffle_when_source_has_one_element_returns_that_element()
     {
         var source = new[] { 42 };
 
@@ -92,7 +92,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_result_is_not_assignable_to_List()
+    public void Shuffle_when_called_returns_a_result_not_assignable_to_List()
     {
         var source = new[] { 1, 2, 3, 4, 5 };
 
@@ -104,7 +104,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_result_is_not_assignable_to_ICollection()
+    public void Shuffle_when_called_returns_a_result_not_assignable_to_ICollection()
     {
         var source = new[] { 1, 2, 3, 4, 5 };
 
@@ -116,7 +116,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_result_is_not_assignable_to_array()
+    public void Shuffle_when_called_returns_a_result_not_assignable_to_an_array()
     {
         var source = new[] { 1, 2, 3, 4, 5 };
 
@@ -128,7 +128,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_with_ICollection_source_exercises_collection_fast_path()
+    public void Shuffle_when_source_is_a_non_array_ICollection_returns_a_permutation_via_CopyTo()
     {
         // An ICollection<T> that is not a T[] — forces the `source is ICollection<T>`
         // branch in Shuffle (Count + CopyTo) rather than the array copy or ToArray fallback.
@@ -143,7 +143,7 @@ public class ShuffleTests
 
 
     [Fact]
-    public void Shuffle_with_pure_IEnumerable_source_exercises_ToArray_fallback()
+    public void Shuffle_when_source_is_a_lazy_sequence_returns_every_item_via_the_ToArray_fallback()
     {
         // ToEnumerable wraps the source in a yield iterator that is NOT an
         // ICollection<T>, forcing the `source.ToArray()` fallback in Shuffle.

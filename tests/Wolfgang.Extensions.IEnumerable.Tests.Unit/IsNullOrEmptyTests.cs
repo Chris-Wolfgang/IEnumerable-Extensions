@@ -7,7 +7,7 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 public class IsNullOrEmptyTests
 {
     [Fact]
-    public void IsNullOrEmpty_with_null_source_returns_true()
+    public void IsNullOrEmpty_when_source_is_null_returns_true()
     {
         IEnumerable<int> source = null!;
 
@@ -19,7 +19,7 @@ public class IsNullOrEmptyTests
 
 
     [Fact]
-    public void IsNullOrEmpty_with_empty_source_returns_true()
+    public void IsNullOrEmpty_when_source_is_empty_returns_true()
     {
         var source = Array.Empty<int>();
 
@@ -31,7 +31,7 @@ public class IsNullOrEmptyTests
 
 
     [Fact]
-    public void IsNullOrEmpty_with_non_empty_source_returns_false()
+    public void IsNullOrEmpty_when_source_is_not_empty_returns_false()
     {
         var source = new[] { 1, 2, 3 };
 
@@ -43,7 +43,7 @@ public class IsNullOrEmptyTests
 
 
     [Fact]
-    public void IsNullOrEmpty_with_ICollection_source_empty_returns_true()
+    public void IsNullOrEmpty_when_ICollection_source_is_empty_returns_true()
     {
         var result = new List<int>().IsNullOrEmpty();
 
@@ -53,7 +53,7 @@ public class IsNullOrEmptyTests
 
 
     [Fact]
-    public void IsNullOrEmpty_with_ICollection_source_with_elements_returns_false()
+    public void IsNullOrEmpty_when_ICollection_source_has_elements_returns_false()
     {
         var result = new List<int> { 1, 2, 3 }.IsNullOrEmpty();
 

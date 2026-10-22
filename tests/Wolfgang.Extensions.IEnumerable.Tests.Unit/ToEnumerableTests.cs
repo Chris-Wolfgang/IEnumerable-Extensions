@@ -81,7 +81,7 @@ public class ToEnumerableTests
 
 
     [Fact]
-    public void ToEnumerable_can_be_enumerated_multiple_times()
+    public void ToEnumerable_when_result_is_enumerated_more_than_once_yields_the_sequence_each_time()
     {
         var source = Enumerable.Range(0, 3);
 
@@ -100,7 +100,7 @@ public class ToEnumerableTests
 
 
     [Fact]
-    public void ToEnumerable_uses_deferred_execution()
+    public void ToEnumerable_when_called_does_not_enumerate_source_until_the_result_is_enumerated()
     {
         var yieldCount = 0;
         var source = CreateTrackingSequence(() => yieldCount++);
