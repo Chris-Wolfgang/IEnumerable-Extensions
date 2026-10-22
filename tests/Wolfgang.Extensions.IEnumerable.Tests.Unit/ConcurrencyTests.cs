@@ -9,7 +9,8 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 /// <summary>
 /// The library is a set of synchronous extension methods with exactly one piece of shared state:
-/// the thread-local <see cref="Random"/> behind <c>Shuffle</c>. These tests exercise that state, and
+/// the <see cref="Random"/> behind <c>Shuffle</c> (the process-wide <c>Random.Shared</c> in the net8.0 and net10.0
+/// builds, a thread-local instance in the net462 and netstandard2.0 builds). These tests exercise that state, and
 /// concurrent reads of one shared source, from several dedicated threads at once. Assertions are
 /// structural (every result is a valid permutation, the source is untouched, nothing throws) so they
 /// do not depend on timing.

@@ -19,8 +19,6 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 /// </summary>
 public class DocExampleTests
 {
-
-
     [Fact]
     public async Task XmlDoc_examples_compile()
     {
