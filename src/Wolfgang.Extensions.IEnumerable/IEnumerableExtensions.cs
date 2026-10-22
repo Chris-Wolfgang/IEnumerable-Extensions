@@ -14,7 +14,7 @@ using System.Threading;
 namespace Wolfgang.Extensions.IEnumerable;
 
 /// <summary>
-/// A collection of extension methods for IEnumerable{T}
+/// A collection of extension methods for <see cref="IEnumerable{T}"/>
 /// </summary>
 public static class IEnumerableExtensions
 {
@@ -22,9 +22,9 @@ public static class IEnumerableExtensions
     /// Executes the specified action on each item in the enumerable
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements the action will be executed on.</param>
     /// <param name="action">The action to execute on each item in the enumerable</param>
-    /// <exception cref="ArgumentNullException">source or action is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var numbers = new[] { 1, 2, 3, 4, 5 };
@@ -64,12 +64,12 @@ public static class IEnumerableExtensions
     /// <summary>
     /// Gets a value indicating whether a sequence contains no elements.
     /// </summary>
-    /// <param name="source">The IEnumerable{T} to check.</param>
+    /// <param name="source">The <see cref="IEnumerable{T}"/> to check.</param>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <returns>
     /// true if the source sequence contains no elements; otherwise, false.
     /// </returns>
-    /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var items = new List&lt;string&gt;();
@@ -96,7 +96,7 @@ public static class IEnumerableExtensions
     /// <summary>
     /// Gets a value indicating whether a sequence is null or contains no elements.
     /// </summary>
-    /// <param name="source">The IEnumerable{T} to check.</param>
+    /// <param name="source">The <see cref="IEnumerable{T}"/> to check.</param>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <returns>
     /// true if the source sequence is null or contains no elements; otherwise, false.
@@ -128,9 +128,9 @@ public static class IEnumerableExtensions
     /// Determines whether a sequence contains no elements.
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">The IEnumerable{T} to check.</param>
+    /// <param name="source">The <see cref="IEnumerable{T}"/> to check.</param>
     /// <returns>false if the source sequence contains any elements; otherwise, true.</returns>
-    /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var numbers = new[] { 1, 2, 3, 4 };
@@ -144,14 +144,15 @@ public static class IEnumerableExtensions
         => source.IsEmpty();
 
 
+
     /// <summary>
     /// Determines whether no element of a sequence satisfies a condition.
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose elements to apply the predicate to.</param>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements to apply the predicate to.</param>
     /// <param name="predicate">A function to test each element for a condition.</param>
     /// <returns>true if no elements in the source sequence pass the test in the specified predicate; otherwise, false.</returns>
-    /// <exception cref="ArgumentNullException">source or predicate is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var numbers = new[] { 1, 2, 3, 4 };
@@ -175,15 +176,16 @@ public static class IEnumerableExtensions
     }
 
 
+
     /// <summary>
-    /// Executes a side-effect action on each element of an IEnumerable{T}
+    /// Executes a side-effect action on each element of an <see cref="IEnumerable{T}"/>
     /// without transforming the elements. The original items are yielded unchanged.
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements the action will be executed on.</param>
     /// <param name="action">The action to execute on each element.</param>
-    /// <returns>An IEnumerable{T} that yields the original elements after executing the action.</returns>
-    /// <exception cref="ArgumentNullException">source or action is null.</exception>
+    /// <returns>An <see cref="IEnumerable{T}"/> that yields the original elements after executing the action.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// foreach (var item in source.Do(x => Console.WriteLine($"Processing: {x}")))
@@ -243,12 +245,12 @@ public static class IEnumerableExtensions
     /// </para>
     /// </remarks>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose elements will be randomly ordered.</param>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements will be randomly ordered.</param>
     /// <returns>
     /// A new sequence containing every element of <paramref name="source"/> in a
     /// random permutation. The input sequence is not mutated.
     /// </returns>
-    /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var deck = new[] { "Ace", "King", "Queen", "Jack" };
@@ -307,11 +309,13 @@ public static class IEnumerableExtensions
         }
     }
 
+
+
 #if NET6_0_OR_GREATER
     private static Random RandomSource => Random.Shared;
 #else
-    private static readonly ThreadLocal<Random> SThreadLocalRandom = new(CreateRandom);
-    private static Random RandomSource => SThreadLocalRandom.Value;
+    private static readonly ThreadLocal<Random> ThreadLocalRandom = new(CreateRandom);
+    private static Random RandomSource => ThreadLocalRandom.Value;
 
     private static Random CreateRandom()
         => new(unchecked((Environment.TickCount * 31) + Thread.CurrentThread.ManagedThreadId));
