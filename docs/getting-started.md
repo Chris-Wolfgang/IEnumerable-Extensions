@@ -54,7 +54,6 @@ var users = GetUsers();
 users.ForEach(user =>
 {
     user.IsActive = true;
-    user.LastUpdated = DateTime.Now;
 });
 ```
 
@@ -135,6 +134,16 @@ foreach (var card in shuffledDeck)
 }
 ```
 
+#### ToEnumerable - Hide the Concrete Collection Type
+
+```csharp
+var list = new List<int> { 1, 2, 3 };
+
+// The result is a lazy iterator: `wrapped is List<int>` and `wrapped is ICollection<int>` are both false,
+// so methods with an ICollection<T> fast path take their general (enumerating) path instead.
+IEnumerable<int> wrapped = list.ToEnumerable();
+```
+
 ## Method Chaining
 
 All extension methods can be chained with LINQ and other extension methods:
@@ -160,7 +169,7 @@ The library includes optimizations for common collection types:
 
 - `IsEmpty()` and `None()` use `ICollection<T>.Count` when available instead of enumerating
 - `ForEach()` delegates to `List<T>.ForEach` for list instances
-- `Shuffle()` converts to `List<T>` once for efficient random access
+- `Shuffle()` copies the source into a `T[]` once (`Array.Copy` for arrays, `ICollection<T>.CopyTo` for collections, `ToArray()` otherwise) and shuffles that buffer in place
 
 ### Thread Safety
 
