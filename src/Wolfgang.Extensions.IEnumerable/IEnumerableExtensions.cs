@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 // ReSharper disable once RedundantUsingDirective - required on net462/netstandard2.0; only redundant on net8.0+, which is the target InspectCode analyses
 using System.Threading;
@@ -320,6 +321,98 @@ public static class IEnumerableExtensions
     private static Random CreateRandom()
         => new(unchecked((Environment.TickCount * 31) + Thread.CurrentThread.ManagedThreadId));
 #endif
+
+
+
+    /// <summary>
+    /// Distributes the elements of <paramref name="source"/> round-robin across a fixed number of
+    /// partitions: the first element goes to partition 0, the second to partition 1, and element
+    /// <c>partitionCount + 1</c> back to partition 0.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Unlike <c>Enumerable.Chunk</c>, which produces a variable number of fixed-size groups,
+    /// <c>Partition</c> produces a fixed number of groups whose sizes differ by at most one. The
+    /// first <c>count % partitionCount</c> partitions hold one element more than the rest.
+    /// </para>
+    /// <para>
+    /// This method is <b>eager</b>: <paramref name="source"/> is enumerated exactly once, when
+    /// <c>Partition</c> is called, and the result does not reflect later changes to the source.
+    /// Each partition can then be enumerated any number of times, independently and from different
+    /// threads.
+    /// </para>
+    /// <para>
+    /// The returned list is read-only, and each partition is a lazy iterator over an internal
+    /// buffer, so <c>partition is List&lt;T&gt;</c>, <c>partition is ICollection&lt;T&gt;</c> and
+    /// <c>partition is T[]</c> are all false (the same contract as <see cref="Shuffle{T}"/>).
+    /// </para>
+    /// </remarks>
+    /// <typeparam name="T">The type of the elements of source.</typeparam>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements are distributed.</param>
+    /// <param name="partitionCount">The number of partitions to create. Must be at least 1.</param>
+    /// <returns>
+    /// A read-only list of exactly <paramref name="partitionCount"/> partitions, in order. A partition
+    /// is empty when <paramref name="source"/> has fewer elements than <paramref name="partitionCount"/>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="partitionCount"/> is less than 1.</exception>
+    /// <example>
+    /// <code>
+    /// var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    /// var groups = numbers.Partition(3);
+    /// // groups[0]: 1, 4, 7   groups[1]: 2, 5, 8   groups[2]: 3, 6, 9
+    /// for (var i = 0; i &lt; groups.Count; i++)
+    /// {
+    ///     Console.WriteLine($"Group {i}: {string.Join(", ", groups[i])}");
+    /// }
+    /// </code>
+    /// </example>
+    public static IReadOnlyList<IEnumerable<T>> Partition<T>(this IEnumerable<T>? source, int partitionCount)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        if (partitionCount < 1)
+        {
+            throw new ArgumentOutOfRangeException
+            (
+                nameof(partitionCount),
+                partitionCount,
+                "partitionCount must be at least 1."
+            );
+        }
+
+        var buffers = new List<T>[partitionCount];
+        for (var i = 0; i < partitionCount; i++)
+        {
+            buffers[i] = new List<T>();
+        }
+
+        var index = 0;
+        foreach (var item in source)
+        {
+            buffers[index].Add(item);
+            index = index + 1 == partitionCount ? 0 : index + 1;
+        }
+
+        var partitions = new IEnumerable<T>[partitionCount];
+        for (var i = 0; i < partitionCount; i++)
+        {
+            partitions[i] = Iterator(buffers[i]);
+        }
+
+        return new ReadOnlyCollection<IEnumerable<T>>(partitions);
+
+        static IEnumerable<T> Iterator(List<T> buffer)
+        {
+            foreach (var item in buffer)
+            {
+                yield return item;
+            }
+        }
+    }
 
 
 

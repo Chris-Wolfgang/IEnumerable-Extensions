@@ -20,6 +20,9 @@ Safely checks whether a sequence is null or contains no elements in a single ope
 - **None()**: Determines whether a sequence contains no elements (inverse of `Any()`)
 - **None(predicate)**: Determines whether no element of a sequence satisfies a condition (inverse of `Any(predicate)`)
 
+### Partition
+Distributes the elements round-robin across a fixed number of groups: item 1 goes to group 0, item 2 to group 1, and item `partitionCount + 1` back to group 0. The source is enumerated once, eagerly; the result is a read-only list of exactly `partitionCount` groups whose sizes differ by at most one.
+
 ### Shuffle
 Creates a new `IEnumerable<T>` containing the elements from the source in a random order using the Fisher-Yates shuffle algorithm.
 
