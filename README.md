@@ -81,6 +81,7 @@ that take an `action` / `predicate` also throw on a null callback.
 | `IsNullOrEmpty()` | Returns `true` when the sequence is `null` OR contains no elements. |
 | `None()` | Inverse of `Any()` — `true` when the sequence has no elements. |
 | `None(Func<T, bool> predicate)` | `true` when no element matches the predicate. |
+| `Partition(int partitionCount)` | Distributes the items round-robin across exactly `partitionCount` groups (item 1 to group 0, item 2 to group 1, ...). Eager; returns a read-only list of groups whose sizes differ by at most one. |
 | `Shuffle()` | Returns a new sequence in random order (Fisher-Yates + thread-safe RNG). Eager — the input is fully consumed before the method returns. |
 | `ToEnumerable()` | Wraps the source in a lazy iterator so the returned sequence is guaranteed not to be a more concrete type (`List<T>`, `ICollection<T>`, array). Useful in tests that need to exercise non-`ICollection` code paths. |
 
@@ -105,6 +106,9 @@ new int[0].IsEmpty();                                // true
 // None
 new[] { 1, 2, 3 }.None();                            // false
 new[] { 1, 2, 3 }.None(x => x < 0);                  // true
+
+// Partition - round-robin into a fixed number of groups
+var groups = Enumerable.Range(1, 9).Partition(3);    // [1,4,7] [2,5,8] [3,6,9]
 
 // Shuffle (on .NET 10 this is ambiguous with System.Linq - see "Shuffle on .NET 10" below)
 var deck = Enumerable.Range(1, 52).Shuffle().ToList();
