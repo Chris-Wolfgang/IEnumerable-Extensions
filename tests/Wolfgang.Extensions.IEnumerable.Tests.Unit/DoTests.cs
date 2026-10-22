@@ -7,13 +7,13 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 public class DoTests
 {
-
     [Fact]
     public void Do_when_source_is_null_throws_ArgumentNullException()
     {
         IEnumerable<int> source = null!;
 
-        var exception = Assert.Throws<ArgumentNullException>(() => source.Do(_ => { }).ToList());
+        // No enumeration inside the lambda: Do must throw when it is called, not on the first MoveNext.
+        var exception = Assert.Throws<ArgumentNullException>(() => source.Do(_ => { }));
 
         Assert.Equal("source", exception.ParamName);
     }
@@ -25,7 +25,8 @@ public class DoTests
     {
         var source = new[] { 1, 2, 3 };
 
-        var exception = Assert.Throws<ArgumentNullException>(() => source.ToEnumerable().Do(null!).ToList());
+        // No enumeration inside the lambda: Do must throw when it is called, not on the first MoveNext.
+        var exception = Assert.Throws<ArgumentNullException>(() => source.ToEnumerable().Do(null!));
 
         Assert.Equal("action", exception.ParamName);
     }
@@ -151,5 +152,4 @@ public class DoTests
             yield return value;
         }
     }
-
 }
