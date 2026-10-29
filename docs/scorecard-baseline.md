@@ -21,8 +21,27 @@ Measured 2026-10-19, commit `1f84442`, Scorecard v5.5.0: **overall score 7**.
 
 ## Floor
 
-The floor is **7**. A change that would lower the published score below it should say why in its pull request.
-There is no automated enforcement: the workflow publishes the score but does not compare it with a threshold, and
-the Code Scanning alerts it raises are already tracked as issues by the security-alerts workflow. Re-measure after a
-release and update this table, since the score depends on the day's repository state (for example the share of
-recent changesets that were reviewed).
+The floor is **7**. It only moves up: when a re-measurement is higher, raise it to the new score; never lower it
+to make a drop pass.
+
+### A change that lowers the score
+
+Scorecard scores the default branch, not a pull request, so a drop can only be predicted before merge. A pull request
+that is expected to take the published score below the floor (for example by unpinning an action, widening a
+workflow's `permissions:`, or removing a security workflow) must:
+
+1. add a changelog fragment under [`changelog/unreleased/`](../changelog/unreleased/README.md), `type: internal`,
+   naming the Scorecard check that drops, the expected score, and why the drop is accepted. The fragment puts the
+   drop in front of the reviewer in the diff and in the release notes after merge;
+2. say the same in the pull request description.
+
+### What catches an unexpected drop
+
+The `floor` job in `.github/workflows/scorecard.yaml` runs after every Scorecard analysis (weekly, on each push to
+`main`, and on branch-protection changes). It reads the floor from the "The floor is" line above, waits for
+scorecard.dev to publish the result for the commit just analysed, and fails the run when the published score is below
+the floor, or when no result for that commit appears. A red Scorecard run on `main` therefore means either a drop that
+needs the changelog note above, or a regression to fix. Keep the "The floor is **N**" wording: the job parses it.
+
+Re-measure after a release and update the baseline table, since the score depends on the day's repository state (for
+example the share of recent changesets that were reviewed).
