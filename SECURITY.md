@@ -89,6 +89,17 @@ gh attestation verify Wolfgang.Extensions.IEnumerable.<version>.nupkg \
 
 This checks that the file's SHA-256 digest was attested by `release.yaml` in this repository, and shows the commit and workflow run that produced it. Only releases cut after the attestation step was added have one: **v1.4.0 (2026-06-03) predates it**, and `gh attestation verify` returns `HTTP 404` for it.
 
+**Offline provenance.** Releases cut after the workflow started attaching it also carry the Sigstore bundle as `provenance.sigstore.json` (one bundle covering every `.nupkg` of the release). Download it next to the package and pass it with `--bundle`, so the attestation is read from the file instead of fetched from GitHub's attestation API:
+
+```bash
+gh attestation verify Wolfgang.Extensions.IEnumerable.<version>.nupkg \
+  --bundle provenance.sigstore.json \
+  --repo Chris-Wolfgang/IEnumerable-Extensions \
+  --signer-workflow Chris-Wolfgang/IEnumerable-Extensions/.github/workflows/release.yaml
+```
+
+A release without `provenance.sigstore.json` (v1.4.0 and any release cut before the asset was added) can still be checked online with the first command when it has an attestation.
+
 **SBOM.** The SBOM lists the package's dependency components. It is a published inventory, **not** signed or attested, so treat it as informational. To cross-check it, check out the release tag, restore the CycloneDX version pinned in `.config/dotnet-tools.json` (or install `dotnet-CycloneDX`), run `dotnet CycloneDX src/Wolfgang.Extensions.IEnumerable/Wolfgang.Extensions.IEnumerable.csproj --json`, and compare the `components` arrays by name and version. `serialNumber` and `metadata.timestamp` differ on every run and should be ignored. Regenerating the v1.4.0 SBOM with a locally installed CycloneDX produced the same 17 components as the published file.
 
 **Package signature.** The package is not author-signed yet (`nuget verify` has nothing to check); that is blocked on a code-signing certificate and tracked in #245.
