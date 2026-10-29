@@ -55,6 +55,67 @@ jobs:
           retention-days: 5
           if-no-files-found: error
 
+  # Compares the score scorecard.dev publishes for this commit with the floor documented in
+  # docs/scorecard-baseline.md ("The floor is **N**"), so a drop on main turns this run red instead of
+  # going unnoticed (#204). Scorecard cannot score a pull request, so this is the earliest point a
+  # drop is measurable; a PR that expects one adds a changelog note (see the doc). A result that never
+  # appears for this commit also fails: a comparison that could not run must not pass.
+  floor:
+    name: Compare the published score with the floor
+    needs: analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Fail when the published score is below the floor
+        shell: bash
+        env:
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.sha }}
+          ATTEMPTS: '10'
+          PAUSE: '30'
+        run: |
+          set -euo pipefail
+          floor=$(sed -nE 's/^The floor is \*\*([0-9]+(\.[0-9]+)?)\*\*.*/\1/p' docs/scorecard-baseline.md | head -n 1)
+          if [ -z "$floor" ]; then
+            echo "::error::docs/scorecard-baseline.md has no 'The floor is **N**' line, so there is nothing to compare with."
+            exit 1
+          fi
+          # scorecard.dev indexes the result a little after the analysis job publishes it.
+          # Poll until the published result is for this commit; an older result would compare
+          # the wrong state of the repository.
+          json=''
+          for attempt in $(seq 1 "$ATTEMPTS"); do
+            json=$(curl -fsS "https://api.scorecard.dev/projects/github.com/${REPO}") || json=''
+            commit=$(jq -r '.repo.commit // empty' <<<"$json" 2>/dev/null || true)
+            if [ "$commit" = "$HEAD_SHA" ]; then
+              break
+            fi
+            echo "Attempt $attempt: scorecard.dev has '${commit:-nothing}', waiting for $HEAD_SHA"
+            json=''
+            sleep "$PAUSE"
+          done
+          if [ -z "$json" ]; then
+            echo "::error::scorecard.dev did not publish a result for $HEAD_SHA, so the score could not be compared with the floor ($floor)."
+            exit 1
+          fi
+          score=$(jq -r '.score' <<<"$json")
+          if ! [[ "$score" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+            echo "::error::scorecard.dev returned no numeric score for $HEAD_SHA ('$score')."
+            exit 1
+          fi
+          echo "Published score $score for $HEAD_SHA; floor $floor (docs/scorecard-baseline.md)."
+          if awk -v s="$score" -v f="$floor" 'BEGIN { exit !(s < f) }'; then
+            echo "::error::The OpenSSF Scorecard score $score is below the documented floor $floor. Add a changelog/unreleased fragment that explains the drop (see docs/scorecard-baseline.md), or fix the regression."
+            exit 1
+          fi
+
   upload:
     name: Filter and upload SARIF
     needs: analysis
