@@ -104,12 +104,6 @@
     </PackageReference>
   </ItemGroup>
 
-  <!-- Roslyn compiles the XML-doc <example> blocks (DocExampleTests). One TFM is enough: the check is
-       about the source comments, not the runtime, so it is not repeated across the whole matrix. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
-  </ItemGroup>
-
   <!-- CsCheck (property-based tests, PropertyTests.cs) targets net8.0 and later only, so it is referenced
        only there and the test file is compiled out on older frameworks. -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0'">

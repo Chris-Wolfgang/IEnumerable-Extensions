@@ -30,6 +30,8 @@ public class ZeroAllocationTests
     // ReSharper disable once CollectionNeverUpdated.Local - an empty list is the fixture
     private static readonly List<int> _emptyList = new();
     private static readonly Action<int> _noOp = static _ => { };
+    // Written by the allocation control test so its array escapes; see that test.
+    private static int[]? _allocationSink;
 
 
 
@@ -89,7 +91,8 @@ public class ZeroAllocationTests
     [Fact]
     public void AllocatedBytes_when_the_measured_call_allocates_reports_bytes()
     {
-        var allocated = MeasureAllocatedBytes(static () => _ = new int[16]);
+        // Stored in a static field: a discarded array never escapes, and Native AOT elides it (measures 0).
+        var allocated = MeasureAllocatedBytes(static () => _allocationSink = new int[16]);
 
         Assert.True(allocated > 0, "The measurement must be able to see an allocation, otherwise the zero-allocation assertions prove nothing.");
     }
