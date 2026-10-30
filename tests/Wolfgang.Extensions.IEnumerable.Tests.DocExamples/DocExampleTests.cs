@@ -1,4 +1,3 @@
-#if NET10_0
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
-namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
+namespace Wolfgang.Extensions.IEnumerable.Tests.DocExamples;
 
 /// <summary>
 /// Compiles every <c>&lt;example&gt;&lt;code&gt;</c> block in the library's XML docs so an
@@ -166,4 +165,3 @@ public class DocExampleTests
             .ToArray();
     }
 }
-#endif
