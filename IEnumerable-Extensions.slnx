@@ -55,6 +55,7 @@
     <Project Path="src/Wolfgang.Extensions.IEnumerable/Wolfgang.Extensions.IEnumerable.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="tests/Wolfgang.Extensions.IEnumerable.Tests.Aot/Wolfgang.Extensions.IEnumerable.Tests.Aot.csproj" />
     <Project Path="tests/Wolfgang.Extensions.IEnumerable.Tests.Unit/Wolfgang.Extensions.IEnumerable.Tests.Unit.csproj" Id="32a9bdf2-278b-49c7-9349-52013bac255f" />
   </Folder>
 </Solution>
