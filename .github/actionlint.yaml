@@ -1,0 +1,28 @@
+# actionlint configuration: the baseline of accepted workflow-lint suppressions.
+# https://github.com/rhysd/actionlint/blob/main/docs/config.md
+#
+# actionlint reads this file from .github/actionlint.yaml. Each `paths:` entry is
+# a pre-existing finding that is deliberate, scoped to the one workflow file and
+# the one shellcheck rule, with its reason. The flagged line also carries an
+# inline `# shellcheck disable=<rule>` comment, so the reason sits next to the
+# code too; this file is the single list of everything accepted. Adding an entry
+# needs a maintainer's review: give the reason here and keep
+# docs/WORKFLOW_SECURITY.md pointing at this file.
+
+self-hosted-runner:
+  # No self-hosted runners in this repository. List a label here if a workflow
+  # ever adds one.
+  labels: []
+
+paths:
+  .github/workflows/pr.yaml:
+    ignore:
+      # The coverage-gate loop: false positive. The loop's redirect and the
+      # inner awk both only read Summary.txt.
+      - 'SC2094'
+
+  .github/workflows/scorecard.yaml:
+    ignore:
+      # Building rules_json: intentional word-splitting, one rule per line for
+      # the jq -R / -s pipeline.
+      - 'SC2086'

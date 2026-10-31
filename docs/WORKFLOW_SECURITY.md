@@ -179,19 +179,20 @@ When adding new configuration files that control code quality or security:
 ## Accepted analyzer suppressions
 
 `actionlint` and `zizmor` run on every pull request (`.github/workflows/actions-audit.yaml`); `actionlint` findings and
-high-severity `zizmor` findings fail the check. A deliberate pattern is accepted with a comment next to the flagged
-line instead of a central file, so each entry below has its reason in place. These are all of them as of this
-writing (`grep -rn "zizmor: *ignore\[\|shellcheck disable" .github/workflows` finds them again, along with some explanatory comments in `actions-audit.yaml` that describe the syntax):
+high-severity `zizmor` findings fail the check. The baseline of accepted suppressions, one entry per suppression with
+its reason, lives in the analyzers' own configuration files, which both tools read automatically:
 
-| Where | Tool and rule | Why it is accepted |
-|---|---|---|
-| `protected-files.yaml`, `pull_request_target:` trigger | zizmor `dangerous-triggers` | The job never checks out or executes pull request content; it only lists the files a PR changes through the API and reports on them. |
-| `release.yaml`, `trigger-docs` job `uses: ./.github/workflows/docfx.yaml` | zizmor `self-repository` | GitHub's `$/` self-repository syntax is preferred, but `actionlint` (a required check) rejects it until rhysd/actionlint#732 ships. Switch to `$/.github/workflows/docfx.yaml` and drop the ignore then. |
-| `pr.yaml`, the coverage-gate loop | shellcheck `SC2094` | False positive: the loop's redirect and the inner `awk` both only read `Summary.txt`. |
-| `scorecard.yaml`, building `rules_json` | shellcheck `SC2086` | Intentional word-splitting: one rule per line for the `jq -R`/`-s` pipeline. |
+- [`.github/zizmor.yml`](../.github/zizmor.yml): zizmor `dangerous-triggers` (`protected-files.yaml`) and
+  `self-repository` (`release.yaml`).
+- [`.github/actionlint.yaml`](../.github/actionlint.yaml): shellcheck `SC2094` (`pr.yaml`, the coverage-gate loop) and
+  `SC2086` (`scorecard.yaml`, building `rules_json`).
 
-Adding a suppression is a change to a protected workflow file, so it needs a maintainer's review; put the reason
-in the comment, and add a row here.
+Each flagged line also keeps its inline comment (`# zizmor: ignore[...]` or `# shellcheck disable=...`) with the same
+reason, so `grep -rn "zizmor: *ignore\[\|shellcheck disable" .github/workflows` still finds every site. A finding of the
+same rule in any other file still fails the check.
+
+Adding a suppression needs a maintainer's review: add the entry, with its reason, to the matching configuration file
+and keep the inline comment next to the flagged line.
 
 ## References
 
