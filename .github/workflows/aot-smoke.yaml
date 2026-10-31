@@ -1,0 +1,113 @@
+# Native AOT smoke test (fleet-canonical name and job; claude-sessions/standards/aot-smoke.md).
+#
+# Publishes every project under src/ or tests/ that sets <PublishAot>true</PublishAot> with
+# Native AOT on linux-x64 and runs each binary. In this repository that is
+# tests/Wolfgang.Extensions.IEnumerable.Tests.Aot: the unit suite linked into an xUnit v3 (AOT
+# edition) executable, so a library change that breaks under trimming or Native AOT fails a test
+# here. The job fails when a publish fails, when the publish reports any warning (trim/AOT IL2xxx
+# and IL3xxx included; -p:TreatWarningsAsErrors=true), or when a binary exits non-zero (a failing
+# test does). No project with PublishAot = pass with a notice.
+#
+# The file name, workflow name, job id and job name are fixed fleet-wide, because a required
+# status check is matched by its exact job name ("AOT smoke (linux-x64)").
+#
+# No `paths:` filter on any trigger: a required check must report on every pull request, and a
+# path-skipped workflow never reports. No push trigger: before the check is made required, run it
+# once on main with workflow_dispatch (Apply-RequiredChecks.ps1 only adds a check that already
+# succeeded on main's HEAD).
+#
+# PublishAot / PublishTrimmed belong in the project file, never on the `dotnet publish` command
+# line: a -p: property is global and reaches every referenced project, including the library's
+# net462 target, where AOT is unsupported (NETSDK1207). PublishAot in the csproj is also the
+# discovery signal.
+name: AOT smoke
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  # Lets release.yaml gate publishing on this same job (`uses: ./.github/workflows/aot-smoke.yaml`).
+  workflow_call:
+
+concurrency:
+  group: aot-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  aot-smoke:
+    name: AOT smoke (linux-x64)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install Native AOT prerequisites
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+
+      - name: Publish and run every PublishAot project (linux-x64)
+        env:
+          RID: linux-x64
+        run: |
+          set -euo pipefail
+          mapfile -t projects < <(grep -rlE --include='*.csproj' '<PublishAot>[[:space:]]*true[[:space:]]*</PublishAot>' src tests 2>/dev/null | sort || true)
+          if [ "${#projects[@]}" -eq 0 ]; then
+            echo "::notice::No project under src/ or tests/ sets <PublishAot>true</PublishAot>; nothing to publish."
+            exit 0
+          fi
+
+          failures=0
+          for project in "${projects[@]}"; do
+            name=$(basename "$project" .csproj)
+            out="aot-out/$name"
+            echo "::group::Publish $project ($RID)"
+            if ! dotnet publish "$project" -c Release -r "$RID" -o "$out" -p:TreatWarningsAsErrors=true 2>&1 | tee "aot-publish-$name.log"; then
+              echo "::endgroup::"
+              echo "::error::Native AOT publish of $project failed (an error, or a warning under TreatWarningsAsErrors; see the log above)."
+              failures=$((failures + 1))
+              continue
+            fi
+            echo "::endgroup::"
+
+            # Belt and braces: a trim/AOT warning that did not become an error still fails the job.
+            if grep -E 'warning IL[0-9]{4}' "aot-publish-$name.log"; then
+              echo "::error::Native AOT publish of $project reported trim/AOT warnings (listed above)."
+              failures=$((failures + 1))
+              continue
+            fi
+
+            bin="$out/$name"
+            if [ ! -x "$bin" ]; then
+              echo "::error::Native AOT binary not produced at $bin"
+              failures=$((failures + 1))
+              continue
+            fi
+
+            echo "::group::Run $bin"
+            if "$bin"; then
+              echo "::endgroup::"
+              echo "$name: native binary exited 0."
+            else
+              code=$?
+              echo "::endgroup::"
+              echo "::error::$bin exited $code (a failing test, or a crash under Native AOT)."
+              failures=$((failures + 1))
+            fi
+          done
+
+          if [ "$failures" -ne 0 ]; then
+            echo "::error::$failures of ${#projects[@]} PublishAot project(s) failed."
+            exit 1
+          fi
+          echo "All ${#projects[@]} PublishAot project(s) published with no warnings and exited 0."
