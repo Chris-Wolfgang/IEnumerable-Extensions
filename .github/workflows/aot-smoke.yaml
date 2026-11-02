@@ -1,0 +1,55 @@
+name: AOT Smoke
+
+# Publishes examples/AotSmoke with Native AOT + trimming and runs the result. The consumer calls
+# every public method and exits non-zero on a wrong answer; trim/AOT warnings are build errors
+# there, so a change the trimmer cannot analyse fails here before it reaches a consumer.
+# Runs on Linux because Native AOT needs the platform linker, which the runner provides.
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'examples/AotSmoke/**'
+      - 'Directory.Build.props'
+      - 'Directory.Build.targets'
+      - '.github/workflows/aot-smoke.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aot-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  aot-smoke:
+    name: Native AOT publish and run
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install native AOT prerequisites
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang zlib1g-dev
+
+      - name: Publish with Native AOT
+        run: dotnet publish examples/AotSmoke -c Release -r linux-x64 -o aot-out
+
+      - name: Run the AOT binary
+        run: |
+          set -euo pipefail
+          test -x aot-out/AotSmoke
+          ./aot-out/AotSmoke
