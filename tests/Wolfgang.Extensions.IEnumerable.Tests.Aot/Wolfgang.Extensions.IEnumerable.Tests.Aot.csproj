@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Native AOT test run (fleet standard, claude-sessions/standards/aot-smoke.md, 2026-10-30).
+
+    Runs the SAME unit tests as Wolfgang.Extensions.IEnumerable.Tests.Unit, compiled as a
+    Native AOT executable with xUnit v3. The 2.x project stays as it is for every TFM; this
+    one exists only to prove the library under trimming + AOT, which a JIT test run cannot.
+    The library sets IsAotCompatible; this project is the proof that the claim holds.
+
+    The test sources are linked, not copied: fix a test in Tests.Unit and it is fixed here.
+    xUnit v3's in-process console runner makes this project its own executable (no
+    Microsoft.NET.Test.Sdk), and with PublishAot that executable is a native binary.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <!-- Not a dotnet-test project: build-pr.ps1 runs `dotnet test` only on IsTestProject /
+         Microsoft.NET.Test.Sdk projects. This one is published and executed by the AOT job. -->
+    <IsTestProject>false</IsTestProject>
+    <PublishAot>true</PublishAot>
+    <PublishTrimmed>true</PublishTrimmed>
+    <IsAotCompatible>true</IsAotCompatible>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <!-- No test uses a real culture, so the binary does not need ICU. -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The AOT (source-generated) edition of xUnit.net v3: test discovery, theory data and attribute
+         configuration are resolved at build time, so no reflection is needed at run time. The plain
+         `xunit.v3` package is reflection-based and cannot run under Native AOT. Requires net9.0+ and C#. -->
+    <PackageReference Include="xunit.v3.aot" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wolfgang.Extensions.IEnumerable\Wolfgang.Extensions.IEnumerable.csproj" />
+  </ItemGroup>
+
+  <!-- The unit tests themselves, linked from the 2.x project. Three files stay in the 2.x run only
+       (measured 2026-10-30 with a native win-x64 publish; none of the reasons is in the library):
+       - DocExampleTests.cs: compiles the library's XML-doc <example> blocks with Roslyn, reading the
+         source tree and the TRUSTED_PLATFORM_ASSEMBLIES list, neither of which a native binary has.
+         Roslyn is not trim-safe (10 IL2026/IL2075/IL2091 diagnostics, all inside
+         Microsoft.CodeAnalysis). It checks source comments, not runtime behaviour.
+       - PropertyTests.cs: CsCheck 4.9.1's Check static constructor calls
+         Assembly.GetCallingAssembly(), which throws PlatformNotSupportedException under Native AOT,
+         so all 8 property tests fail before reaching the library.
+       - ZeroAllocationTests.cs: its self-check AllocatedBytes_when_the_measured_call_allocates_reports_bytes
+         measures 0 bytes for `new int[16]` in the native binary (the AOT compiler drops or
+         stack-allocates the non-escaping array), so the file's own control fails. Allocation
+         behaviour is a codegen property; the 2.x run checks it on every TFM. -->
+  <ItemGroup>
+    <Compile Include="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\**\*.cs" Exclude="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\obj\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\bin\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\DocExampleTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\PropertyTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\ZeroAllocationTests.cs" Link="Unit\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>
