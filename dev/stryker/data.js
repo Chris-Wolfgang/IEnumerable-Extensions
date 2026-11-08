@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792304489310,
+  "lastUpdate": 1794142347834,
   "repoUrl": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions",
   "entries": {
     "Mutation score": [
@@ -102,6 +102,33 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/be8c1af15912e6cc27ed3841710ef86441c44e04"
         },
         "date": 1792304486392,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score",
+            "value": 79.49,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "9697053b086fb2750c22eaca4cbec5b4cd166496",
+          "message": "chore(pack): stop requiring licence acceptance for the MIT package (#613)\n\nPackageRequireLicenseAcceptance=True makes Visual Studio show an\naccept-licence prompt on install. MIT does not require acceptance, so the\nprompt is only friction.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-08T02:26:38Z",
+          "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/9697053b086fb2750c22eaca4cbec5b4cd166496"
+        },
+        "date": 1794142343440,
         "tool": "customBiggerIsBetter",
         "benches": [
           {
