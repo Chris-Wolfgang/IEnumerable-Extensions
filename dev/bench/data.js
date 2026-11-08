@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792262370194,
+  "lastUpdate": 1794105750573,
   "repoUrl": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions",
   "entries": {
     "BenchmarkDotNet": [
@@ -8946,6 +8946,534 @@ window.BENCHMARK_DATA = {
             "value": 4739.62008412679,
             "unit": "ns",
             "range": "± 8.598388480695824"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com",
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "9697053b086fb2750c22eaca4cbec5b4cd166496",
+          "message": "chore(pack): stop requiring licence acceptance for the MIT package (#613)\n\nPackageRequireLicenseAcceptance=True makes Visual Studio show an\naccept-licence prompt on install. MIT does not require acceptance, so the\nprompt is only friction.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-07T21:26:38-05:00",
+          "tree_id": "9ecf05e2718d5d3637b6f1d92c5935b7875aabc9",
+          "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/9697053b086fb2750c22eaca4cbec5b4cd166496"
+        },
+        "date": 1794105748753,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Foreach_RawLoop(Size: 100)",
+            "value": 39.94866623481115,
+            "unit": "ns",
+            "range": "± 0.2564328203022543"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Do_Iterator(Size: 100)",
+            "value": 512.3376290003458,
+            "unit": "ns",
+            "range": "± 1.298307509573708"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Linq_Select_SideEffect(Size: 100)",
+            "value": 263.9683396021525,
+            "unit": "ns",
+            "range": "± 7.822407510518748"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Foreach_RawLoop(Size: 10000)",
+            "value": 3345.301052093506,
+            "unit": "ns",
+            "range": "± 3.8070845472834427"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Do_Iterator(Size: 10000)",
+            "value": 49492.19208780924,
+            "unit": "ns",
+            "range": "± 607.9247073070346"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Linq_Select_SideEffect(Size: 10000)",
+            "value": 43307.87508138021,
+            "unit": "ns",
+            "range": "± 293.15558860800303"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Foreach_RawLoop(Size: 1000000)",
+            "value": 321221.77734375,
+            "unit": "ns",
+            "range": "± 2828.67085790348"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Do_Iterator(Size: 1000000)",
+            "value": 4696437.434895833,
+            "unit": "ns",
+            "range": "± 6361.793124269429"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.DoBenchmarks.Linq_Select_SideEffect(Size: 1000000)",
+            "value": 1648774.8658854167,
+            "unit": "ns",
+            "range": "± 24615.324771258907"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Foreach_RawLoop(Size: 100)",
+            "value": 69.0527594089508,
+            "unit": "ns",
+            "range": "± 0.06282814817410369"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnListAsEnumerable(Size: 100)",
+            "value": 125.04095196723938,
+            "unit": "ns",
+            "range": "± 0.5158703117148125"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnArrayAsEnumerable(Size: 100)",
+            "value": 299.833189646403,
+            "unit": "ns",
+            "range": "± 3.1788519016777546"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnYieldEnumerable(Size: 100)",
+            "value": 169.6074055035909,
+            "unit": "ns",
+            "range": "± 0.7687092386689525"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Bcl_ListForEach(Size: 100)",
+            "value": 124.70858176549275,
+            "unit": "ns",
+            "range": "± 1.066850966897454"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Linq_ToList_Then_Foreach(Size: 100)",
+            "value": 109.4171490073204,
+            "unit": "ns",
+            "range": "± 1.338685556476879"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Foreach_RawLoop(Size: 10000)",
+            "value": 6249.627326965332,
+            "unit": "ns",
+            "range": "± 4.743815382978124"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnListAsEnumerable(Size: 10000)",
+            "value": 11373.146092732748,
+            "unit": "ns",
+            "range": "± 265.33498182795915"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnArrayAsEnumerable(Size: 10000)",
+            "value": 19669.464385986328,
+            "unit": "ns",
+            "range": "± 388.32967239608706"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnYieldEnumerable(Size: 10000)",
+            "value": 14112.23666636149,
+            "unit": "ns",
+            "range": "± 137.18586473209047"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Bcl_ListForEach(Size: 10000)",
+            "value": 10473.506632486979,
+            "unit": "ns",
+            "range": "± 104.3533446271432"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Linq_ToList_Then_Foreach(Size: 10000)",
+            "value": 8523.770650227865,
+            "unit": "ns",
+            "range": "± 124.57553754120514"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Foreach_RawLoop(Size: 1000000)",
+            "value": 627114.7434895834,
+            "unit": "ns",
+            "range": "± 2060.373909828601"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnListAsEnumerable(Size: 1000000)",
+            "value": 975618.3489583334,
+            "unit": "ns",
+            "range": "± 4211.251548943594"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnArrayAsEnumerable(Size: 1000000)",
+            "value": 1336975.5725911458,
+            "unit": "ns",
+            "range": "± 14185.305465930838"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Extension_OnYieldEnumerable(Size: 1000000)",
+            "value": 1397647.19140625,
+            "unit": "ns",
+            "range": "± 6241.370620919752"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Bcl_ListForEach(Size: 1000000)",
+            "value": 972777.1432291666,
+            "unit": "ns",
+            "range": "± 5567.048786250836"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ForEachBenchmarks.Linq_ToList_Then_Foreach(Size: 1000000)",
+            "value": 1819209.634765625,
+            "unit": "ns",
+            "range": "± 12845.414920716083"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.Linq_NotAny_EmptyList",
+            "value": 3.776631531616052,
+            "unit": "ns",
+            "range": "± 0.0014901392487566211"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.IsEmpty_EmptyList",
+            "value": 2.2605441361665726,
+            "unit": "ns",
+            "range": "± 0.003947089710625802"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.IsNullOrEmpty_EmptyList",
+            "value": 2.359924204647541,
+            "unit": "ns",
+            "range": "± 0.11271428764934932"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.None_EmptyList",
+            "value": 2.2733252371350923,
+            "unit": "ns",
+            "range": "± 0.0324634677804125"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.Linq_NotAny_PopulatedList",
+            "value": 3.807133520642916,
+            "unit": "ns",
+            "range": "± 0.016320363949358308"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.IsEmpty_PopulatedList",
+            "value": 2.3666654328505197,
+            "unit": "ns",
+            "range": "± 0.04637110635361952"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.None_PopulatedList",
+            "value": 2.261548268298308,
+            "unit": "ns",
+            "range": "± 0.009035080027596716"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.Linq_NotAny_EmptyYield",
+            "value": 15.754443943500519,
+            "unit": "ns",
+            "range": "± 0.18664245442871386"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.IsEmpty_EmptyYield",
+            "value": 15.321966926256815,
+            "unit": "ns",
+            "range": "± 0.36997407200779364"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.IsNullOrEmpty_EmptyYield",
+            "value": 14.995635330677032,
+            "unit": "ns",
+            "range": "± 0.09006648059451251"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.None_EmptyYield",
+            "value": 14.980598797400793,
+            "unit": "ns",
+            "range": "± 0.012029795115359848"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.Linq_NotAny_PopulatedYield",
+            "value": 15.865998069445292,
+            "unit": "ns",
+            "range": "± 0.06641473219136387"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.IsEmpty_PopulatedYield",
+            "value": 15.278811732927958,
+            "unit": "ns",
+            "range": "± 0.05616980538578725"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.IsNullOrEmpty_PopulatedYield",
+            "value": 15.213876585165659,
+            "unit": "ns",
+            "range": "± 0.03502852844674655"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsEmptyBenchmarks.None_PopulatedYield",
+            "value": 15.59105654557546,
+            "unit": "ns",
+            "range": "± 0.20880830542191603"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsNullOrEmptyBenchmarks.ManualNullCheck_Null",
+            "value": 0.1310119293630123,
+            "unit": "ns",
+            "range": "± 0.016664129300143462"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsNullOrEmptyBenchmarks.IsNullOrEmpty_Null",
+            "value": 0.36197787150740623,
+            "unit": "ns",
+            "range": "± 0.007200843586770507"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsNullOrEmptyBenchmarks.ManualNullCheck_EmptyList",
+            "value": 0.5404744731883208,
+            "unit": "ns",
+            "range": "± 0.005885105828544613"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsNullOrEmptyBenchmarks.IsNullOrEmpty_EmptyList",
+            "value": 2.260350026190281,
+            "unit": "ns",
+            "range": "± 0.001795940460435717"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsNullOrEmptyBenchmarks.IsNullOrEmpty_PopulatedList",
+            "value": 2.5667620797952018,
+            "unit": "ns",
+            "range": "± 0.005632493188351873"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsNullOrEmptyBenchmarks.IsNullOrEmpty_EmptyYield",
+            "value": 15.12447096904119,
+            "unit": "ns",
+            "range": "± 0.15155085331771698"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.IsNullOrEmptyBenchmarks.IsNullOrEmpty_PopulatedYield",
+            "value": 15.219674358765284,
+            "unit": "ns",
+            "range": "± 0.04235176329926924"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.Linq_NotAny_LateMatch(Size: 100)",
+            "value": 210.2565519809723,
+            "unit": "ns",
+            "range": "± 0.31130830405340676"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.None_LateMatch(Size: 100)",
+            "value": 205.7817268371582,
+            "unit": "ns",
+            "range": "± 0.06593444348769174"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.Linq_NotAny_NoMatch(Size: 100)",
+            "value": 176.38260380427042,
+            "unit": "ns",
+            "range": "± 0.69624213496688"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.None_NoMatch(Size: 100)",
+            "value": 177.21140360832214,
+            "unit": "ns",
+            "range": "± 1.4080139046001106"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.Linq_NotAny_LateMatch(Size: 10000)",
+            "value": 17997.750778198242,
+            "unit": "ns",
+            "range": "± 41.3365156417814"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.None_LateMatch(Size: 10000)",
+            "value": 17762.04234822591,
+            "unit": "ns",
+            "range": "± 109.67758723691138"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.Linq_NotAny_NoMatch(Size: 10000)",
+            "value": 15795.581726074219,
+            "unit": "ns",
+            "range": "± 229.44685493067198"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.None_NoMatch(Size: 10000)",
+            "value": 15648.552261352539,
+            "unit": "ns",
+            "range": "± 12.945434608477818"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.Linq_NotAny_LateMatch(Size: 1000000)",
+            "value": 1700292.3821614583,
+            "unit": "ns",
+            "range": "± 7364.299030065843"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.None_LateMatch(Size: 1000000)",
+            "value": 1710395.7916666667,
+            "unit": "ns",
+            "range": "± 2041.519388489687"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.Linq_NotAny_NoMatch(Size: 1000000)",
+            "value": 1561973.09375,
+            "unit": "ns",
+            "range": "± 1151.7008909648798"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.NonePredicateBenchmarks.None_NoMatch(Size: 1000000)",
+            "value": 1565193.6217447917,
+            "unit": "ns",
+            "range": "± 536.0676715618124"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_Array(Size: 100)",
+            "value": 969.9057744344076,
+            "unit": "ns",
+            "range": "± 1.3575572969315828"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_List(Size: 100)",
+            "value": 935.6825148264567,
+            "unit": "ns",
+            "range": "± 1.5205144323770934"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_ICollectionNotList(Size: 100)",
+            "value": 949.2449852625529,
+            "unit": "ns",
+            "range": "± 4.070544452151473"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_Yield(Size: 100)",
+            "value": 1421.202675819397,
+            "unit": "ns",
+            "range": "± 4.2774120392571815"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Reference_ToArrayThenShuffle(Size: 100)",
+            "value": 714.4312219619751,
+            "unit": "ns",
+            "range": "± 2.1838133768061962"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_Array(Size: 1000)",
+            "value": 8998.182795206705,
+            "unit": "ns",
+            "range": "± 26.106788613154496"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_List(Size: 1000)",
+            "value": 8613.463516235352,
+            "unit": "ns",
+            "range": "± 19.987867000444364"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_ICollectionNotList(Size: 1000)",
+            "value": 9012.267852783203,
+            "unit": "ns",
+            "range": "± 12.794926644089479"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_Yield(Size: 1000)",
+            "value": 12025.36905415853,
+            "unit": "ns",
+            "range": "± 19.642246407222007"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Reference_ToArrayThenShuffle(Size: 1000)",
+            "value": 6915.208669026692,
+            "unit": "ns",
+            "range": "± 28.99137377677794"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_Array(Size: 10000)",
+            "value": 89757.33386230469,
+            "unit": "ns",
+            "range": "± 346.95983493243904"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_List(Size: 10000)",
+            "value": 89647.89774576823,
+            "unit": "ns",
+            "range": "± 2144.7989123715615"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_ICollectionNotList(Size: 10000)",
+            "value": 87939.9012858073,
+            "unit": "ns",
+            "range": "± 253.3367614291645"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Shuffle_Yield(Size: 10000)",
+            "value": 117977.80151367188,
+            "unit": "ns",
+            "range": "± 241.52229486139947"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ShuffleBenchmarks.Reference_ToArrayThenShuffle(Size: 10000)",
+            "value": 70420.92508951823,
+            "unit": "ns",
+            "range": "± 64.01038198533502"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ToEnumerableBenchmarks.Identity_Array",
+            "value": 0.9329207303623358,
+            "unit": "ns",
+            "range": "± 0.0011551727849262996"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ToEnumerableBenchmarks.ToEnumerable_Array",
+            "value": 31.405071298281353,
+            "unit": "ns",
+            "range": "± 0.1664467915825535"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ToEnumerableBenchmarks.ToEnumerable_List",
+            "value": 31.47029674053192,
+            "unit": "ns",
+            "range": "± 0.15174153499433132"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ToEnumerableBenchmarks.ToEnumerable_Yield",
+            "value": 31.862128963073094,
+            "unit": "ns",
+            "range": "± 0.17484022768875723"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ToEnumerableEnumerationBenchmarks.Enumerate_Array_Baseline",
+            "value": 349.6252815723419,
+            "unit": "ns",
+            "range": "± 2.6459961327558568"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ToEnumerableEnumerationBenchmarks.Enumerate_Array_ViaToEnumerable",
+            "value": 4108.051294962565,
+            "unit": "ns",
+            "range": "± 13.305315456376226"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ToEnumerableEnumerationBenchmarks.Enumerate_List_Baseline",
+            "value": 629.2903051376343,
+            "unit": "ns",
+            "range": "± 0.5035514458652128"
+          },
+          {
+            "name": "Wolfgang.Extensions.IEnumerable.Benchmarks.ToEnumerableEnumerationBenchmarks.Enumerate_List_ViaToEnumerable",
+            "value": 4747.937395731608,
+            "unit": "ns",
+            "range": "± 20.048502811431256"
           }
         ]
       }
