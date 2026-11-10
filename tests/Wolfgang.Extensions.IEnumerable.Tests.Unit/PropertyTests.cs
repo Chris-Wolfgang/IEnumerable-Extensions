@@ -226,7 +226,8 @@ public class PropertyTests
                     Assert.Equal(partitionCount, groups.Count);
                     for (var group = 0; group < partitionCount; group++)
                     {
-                        var expected = items.Where((_, index) => index % partitionCount == group);
+                        var groupIndex = group;
+                        var expected = items.Where((_, index) => index % partitionCount == groupIndex);
                         Assert.Equal(expected, groups[group]);
                     }
                 }
