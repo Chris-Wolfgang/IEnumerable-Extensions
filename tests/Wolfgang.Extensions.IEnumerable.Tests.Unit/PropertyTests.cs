@@ -1,5 +1,4 @@
 #if NET8_0_OR_GREATER
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using CsCheck;
@@ -19,6 +18,7 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 /// fuzz session by setting <c>CsCheck_Iter</c> (a case count) or <c>CsCheck_Time</c> (seconds) in the
 /// environment, with no code change.
 /// </remarks>
+// ReSharper disable PossibleMultipleEnumeration - every property compares two methods over the same sequence
 public class PropertyTests
 {
     private static readonly Gen<List<int>> _items = Gen.Int[-50, 50].List[0, 40];
@@ -193,4 +193,5 @@ public class PropertyTests
         yield return items.ToEnumerable();
     }
 }
+// ReSharper restore PossibleMultipleEnumeration
 #endif
