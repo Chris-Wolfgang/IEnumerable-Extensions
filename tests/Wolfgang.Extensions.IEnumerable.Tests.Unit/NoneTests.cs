@@ -6,8 +6,6 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 public class NoneTests
 {
-
-
     [Fact]
     public void None_with_source_when_passed_null_source_throws_ArgumentNullException()
     {
@@ -54,7 +52,7 @@ public class NoneTests
         Assert.False(source.ToEnumerable().None());
     }
 
-        
+
 
     [Fact]
     public void None_with_source_when_list_of_integers_contains_no_items_returns_true()
@@ -192,6 +190,4 @@ public class NoneTests
     {
         public string? Color { get; set; }
     }
-
-
 }
