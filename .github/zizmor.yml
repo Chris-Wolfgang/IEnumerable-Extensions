@@ -1,0 +1,29 @@
+# zizmor configuration: the baseline of accepted workflow-audit suppressions.
+# https://docs.zizmor.sh/configuration/
+#
+# zizmor reads this file from .github/zizmor.yml (or zizmor.yml at the root);
+# a root .zizmor.yml is silently ignored.
+#
+# Each `ignore:` entry is a pre-existing finding that is deliberate design, with
+# its reason. The flagged line also carries an inline `# zizmor: ignore[<rule>]`
+# comment, so the reason sits next to the code too; this file is the single list
+# of everything accepted. A finding of the same rule in any other file still
+# fails the zizmor job. Adding an entry needs a maintainer's review: give the
+# reason here and keep docs/WORKFLOW_SECURITY.md pointing at this file.
+
+rules:
+  dangerous-triggers:
+    ignore:
+      # protected-files.yaml runs on `pull_request_target`, but the job never
+      # checks out or executes pull request content: it only lists the files a
+      # PR changes through the API and reports on them.
+      - protected-files.yaml
+
+  self-repository:
+    ignore:
+      # release.yaml's trigger-docs job calls `./.github/workflows/docfx.yaml`.
+      # GitHub's `$/` self-repository syntax is preferred, but actionlint (a
+      # required check) rejects it until rhysd/actionlint#732 ships. Switch to
+      # `$/.github/workflows/docfx.yaml` and drop this entry and the inline
+      # ignore then.
+      - release.yaml
