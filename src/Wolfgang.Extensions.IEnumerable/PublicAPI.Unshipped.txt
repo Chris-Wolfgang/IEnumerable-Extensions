@@ -1,1 +1,2 @@
 #nullable enable
+static Wolfgang.Extensions.IEnumerable.IEnumerableExtensions.Partition<T>(this System.Collections.Generic.IEnumerable<T>? source, int partitionCount) -> System.Collections.Generic.IReadOnlyList<System.Collections.Generic.IEnumerable<T>!>!

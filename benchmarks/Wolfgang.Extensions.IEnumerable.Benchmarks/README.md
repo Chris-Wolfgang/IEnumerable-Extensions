@@ -1,55 +1,50 @@
-# Shuffle Benchmarks
+# Wolfgang.Extensions.IEnumerable Benchmarks
 
-This benchmark project compares the current `Shuffle()` extension method implementation with a legacy GUID-based implementation:
+BenchmarkDotNet suites for the library's extension methods. Every suite compares the extension method with
+the hand-written loop or LINQ call it replaces, and all of them use `[MemoryDiagnoser]`, so each result shows
+time and allocation.
 
-## Implementations Compared
+## Suites
 
-1. **Current Implementation (Fisher-Yates Shuffle)**
-   - Uses the classic Fisher-Yates shuffle algorithm
-   - More efficient with O(n) time complexity
-   - Uses `Random.Shared` for random number generation
+| Suite | What it measures | Sizes |
+|-------|------------------|-------|
+| `DoBenchmarks` | `Do()` against a raw `foreach` and a side-effecting LINQ `Select` | 100 / 10,000 / 1,000,000 |
+| `ForEachBenchmarks` | `ForEach()` on a list, an array and a yield iterator, against a raw loop, `List<T>.ForEach` and `ToList()` + `foreach` | 100 / 10,000 / 1,000,000 |
+| `IsEmptyBenchmarks` | `IsEmpty()`, `IsNullOrEmpty()` and `None()` against `!Any()`, for empty and populated lists and yield iterators | 1,000 (populated) |
+| `IsNullOrEmptyBenchmarks` | `IsNullOrEmpty()` against a manual `source == null \|\| !source.Any()` check, for null, empty and populated sources | 1,000 (populated) |
+| `NonePredicateBenchmarks` | `None(predicate)` against `!Any(predicate)` with a late match | 100 / 10,000 / 1,000,000 |
+| `ShuffleBenchmarks` | `Shuffle()` per source type (array, `List<T>`, other `ICollection<T>`, yield iterator) against an always-`ToArray()` Fisher-Yates reference | 100 / 1,000 / 10,000 |
+| `ToEnumerableBenchmarks` | The cost of calling `ToEnumerable()` on an array, a list and a yield iterator | 1,000 |
+| `ToEnumerableEnumerationBenchmarks` | Enumerating an array or list directly against enumerating it through `ToEnumerable()` | 1,000 |
 
-2. **Legacy/Alternative Implementation (Guid-based)**
-   - Uses `OrderBy(_ => Guid.NewGuid())`
-   - Simple and readable, but generally slower
-   - Generates a GUID for each element during the sort operation
-## Benchmark Sizes
+`Program.cs` runs the suites through `BenchmarkSwitcher`, so you can run all of them or pick one with `--filter`.
 
-The benchmarks test three different collection sizes:
-- **Small**: 100 items
-- **Medium**: 1,000 items  
-- **Large**: 10,000 items
+## Running the benchmarks
 
-## Running the Benchmarks
-
-### Prerequisites
-- .NET 8.0 SDK or later
-
-### Run Command
+Prerequisite: the .NET 10.0 SDK (the repository's build requirement; the benchmark project itself targets `net8.0`).
 
 ```bash
-# From the repository root
-dotnet run --project benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks.csproj --configuration Release
+# From the repository root: every suite (interactive picker if no filter is given)
+dotnet run --project benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks --configuration Release -- --filter "*"
+
+# One suite
+dotnet run --project benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks --configuration Release -- --filter "*ShuffleBenchmarks*"
+
+# What CI runs (shorter job, JSON export)
+dotnet run --project benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks --configuration Release -- --filter "*" --job short --memory --exporters json
 ```
 
-### Example Output
+Results are written to `BenchmarkDotNet.Artifacts/`.
 
-BenchmarkDotNet will generate detailed performance metrics including:
-- Mean execution time
-- Memory allocations
-- Standard deviation
-- Relative performance rankings
+## Published results
 
-Results will be saved to `BenchmarkDotNet.Artifacts/` directory.
+`.github/workflows/benchmarks.yaml` runs every suite and publishes the history as a chart on GitHub Pages:
+<https://chris-wolfgang.github.io/IEnumerable-Extensions/dev/bench/>.
 
-## Interpreting Results
+## Reading the results
 
-Look for:
-- **Mean**: Average execution time
-- **Allocated**: Memory allocated per operation
-- **Rank**: Relative performance ranking (1 is best)
-
-The Fisher-Yates implementation should show:
-- Faster execution time (lower Mean)
-- Better scalability as collection size increases
-- Similar or better memory efficiency
+- **Mean**: average time per operation.
+- **Ratio**: time relative to the suite's `Baseline = true` benchmark (the raw loop or LINQ equivalent).
+- **Allocated**: bytes allocated per operation. `IsEmpty()`, `IsNullOrEmpty()` and `None()` on arrays and lists,
+  and `ForEach()` on a `List<T>`, are expected to allocate nothing; `ZeroAllocationTests` in the unit-test
+  project enforces that.

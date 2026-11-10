@@ -9,7 +9,8 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 /// <summary>
 /// The library is a set of synchronous extension methods with exactly one piece of shared state:
-/// the thread-local <see cref="Random"/> behind <c>Shuffle</c>. These tests exercise that state, and
+/// the <see cref="Random"/> behind <c>Shuffle</c> (the process-wide <c>Random.Shared</c> in the net8.0 and net10.0
+/// builds, a thread-local instance in the net462 and netstandard2.0 builds). These tests exercise that state, and
 /// concurrent reads of one shared source, from several dedicated threads at once. Assertions are
 /// structural (every result is a valid permutation, the source is untouched, nothing throws) so they
 /// do not depend on timing.
@@ -95,9 +96,9 @@ public class ConcurrencyTests
 
 
     [Fact]
-    public async Task Enumerating_one_shared_ToEnumerable_result_from_many_threads_yields_the_full_sequence_each_time()
+    public async Task ToEnumerable_when_one_result_is_enumerated_from_many_threads_yields_the_full_sequence_each_time()
     {
-        var shared = Enumerable.Range(0, ItemCount).ToArray().ToEnumerable();
+        var shared = Enumerable.Range(0, ItemCount).ToEnumerable();
 
         var wrongLengths = 0;
         await RunOnDedicatedThreadsAsync
@@ -106,6 +107,7 @@ public class ConcurrencyTests
             {
                 for (var i = 0; i < IterationsPerThread; i++)
                 {
+                    // ReSharper disable once PossibleMultipleEnumeration - enumerating one shared sequence repeatedly, from many threads, is what this test checks
                     Interlocked.Add(ref wrongLengths, shared.Count() == ItemCount ? 0 : 1);
                 }
             }
@@ -120,7 +122,7 @@ public class ConcurrencyTests
     public async Task Do_when_one_shared_result_is_enumerated_from_many_threads_runs_the_action_once_per_item_per_enumeration()
     {
         var calls = 0;
-        var shared = Enumerable.Range(0, ItemCount).ToArray().Do(_ => Interlocked.Increment(ref calls));
+        var shared = Enumerable.Range(0, ItemCount).Do(_ => Interlocked.Increment(ref calls));
 
         await RunOnDedicatedThreadsAsync
         (
@@ -128,6 +130,7 @@ public class ConcurrencyTests
             {
                 for (var i = 0; i < IterationsPerThread; i++)
                 {
+                    // ReSharper disable once PossibleMultipleEnumeration - enumerating one shared sequence repeatedly, from many threads, is what this test checks
                     _ = shared.ToArray();
                 }
             }
@@ -187,6 +190,7 @@ public class ConcurrencyTests
                 (
                     () =>
                     {
+                        // ReSharper disable once AccessToDisposedClosure - every task is awaited below before the barrier is disposed
                         barrier.SignalAndWait();
                         body();
                     },

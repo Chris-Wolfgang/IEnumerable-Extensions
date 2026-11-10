@@ -19,10 +19,8 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 /// </summary>
 public class DocExampleTests
 {
-
-
     [Fact]
-    public async Task XmlDoc_examples_compile()
+    public async Task XmlDocExamples_when_compiled_report_no_errors()
     {
         var examples = await ReadExamplesAsync();
 
@@ -38,7 +36,7 @@ public class DocExampleTests
 
 
     [Fact]
-    public async Task XmlDoc_examples_are_found_in_every_documented_extension_method()
+    public async Task XmlDocExamples_when_collected_include_one_per_documented_extension_method()
     {
         var examples = await ReadExamplesAsync();
 
