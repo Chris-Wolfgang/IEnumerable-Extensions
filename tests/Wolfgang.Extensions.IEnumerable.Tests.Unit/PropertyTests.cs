@@ -1,5 +1,4 @@
 #if NET8_0_OR_GREATER
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,6 +27,7 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 /// every later short run checks it as a regression.
 /// </para>
 /// </remarks>
+// ReSharper disable PossibleMultipleEnumeration - every property compares two methods over the same sequence
 public class PropertyTests
 {
     private const string ReplayFileName = "seeds.txt";
@@ -359,4 +359,5 @@ public class PropertyTests
         yield return items.ToEnumerable();
     }
 }
+// ReSharper restore PossibleMultipleEnumeration
 #endif
