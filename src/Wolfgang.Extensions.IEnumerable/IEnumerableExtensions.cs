@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 // ReSharper disable once RedundantUsingDirective - required on net462/netstandard2.0; only redundant on net8.0+, which is the target InspectCode analyses
 using System.Threading;
@@ -14,7 +15,7 @@ using System.Threading;
 namespace Wolfgang.Extensions.IEnumerable;
 
 /// <summary>
-/// A collection of extension methods for IEnumerable{T}
+/// A collection of extension methods for <see cref="IEnumerable{T}"/>
 /// </summary>
 public static class IEnumerableExtensions
 {
@@ -22,9 +23,9 @@ public static class IEnumerableExtensions
     /// Executes the specified action on each item in the enumerable
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements the action will be executed on.</param>
     /// <param name="action">The action to execute on each item in the enumerable</param>
-    /// <exception cref="ArgumentNullException">source or action is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var numbers = new[] { 1, 2, 3, 4, 5 };
@@ -64,12 +65,18 @@ public static class IEnumerableExtensions
     /// <summary>
     /// Gets a value indicating whether a sequence contains no elements.
     /// </summary>
-    /// <param name="source">The IEnumerable{T} to check.</param>
+    /// <remarks>
+    /// When <paramref name="source"/> is an <see cref="ICollection{T}"/> (an array, a <see cref="List{T}"/>, and
+    /// so on) the answer is read from its <c>Count</c> and the sequence is not enumerated. For any other
+    /// sequence the result, the exceptions and the disposal of the enumerator are the same as for
+    /// <c>!source.Any()</c>: at most one element is pulled.
+    /// </remarks>
+    /// <param name="source">The <see cref="IEnumerable{T}"/> to check.</param>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <returns>
     /// true if the source sequence contains no elements; otherwise, false.
     /// </returns>
-    /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var items = new List&lt;string&gt;();
@@ -83,6 +90,7 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
+        // Stryker disable once Block : the collection shortcut matters on .NET Framework, where LINQ enumerates a collection (the CountOnlyCollection tests fail there without it); on .NET Core LINQ has the same shortcut, so it is indistinguishable on the net10.0 target Stryker runs
         if (source is ICollection<T> s)
         {
             return s.Count == 0;
@@ -96,7 +104,12 @@ public static class IEnumerableExtensions
     /// <summary>
     /// Gets a value indicating whether a sequence is null or contains no elements.
     /// </summary>
-    /// <param name="source">The IEnumerable{T} to check.</param>
+    /// <remarks>
+    /// A <see langword="null"/> <paramref name="source"/> returns <see langword="true"/>. Otherwise this behaves
+    /// like <see cref="IsEmpty{T}"/>: a collection is answered from its <c>Count</c> without being enumerated,
+    /// and any other sequence behaves like <c>!source.Any()</c>.
+    /// </remarks>
+    /// <param name="source">The <see cref="IEnumerable{T}"/> to check.</param>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <returns>
     /// true if the source sequence is null or contains no elements; otherwise, false.
@@ -114,6 +127,7 @@ public static class IEnumerableExtensions
             return true;
         }
 
+        // Stryker disable once Block : the collection shortcut matters on .NET Framework, where LINQ enumerates a collection (the CountOnlyCollection tests fail there without it); on .NET Core LINQ has the same shortcut, so it is indistinguishable on the net10.0 target Stryker runs
         if (source is ICollection<T> collection)
         {
             return collection.Count == 0;
@@ -128,9 +142,9 @@ public static class IEnumerableExtensions
     /// Determines whether a sequence contains no elements.
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">The IEnumerable{T} to check.</param>
+    /// <param name="source">The <see cref="IEnumerable{T}"/> to check.</param>
     /// <returns>false if the source sequence contains any elements; otherwise, true.</returns>
-    /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var numbers = new[] { 1, 2, 3, 4 };
@@ -144,14 +158,15 @@ public static class IEnumerableExtensions
         => source.IsEmpty();
 
 
+
     /// <summary>
     /// Determines whether no element of a sequence satisfies a condition.
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose elements to apply the predicate to.</param>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements to apply the predicate to.</param>
     /// <param name="predicate">A function to test each element for a condition.</param>
     /// <returns>true if no elements in the source sequence pass the test in the specified predicate; otherwise, false.</returns>
-    /// <exception cref="ArgumentNullException">source or predicate is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var numbers = new[] { 1, 2, 3, 4 };
@@ -175,15 +190,16 @@ public static class IEnumerableExtensions
     }
 
 
+
     /// <summary>
-    /// Executes a side-effect action on each element of an IEnumerable{T}
+    /// Executes a side-effect action on each element of an <see cref="IEnumerable{T}"/>
     /// without transforming the elements. The original items are yielded unchanged.
     /// </summary>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose elements the action will be executed on.</param>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements the action will be executed on.</param>
     /// <param name="action">The action to execute on each element.</param>
-    /// <returns>An IEnumerable{T} that yields the original elements after executing the action.</returns>
-    /// <exception cref="ArgumentNullException">source or action is null.</exception>
+    /// <returns>An <see cref="IEnumerable{T}"/> that yields the original elements after executing the action.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// foreach (var item in source.Do(x => Console.WriteLine($"Processing: {x}")))
@@ -243,12 +259,12 @@ public static class IEnumerableExtensions
     /// </para>
     /// </remarks>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
-    /// <param name="source">An IEnumerable{T} whose elements will be randomly ordered.</param>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements will be randomly ordered.</param>
     /// <returns>
     /// A new sequence containing every element of <paramref name="source"/> in a
     /// random permutation. The input sequence is not mutated.
     /// </returns>
-    /// <exception cref="ArgumentNullException">source is null.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
     /// <example>
     /// <code>
     /// var deck = new[] { "Ace", "King", "Queen", "Jack" };
@@ -288,6 +304,7 @@ public static class IEnumerableExtensions
 
         var rng = RandomSource;
 
+        // Stryker disable once Equality : at i == 0 the swap is element 0 with itself, so i >= 0 is indistinguishable
         for (var i = buffer.Length - 1; i > 0; i--)
         {
             var j = rng.Next(i + 1);
@@ -307,15 +324,109 @@ public static class IEnumerableExtensions
         }
     }
 
+
+
 #if NET6_0_OR_GREATER
     private static Random RandomSource => Random.Shared;
 #else
-    private static readonly ThreadLocal<Random> SThreadLocalRandom = new(CreateRandom);
-    private static Random RandomSource => SThreadLocalRandom.Value;
+    private static readonly ThreadLocal<Random> ThreadLocalRandom = new(CreateRandom);
+    private static Random RandomSource => ThreadLocalRandom.Value;
 
     private static Random CreateRandom()
         => new(unchecked((Environment.TickCount * 31) + Thread.CurrentThread.ManagedThreadId));
 #endif
+
+
+
+    /// <summary>
+    /// Distributes the elements of <paramref name="source"/> round-robin across a fixed number of
+    /// partitions: the first element goes to partition 0, the second to partition 1, and element
+    /// <c>partitionCount + 1</c> back to partition 0.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Unlike <c>Enumerable.Chunk</c>, which produces a variable number of fixed-size groups,
+    /// <c>Partition</c> produces a fixed number of groups whose sizes differ by at most one. The
+    /// first <c>count % partitionCount</c> partitions hold one element more than the rest.
+    /// </para>
+    /// <para>
+    /// This method is <b>eager</b>: <paramref name="source"/> is enumerated exactly once, when
+    /// <c>Partition</c> is called, and the result does not reflect later changes to the source.
+    /// Each partition can then be enumerated any number of times, independently and from different
+    /// threads.
+    /// </para>
+    /// <para>
+    /// The returned list is read-only, and each partition is a lazy iterator over an internal
+    /// buffer, so <c>partition is List&lt;T&gt;</c>, <c>partition is ICollection&lt;T&gt;</c> and
+    /// <c>partition is T[]</c> are all false (the same contract as <see cref="Shuffle{T}"/>).
+    /// </para>
+    /// </remarks>
+    /// <typeparam name="T">The type of the elements of source.</typeparam>
+    /// <param name="source">An <see cref="IEnumerable{T}"/> whose elements are distributed.</param>
+    /// <param name="partitionCount">The number of partitions to create. Must be at least 1.</param>
+    /// <returns>
+    /// A read-only list of exactly <paramref name="partitionCount"/> partitions, in order. A partition
+    /// is empty when <paramref name="source"/> has fewer elements than <paramref name="partitionCount"/>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException"><paramref name="source"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="partitionCount"/> is less than 1.</exception>
+    /// <example>
+    /// <code>
+    /// var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    /// var groups = numbers.Partition(3);
+    /// // groups[0]: 1, 4, 7   groups[1]: 2, 5, 8   groups[2]: 3, 6, 9
+    /// for (var i = 0; i &lt; groups.Count; i++)
+    /// {
+    ///     Console.WriteLine($"Group {i}: {string.Join(", ", groups[i])}");
+    /// }
+    /// </code>
+    /// </example>
+    public static IReadOnlyList<IEnumerable<T>> Partition<T>(this IEnumerable<T>? source, int partitionCount)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        if (partitionCount < 1)
+        {
+            throw new ArgumentOutOfRangeException
+            (
+                nameof(partitionCount),
+                partitionCount,
+                "partitionCount must be at least 1."
+            );
+        }
+
+        var buffers = new List<T>[partitionCount];
+        for (var i = 0; i < partitionCount; i++)
+        {
+            buffers[i] = new List<T>();
+        }
+
+        var index = 0;
+        foreach (var item in source)
+        {
+            buffers[index].Add(item);
+            index = index + 1 == partitionCount ? 0 : index + 1;
+        }
+
+        var partitions = new IEnumerable<T>[partitionCount];
+        for (var i = 0; i < partitionCount; i++)
+        {
+            partitions[i] = Iterator(buffers[i]);
+        }
+
+        return new ReadOnlyCollection<IEnumerable<T>>(partitions);
+
+        static IEnumerable<T> Iterator(List<T> buffer)
+        {
+            foreach (var item in buffer)
+            {
+                yield return item;
+            }
+        }
+    }
 
 
 
