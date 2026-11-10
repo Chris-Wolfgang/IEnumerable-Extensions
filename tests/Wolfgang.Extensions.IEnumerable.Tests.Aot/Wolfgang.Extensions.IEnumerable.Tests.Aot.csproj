@@ -51,7 +51,7 @@
        The XML-doc example tests (Roslyn, not trim-safe) live in Tests.DocExamples, so they are not
        linked here. -->
   <ItemGroup>
-    <Compile Include="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\**\*.cs" Exclude="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\obj\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unitin\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\MutationSurvivorTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\PropertyTests.cs" Link="Unit\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\**\*.cs" Exclude="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\obj\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\bin\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\MutationSurvivorTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\PropertyTests.cs" Link="Unit\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>
