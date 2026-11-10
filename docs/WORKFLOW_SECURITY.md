@@ -176,6 +176,24 @@ When adding new configuration files that control code quality or security:
 3. Test that the file is correctly fetched from main branch.
 4. Update this documentation.
 
+## Accepted analyzer suppressions
+
+`actionlint` and `zizmor` run on every pull request (`.github/workflows/actions-audit.yaml`); `actionlint` findings and
+high-severity `zizmor` findings fail the check. The baseline of accepted suppressions, one entry per suppression with
+its reason, lives in the analyzers' own configuration files, which both tools read automatically:
+
+- [`.github/zizmor.yml`](../.github/zizmor.yml): zizmor `dangerous-triggers` (`protected-files.yaml`) and
+  `self-repository` (`release.yaml`).
+- [`.github/actionlint.yaml`](../.github/actionlint.yaml): shellcheck `SC2094` (`pr.yaml`, the coverage-gate loop) and
+  `SC2086` (`scorecard.yaml`, building `rules_json`).
+
+Each flagged line also keeps its inline comment (`# zizmor: ignore[...]` or `# shellcheck disable=...`) with the same
+reason, so `grep -rn "zizmor: *ignore\[\|shellcheck disable" .github/workflows` still finds every site. A finding of the
+same rule in any other file still fails the check.
+
+Adding a suppression needs a maintainer's review: add the entry, with its reason, to the matching configuration file
+and keep the inline comment next to the flagged line.
+
 ## References
 
 - [GitHub Actions Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
