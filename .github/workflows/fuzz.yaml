@@ -1,0 +1,101 @@
+name: Fuzz
+
+# Long-running version of tests/.../PropertyTests.cs. The per-PR run uses 100 CsCheck cases per
+# property; here each property runs for FUZZ_SECONDS of randomized cases (CsCheck_Time), which
+# surfaces edge cases the short run does not. No test code changes: CsCheck reads the budget from
+# the environment.
+#
+# A failing property prints its seed in the test output. The job uploads that output; the next
+# job opens an issue (once) that tells the reader how to replay it deterministically with
+# CsCheck_Seed and to add the case as a regression test.
+
+on:
+  schedule:
+    - cron: '23 4 * * 0'   # Sundays at 04:23 UTC
+  workflow_dispatch:
+    inputs:
+      seconds:
+        description: 'Seconds of fuzzing per property (8 properties run one after another)'
+        type: string
+        default: '240'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fuzz-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  fuzz:
+    name: Fuzz the property tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      FUZZ_SECONDS: ${{ inputs.seconds || '240' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run the property tests as a fuzz session
+        run: |
+          set -euo pipefail
+          case "$FUZZ_SECONDS" in
+            ''|*[!0-9]*) echo "::error::seconds must be a whole number, got '$FUZZ_SECONDS'"; exit 1 ;;
+          esac
+          export CsCheck_Time="$FUZZ_SECONDS"
+          dotnet test tests/Wolfgang.Extensions.IEnumerable.Tests.Unit \
+            -c Release -f net10.0 \
+            --filter "FullyQualifiedName~PropertyTests" \
+            --logger "trx;LogFileName=fuzz.trx" \
+            --results-directory fuzz-results \
+            2>&1 | tee fuzz-results-console.txt
+
+      - name: Upload fuzz output
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: fuzz-output
+          path: |
+            fuzz-results/
+            fuzz-results-console.txt
+          if-no-files-found: ignore
+
+  report:
+    name: Open an issue for a failed fuzz run
+    needs: fuzz
+    if: failure() && needs.fuzz.result == 'failure'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Open the issue unless one is already open
+        run: |
+          set -euo pipefail
+          title="Fuzz run found a failing property"
+          existing=$(gh issue list --repo "$REPO" --state open --search "\"$title\" in:title" --json number --jq 'length')
+          if [ "$existing" != "0" ]; then
+            echo "An issue for a failing fuzz run is already open; not opening another."
+            exit 0
+          fi
+          body="The scheduled fuzz run failed: $RUN_URL
+
+          The seed is in the test output (artifact \`fuzz-output\`, or the job log). To replay the case deterministically:
+
+              CsCheck_Seed=<seed from the output> dotnet test tests/Wolfgang.Extensions.IEnumerable.Tests.Unit -c Release -f net10.0 --filter FullyQualifiedName~PropertyTests
+
+          Fix the library (or the property, if it was wrong), and add the shrunk failing input as a plain regression test so the per-PR run covers it."
+          gh issue create --repo "$REPO" --title "$title" --body "$body"
