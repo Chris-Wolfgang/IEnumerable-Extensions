@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net462;netstandard2.0;net8.0;net10.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
     <Version>1.4.0</Version>
     <!-- Pin AssemblyVersion to a fixed binding-stability baseline so consumers
          do not need to recompile / add binding redirects on every minor/patch
@@ -17,10 +16,9 @@
     <RepositoryUrl>https://github.com/Chris-Wolfgang/IEnumerable-Extensions.git</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
     <PackageIcon>icon.png</PackageIcon>
     <!-- Package validation (ApiCompat) compares every pack against the last PUBLISHED version, so an
          unintended binary-breaking change fails dotnet pack, including the release workflow's pack step.
@@ -34,10 +32,6 @@
     <IsAotCompatible>true</IsAotCompatible>
     <PackageValidationBaselineVersion>1.4.0</PackageValidationBaselineVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="icon.ico" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\assets\icon.png">

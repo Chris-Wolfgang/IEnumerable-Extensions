@@ -1,0 +1,30 @@
+# Fuzz replay corpus for PropertyTests (net8.0+).
+#
+# One "<property method name> <CsCheck seed>" per line; '#' starts a comment. Each property in
+# PropertyTests replays its seeds here (one deterministic case each: Sample(..., seed, iter: 1))
+# before its random cases, on every test run. When a fuzz run (fuzz.yaml) finds a failing input,
+# append the property and seed it reports here so the case stays a regression test.
+# ReplaySeeds_when_loaded_name_only_existing_properties_and_cover_every_property checks that
+# every line names an existing property and that every property has at least one seed.
+#
+# Starting corpus: one seed per property, captured 2026-10-31 from shrunk CsCheck cases chosen
+# at an edge of each property (the case each seed produces is in the comment above it).
+
+# []
+IsEmpty_when_given_any_runtime_shape_agrees_with_Any 5oGl9Pwqg-Ta
+# []
+IsNullOrEmpty_when_given_any_runtime_shape_agrees_with_Any_and_is_true_for_null 5joCVU4LT9S1
+# [0] (a single item)
+None_when_given_any_runtime_shape_agrees_with_not_Any 0GB0egJlqrKn
+# [12, 1] (one item matches both predicates, one matches neither)
+None_when_given_a_predicate_and_any_runtime_shape_agrees_with_not_Any_with_that_predicate 2PIozXAi4f4a
+# [-1, -1] (duplicates)
+ForEach_when_given_any_runtime_shape_visits_every_item_once_in_order f5DMPFRnlPCc
+# [2, 2] (duplicates)
+Do_when_enumerated_yields_the_source_unchanged_and_runs_the_action_once_per_item_in_order 9RRxn0CExQ_5
+# [-1, -1, 0] (three items with a duplicate)
+Shuffle_when_given_any_source_returns_a_permutation_and_does_not_modify_the_source 6ThnAqe8p1bi
+# []
+ToEnumerable_when_given_any_source_yields_the_same_sequence_and_is_never_a_more_concrete_collection 8UF5cqhbB-E1
+# ([0], 2) (more partitions than items, so one group is empty)
+Partition_when_given_any_runtime_shape_deals_items_round_robin_into_exactly_partitionCount_groups 9iXdsF4hwS1i
