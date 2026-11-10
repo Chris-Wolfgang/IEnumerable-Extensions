@@ -7,7 +7,9 @@ name: PR Benchmarks
 # Gating, and why it is asymmetric: allocated bytes per operation are deterministic, so growth beyond
 # ALLOC_THRESHOLD_PCT fails the job. Mean time on a shared runner is noisy even with both sides measured
 # back to back, so it is reported and only fails beyond TIME_THRESHOLD_PCT (a deliberately coarse
-# default). Add the label `perf-impact-acknowledged` to accept a regression; the job then reports it
+# default) and only when the mean also moved by at least TIME_FLOOR_NS, so a sub-nanosecond benchmark
+# (a null check at 0.03 ns) cannot fail the gate on a 0.06 ns wobble that reads as +200%.
+# Add the label `perf-impact-acknowledged` to accept a regression; the job then reports it
 # and passes. The comment/summary is replaced on every push, never appended.
 
 on:
@@ -37,6 +39,7 @@ jobs:
     env:
       ALLOC_THRESHOLD_PCT: '50'
       TIME_THRESHOLD_PCT: '100'
+      TIME_FLOOR_NS: '1'
       BENCH_DIR: benchmarks/Wolfgang.Extensions.IEnumerable.Benchmarks
       ACKNOWLEDGED: ${{ contains(github.event.pull_request.labels.*.name, 'perf-impact-acknowledged') }}
     steps:
@@ -89,6 +92,7 @@ jobs:
 
           alloc_limit = float(os.environ["ALLOC_THRESHOLD_PCT"])
           time_limit = float(os.environ["TIME_THRESHOLD_PCT"])
+          time_floor = float(os.environ["TIME_FLOOR_NS"])
 
 
           def load(folder):
@@ -134,7 +138,7 @@ jobs:
                   if da > alloc_limit:
                       regress.append(f"{name}: allocations {old_a} -> {new_a} B/op ({da:+.0f}%)")
                       flag = " :x:"
-                  if dt > time_limit:
+                  if dt > time_limit and (new_t - old_t) >= time_floor:
                       regress.append(f"{name}: time {old_t:,.1f} -> {new_t:,.1f} ns ({dt:+.0f}%)")
                       flag = " :x:"
                   lines.append(f"| {name}{flag} | {old_t:,.1f} ns | {new_t:,.1f} ns | {dt:+.1f}% | {old_a} | {new_a} | {da:+.1f}% |")
@@ -143,7 +147,8 @@ jobs:
           lines += [
               "",
               f"Gate: allocations may grow by at most {alloc_limit:.0f}% (deterministic); time by at most {time_limit:.0f}% "
-              "(noisy on shared runners, so deliberately coarse). Label `perf-impact-acknowledged` accepts a regression.",
+              f"and only when the mean also grows by at least {time_floor:g} ns (noisy on shared runners, so deliberately coarse). "
+              "Label `perf-impact-acknowledged` accepts a regression.",
           ]
           if regress:
               lines += ["", "**Beyond threshold:**"] + [f"- {r}" for r in regress]
