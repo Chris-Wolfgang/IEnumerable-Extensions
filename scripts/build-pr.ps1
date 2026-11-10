@@ -23,7 +23,7 @@
 
 .PARAMETER CoverageThreshold
     Minimum line coverage for PRODUCTION assemblies (anything under src/).
-    Defaults to 90. Mirrors CODECOV_MINIMUM in pr.yaml.
+    Defaults to 95. Mirrors CODECOV_MINIMUM in pr.yaml.
 
 .PARAMETER TestCoverageThreshold
     Minimum line coverage for TEST assemblies (anything under tests/).
@@ -39,9 +39,13 @@ param(
     [switch]$SkipTests,
     [switch]$SkipCoverage,
     [switch]$SkipSecurity,
-    [int]$CoverageThreshold = 90,
+    [int]$CoverageThreshold = 95,
     [int]$TestCoverageThreshold = 100
 )
+
+# Set when a test run used the coverage collector (net5.0 and later). Step 3 uses it to tell "nothing
+# was collected because nothing could be" from "the collector produced nothing", which must fail.
+$collectedCoverage = $false
 
 $ErrorActionPreference = 'Stop'
 $failed = @()
@@ -197,6 +201,7 @@ if (-not $SkipTests -and $failed.Count -eq 0) {
 
                 if ($fw -match '^net([5-9]|[1-9][0-9]+)\.') {
                     $testArgs += '--collect:XPlat Code Coverage'
+                    $collectedCoverage = $true
                     $testArgs += '--results-directory'
                     $testArgs += './TestResults'
                     if (Test-Path 'coverlet.runsettings') {
@@ -243,7 +248,16 @@ if (-not $SkipTests -and -not $SkipCoverage -and $failed.Count -eq 0) {
     $coverageFiles = Get-ChildItem -Path TestResults -Recurse -Filter coverage.cobertura.xml -ErrorAction SilentlyContinue
 
     if (-not $coverageFiles) {
-        Write-Host "No coverage files found — skipping"
+        if ($collectedCoverage) {
+            # pr.yaml fails here rather than skipping: a coverage-collecting framework ran, so no
+            # coverage files means the collector produced nothing and the gate cannot run - and a
+            # gate that cannot run must fail, or a local "all checks passed" hides a broken collector.
+            Write-Fail "No coverage files found - tests ran on a coverage-collecting framework but the collector produced nothing, so the coverage gate cannot run"
+            $failed += "Coverage"
+        }
+        else {
+            Write-Host "No coverage files found - no test ran on a coverage-collecting framework (.NET 5.0+), skipping"
+        }
     }
     else {
         # ReportGenerator is pinned in .config/dotnet-tools.json, exactly as pr.yaml
