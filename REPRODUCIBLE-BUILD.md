@@ -43,4 +43,50 @@ Releases published after the manifest step was added to `release.yaml` carry a `
 
 ### Sharing your verification result
 
-There is no third-party attestation service wired into this repository. To record that you rebuilt a release, open an issue titled `Verification: v<version>` containing the same information as a discrepancy report: tag and commit, operating system and `dotnet --info`, the exact build command, and the per-target-framework `cmp -l` byte count with the differing offsets. State plainly whether the result was byte-identical, a near-match confined to the five fields, or a mismatch elsewhere. A report is a claim by the person who ran it, not something this project signs or vouches for.
+There is no third-party attestation service wired into this repository. A verification is recorded as a signed
+statement attached to an issue, following the Reproducible Builds convention of publishing independent rebuild results
+as signed files that anyone can check against the verifier's public key.
+
+1. **Write the result** as `verification-v<version>.json`, for example:
+
+   ```json
+   {
+     "package": "Wolfgang.Extensions.IEnumerable",
+     "version": "<version>",
+     "tag": "v<version>",
+     "commit": "<full commit sha>",
+     "verifier": "<your name or GitHub login>",
+     "date": "<UTC date of the rebuild>",
+     "environment": { "os": "<operating system>", "sdk": "<dotnet --version>" },
+     "command": "<the exact build command, including any -p:Copyright override>",
+     "nupkgSha256": "<sha256 of the .nupkg you compared against>",
+     "assemblies": [
+       { "tfm": "net8.0", "rebuiltSha256": "<sha256>", "differingBytes": 0, "differingOffsets": [] }
+     ],
+     "result": "identical | near-match | mismatch"
+   }
+   ```
+
+   `result` is `identical` when every assembly has 0 differing bytes, `near-match` when the only differences are the
+   five fields listed above, and `mismatch` otherwise. Include an entry per target framework.
+2. **Sign it** with an OpenPGP key whose public half you publish somewhere you control (for example
+   `https://github.com/<login>.gpg`, a keyserver, or your website):
+
+   ```bash
+   gpg --armor --detach-sign verification-v<version>.json
+   ```
+
+   This writes `verification-v<version>.json.asc`.
+3. **Upload** both files to an issue titled `Verification: v<version>`, and say in the issue where your public key
+   is published. A `mismatch` should also follow [Reporting a discrepancy](#reporting-a-discrepancy).
+
+Anyone can then check the statement is unmodified and was made by the holder of that key:
+
+```bash
+gpg --import <verifier's public key>
+gpg --verify verification-v<version>.json.asc verification-v<version>.json
+```
+
+`Good signature` means the file is exactly what the key holder signed; any edit makes `gpg` report `BAD signature`.
+A verification is a claim by the person who ran it, not something this project signs or vouches for; the signature
+proves who made the claim, not that the rebuild was done correctly, so the useful check is to repeat it.
