@@ -64,6 +64,12 @@ public static class IEnumerableExtensions
     /// <summary>
     /// Gets a value indicating whether a sequence contains no elements.
     /// </summary>
+    /// <remarks>
+    /// When <paramref name="source"/> is an <see cref="ICollection{T}"/> (an array, a <see cref="List{T}"/>, and
+    /// so on) the answer is read from its <c>Count</c> and the sequence is not enumerated. For any other
+    /// sequence the result, the exceptions and the disposal of the enumerator are the same as for
+    /// <c>!source.Any()</c>: at most one element is pulled.
+    /// </remarks>
     /// <param name="source">The IEnumerable{T} to check.</param>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <returns>
@@ -83,6 +89,7 @@ public static class IEnumerableExtensions
             throw new ArgumentNullException(nameof(source));
         }
 
+        // Stryker disable once Block : the collection shortcut matters on .NET Framework, where LINQ enumerates a collection (the CountOnlyCollection tests fail there without it); on .NET Core LINQ has the same shortcut, so it is indistinguishable on the net10.0 target Stryker runs
         if (source is ICollection<T> s)
         {
             return s.Count == 0;
@@ -96,6 +103,11 @@ public static class IEnumerableExtensions
     /// <summary>
     /// Gets a value indicating whether a sequence is null or contains no elements.
     /// </summary>
+    /// <remarks>
+    /// A <see langword="null"/> <paramref name="source"/> returns <see langword="true"/>. Otherwise this behaves
+    /// like <see cref="IsEmpty{T}"/>: a collection is answered from its <c>Count</c> without being enumerated,
+    /// and any other sequence behaves like <c>!source.Any()</c>.
+    /// </remarks>
     /// <param name="source">The IEnumerable{T} to check.</param>
     /// <typeparam name="T">The type of the elements of source.</typeparam>
     /// <returns>
@@ -114,6 +126,7 @@ public static class IEnumerableExtensions
             return true;
         }
 
+        // Stryker disable once Block : the collection shortcut matters on .NET Framework, where LINQ enumerates a collection (the CountOnlyCollection tests fail there without it); on .NET Core LINQ has the same shortcut, so it is indistinguishable on the net10.0 target Stryker runs
         if (source is ICollection<T> collection)
         {
             return collection.Count == 0;
@@ -288,6 +301,7 @@ public static class IEnumerableExtensions
 
         var rng = RandomSource;
 
+        // Stryker disable once Equality : at i == 0 the swap is element 0 with itself, so i >= 0 is indistinguishable
         for (var i = buffer.Length - 1; i > 0; i--)
         {
             var j = rng.Next(i + 1);
