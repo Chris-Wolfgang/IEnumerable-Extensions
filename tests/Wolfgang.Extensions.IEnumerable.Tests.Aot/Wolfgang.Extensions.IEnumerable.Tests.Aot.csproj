@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <!--
     Native AOT test run (fleet standard, claude-sessions/standards/aot-smoke.md, 2026-10-30).
@@ -39,15 +39,19 @@
     <ProjectReference Include="..\..\src\Wolfgang.Extensions.IEnumerable\Wolfgang.Extensions.IEnumerable.csproj" />
   </ItemGroup>
 
-  <!-- The unit tests themselves, linked from the 2.x project. One file stays in the 2.x run only
-       (measured 2026-10-30 with a native win-x64 publish; the reason is not in the library):
+  <!-- The unit tests themselves, linked from the 2.x project. Two files stay in the 2.x run only
+       (measured 2026-10-30 with a native win-x64 publish; neither reason is in the library):
        - PropertyTests.cs: CsCheck 4.9.1's Check static constructor calls
          Assembly.GetCallingAssembly(), which throws PlatformNotSupportedException under Native AOT,
          so all 8 property tests fail before reaching the library.
+       - MutationSurvivorTests.cs: four tests assert which method threw through Exception.TargetSite,
+         which is RequiresUnreferencedCode (IL2026 under TreatWarningsAsErrors) and may be null in a
+         native binary. The contract they pin is the JIT diagnostic, and the mutation run that
+         motivates them is a JIT run too.
        The XML-doc example tests (Roslyn, not trim-safe) live in Tests.DocExamples, so they are not
        linked here. -->
   <ItemGroup>
-    <Compile Include="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\**\*.cs" Exclude="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\obj\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\bin\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\PropertyTests.cs" Link="Unit\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\**\*.cs" Exclude="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\obj\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unitin\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\MutationSurvivorTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\PropertyTests.cs" Link="Unit\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>
