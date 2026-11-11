@@ -332,8 +332,20 @@ public static class IEnumerableExtensions
     private static readonly ThreadLocal<Random> ThreadLocalRandom = new(CreateRandom);
     private static Random RandomSource => ThreadLocalRandom.Value;
 
+    // Each thread's generator is seeded from the operating system's cryptographic random number
+    // generator, never from the clock or the thread id: a seed computed from Environment.TickCount and
+    // ManagedThreadId repeats for two threads whose ids differ by 31 that start one millisecond apart,
+    // and both threads then return the same shuffle.
     private static Random CreateRandom()
-        => new(unchecked((Environment.TickCount * 31) + Thread.CurrentThread.ManagedThreadId));
+    {
+        var seed = new byte[sizeof(int)];
+        using (var generator = System.Security.Cryptography.RandomNumberGenerator.Create())
+        {
+            generator.GetBytes(seed);
+        }
+
+        return new Random(BitConverter.ToInt32(seed, 0));
+    }
 #endif
 
 
