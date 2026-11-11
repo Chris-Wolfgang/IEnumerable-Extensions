@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794142347834,
+  "lastUpdate": 1794360629995,
   "repoUrl": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions",
   "entries": {
     "Mutation score": [
@@ -134,6 +134,33 @@ window.BENCHMARK_DATA = {
           {
             "name": "Mutation score",
             "value": 79.49,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "9033ad7b281d8d419e22cf6caf122b6a64fa8bf6",
+          "message": "ci: AOT smoke workflow - publish and run every PublishAot project on linux-x64 (protected-only) (#638)\n\nReplaces #609, which GitHub marked as merged into its base branch during\nthe 2026-11-10 restack. Same workflow file (aot-smoke.yaml, job 'AOT smoke',\ncheck 'AOT smoke (linux-x64)').\n\nCo-authored-by: Claude Fable 5.1 <noreply@anthropic.com>",
+          "timestamp": "2026-11-11T01:09:38Z",
+          "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/9033ad7b281d8d419e22cf6caf122b6a64fa8bf6"
+        },
+        "date": 1794360625726,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score",
+            "value": 100,
             "unit": "%"
           }
         ]
