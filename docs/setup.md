@@ -6,7 +6,7 @@ This guide will help you set up a development environment for contributing to Wo
 
 ### Required Software
 
-1. **.NET SDK** (version 8.0 or later recommended for development)
+1. **.NET SDK 10.0** (required: older SDKs cannot load the projects)
    - The library supports .NET Framework 4.6.2 through .NET 10
    - Download from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)
    - Verify installation: `dotnet --version`
@@ -158,7 +158,7 @@ git checkout -b feature/your-feature-name
 
 - Add unit tests in `tests/Wolfgang.Extensions.IEnumerable.Tests.Unit/`
 - Ensure tests cover edge cases and error conditions
-- Aim for high code coverage (80%+ required)
+- Coverage gate: 100% line coverage on test assemblies (`CODECOV_TEST_MINIMUM`) and 90% on production code (`CODECOV_MINIMUM`) in `.github/workflows/pr.yaml`; `scripts/build-pr.ps1` runs the same gate locally
 
 ### 4. Run Quality Checks
 
@@ -209,7 +209,7 @@ dotnet run -c Release
 The project uses `.editorconfig` to enforce code style. Key guidelines:
 
 - **File-scoped namespaces**: Use file-scoped namespace declarations
-- **Explicit typing**: Use explicit types rather than `var` where it improves clarity
+- **`var`**: use `var` for locals when the type is obvious (`.editorconfig` prefers `var`)
 - **Null safety**: Enable nullable reference types
 - **Documentation**: Add XML documentation for all public APIs
 - **Error handling**: Validate arguments and throw appropriate exceptions
@@ -234,8 +234,10 @@ public static class IEnumerableExtensions
     public static void YourMethod<T>(this IEnumerable<T> source)
     {
         if (source == null)
+        {
             throw new ArgumentNullException(nameof(source));
-            
+        }
+
         // Implementation
     }
 }
@@ -302,7 +304,7 @@ devskim analyze --source-code . -f text
 ## Getting Help
 
 - **Issues**: Report problems on [GitHub Issues](https://github.com/Chris-Wolfgang/IEnumerable-Extensions/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/Chris-Wolfgang/IEnumerable-Extensions/discussions)
+- **Questions**: open a [GitHub Issue](https://github.com/Chris-Wolfgang/IEnumerable-Extensions/issues) (Discussions is not enabled on this repository)
 - **Pull Requests**: Review the contributing guidelines before submitting
 
 ## License
