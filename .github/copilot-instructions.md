@@ -15,6 +15,7 @@
 - `IsNullOrEmpty()` — true when the sequence is null OR contains no elements
 - `None()` — inverse of `Any()` (no predicate)
 - `None(Func<T, bool> predicate)` — true when no element matches the predicate
+- `Partition(int partitionCount)` — eagerly distributes items round-robin into exactly `partitionCount` groups (read-only list of opaque iterators)
 - `Shuffle()` — returns a new sequence in random order using Fisher-Yates with a thread-safe RNG
 - `ToEnumerable()` — wraps the source in a lazy iterator so the result is never a `List<T>`, `ICollection<T>` or array (defeats type-based fast paths in tests)
 

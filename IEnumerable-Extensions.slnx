@@ -55,6 +55,7 @@
     <Project Path="examples/IsEmpty.Example/IsEmpty.Example.csproj" />
     <Project Path="examples/IsNullOrEmpty.Example/IsNullOrEmpty.Example.csproj" />
     <Project Path="examples/None.Example/None.Example.csproj" />
+    <Project Path="examples/Partition.Example/Partition.Example.csproj" />
     <Project Path="examples/Shuffle.Example/Shuffle.Example.csproj" />
     <Project Path="examples/ToEnumerable.Example/ToEnumerable.Example.csproj" />
   </Folder>
