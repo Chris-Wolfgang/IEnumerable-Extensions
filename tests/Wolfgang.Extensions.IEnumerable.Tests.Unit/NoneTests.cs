@@ -186,7 +186,7 @@ public class NoneTests
 
 
 
-    private class Balloon
+    private sealed class Balloon
     {
         public string? Color { get; set; }
     }
