@@ -15,7 +15,6 @@
     <File Path="README.md" />
     <File Path="REPRODUCIBLE-BUILD.md" />
     <File Path="SECURITY.md" />
-    <File Path="stryker-config.json" />
   </Folder>
   <Folder Name="/.root/.github/">
     <File Path=".github/CODEOWNERS" />
@@ -63,6 +62,7 @@
     <Project Path="src/Wolfgang.Extensions.IEnumerable/Wolfgang.Extensions.IEnumerable.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <File Path="tests/Wolfgang.Extensions.IEnumerable.Tests.Unit/stryker-config.json" />
     <Project Path="tests/Wolfgang.Extensions.IEnumerable.Tests.Aot/Wolfgang.Extensions.IEnumerable.Tests.Aot.csproj" />
     <Project Path="tests/Wolfgang.Extensions.IEnumerable.Tests.DocExamples/Wolfgang.Extensions.IEnumerable.Tests.DocExamples.csproj" />
     <Project Path="tests/Wolfgang.Extensions.IEnumerable.Tests.Unit/Wolfgang.Extensions.IEnumerable.Tests.Unit.csproj" Id="32a9bdf2-278b-49c7-9349-52013bac255f" />
