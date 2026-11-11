@@ -5,9 +5,11 @@ name: Fuzz
 # surfaces edge cases the short run does not. No test code changes: CsCheck reads the budget from
 # the environment.
 #
-# A failing property prints its seed in the test output. The job uploads that output; the next
-# job opens an issue (once) that tells the reader how to replay it deterministically with
-# CsCheck_Seed and to add the case as a regression test.
+# A failing property prints its seed in the test output. The job turns each failure into a
+# "<property> <seed>" line (fuzz-replay.txt, the format of the replay corpus
+# tests/Wolfgang.Extensions.IEnumerable.Tests.Unit/fuzz-replay/seeds.txt) and uploads it with the
+# output; the next job opens an issue (once) that lists those lines and asks for them to be appended
+# to the corpus, so every later per-PR run replays the failing input as a deterministic regression.
 
 on:
   schedule:
@@ -30,6 +32,8 @@ jobs:
   fuzz:
     name: Fuzz the property tests
     runs-on: ubuntu-latest
+    outputs:
+      replay: ${{ steps.replay.outputs.lines }}
     timeout-minutes: 75
     env:
       FUZZ_SECONDS: ${{ inputs.seconds || '240' }}
@@ -58,6 +62,30 @@ jobs:
             --results-directory fuzz-results \
             2>&1 | tee fuzz-results-console.txt
 
+      - name: Extract the failing seeds in replay-corpus format
+        id: replay
+        if: failure()
+        run: |
+          set -euo pipefail
+          # Pairs each "Failed ...PropertyTests.<property> [" line with the CsCheck message after it
+          # ('Set seed: "<seed>" ...') and writes one "<property> <seed>" line per failure.
+          awk '
+            /^[[:space:]]*Failed [^ ]*PropertyTests\./ {
+              name = $2; sub(/.*PropertyTests\./, "", name); next
+            }
+            name != "" && /Set seed: "/ {
+              seed = $0; sub(/.*Set seed: "/, "", seed); sub(/".*/, "", seed)
+              print name " " seed; name = ""
+            }
+          ' fuzz-results-console.txt > fuzz-replay.txt || true
+          echo "Failing seeds:"
+          cat fuzz-replay.txt
+          {
+            echo "lines<<FUZZ_REPLAY_EOF"
+            cat fuzz-replay.txt
+            echo "FUZZ_REPLAY_EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Upload fuzz output
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
@@ -66,6 +94,7 @@ jobs:
           path: |
             fuzz-results/
             fuzz-results-console.txt
+            fuzz-replay.txt
           if-no-files-found: ignore
 
   report:
@@ -81,6 +110,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       REPO: ${{ github.repository }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      REPLAY: ${{ needs.fuzz.outputs.replay }}
     steps:
       - name: Open the issue unless one is already open
         run: |
@@ -91,11 +121,16 @@ jobs:
             echo "An issue for a failing fuzz run is already open; not opening another."
             exit 0
           fi
+          replay="${REPLAY:-(none extracted; read the seed from the test output)}"
           body="The scheduled fuzz run failed: $RUN_URL
 
-          The seed is in the test output (artifact \`fuzz-output\`, or the job log). To replay the case deterministically:
+          Failing properties and seeds (also in \`fuzz-replay.txt\` in the \`fuzz-output\` artifact):
 
-              CsCheck_Seed=<seed from the output> dotnet test tests/Wolfgang.Extensions.IEnumerable.Tests.Unit -c Release -f net10.0 --filter FullyQualifiedName~PropertyTests
+          \`\`\`
+          $replay
+          \`\`\`
 
-          Fix the library (or the property, if it was wrong), and add the shrunk failing input as a plain regression test so the per-PR run covers it."
+          1. Append these lines to \`tests/Wolfgang.Extensions.IEnumerable.Tests.Unit/fuzz-replay/seeds.txt\`. Every property replays its seeds there before its random cases, so the per-PR run then fails on this input deterministically.
+          2. To replay one case by hand: \`CsCheck_Seed=<seed> dotnet test tests/Wolfgang.Extensions.IEnumerable.Tests.Unit -c Release -f net10.0 --filter FullyQualifiedName~PropertyTests\`
+          3. Fix the library (or the property, if it was wrong)."
           gh issue create --repo "$REPO" --title "$title" --body "$body"
