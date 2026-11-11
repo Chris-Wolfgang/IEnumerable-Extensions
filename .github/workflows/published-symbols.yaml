@@ -73,8 +73,14 @@ jobs:
           id_lower="${PACKAGE_ID,,}"
           version="${INPUT_VERSION:-}"
           if [ -z "$version" ]; then
-            version=$(curl -fsS "https://api.nuget.org/v3-flatcontainer/${id_lower}/index.json" \
-              | python3 -c "import sys,json;v=[x for x in json.load(sys.stdin)['versions'] if '-' not in x];print(v[-1])")
+            # Download to a file and read it with jq: piping a download into an interpreter is what
+            # Scorecard's Pinned-Dependencies check reports as an unpinned download-then-run.
+            curl -fsS -o "$RUNNER_TEMP/index.json" "https://api.nuget.org/v3-flatcontainer/${id_lower}/index.json"
+            version=$(jq -r '[.versions[] | select(contains("-") | not)] | last // empty' "$RUNNER_TEMP/index.json")
+            if [ -z "$version" ]; then
+              echo "::error::No stable version of ${PACKAGE_ID} found on nuget.org"
+              exit 1
+            fi
           fi
           echo "Checking ${PACKAGE_ID} ${version}"
           mkdir -p published/dll published/snupkg
