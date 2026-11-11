@@ -7,8 +7,6 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 public class ToEnumerableTests
 {
-
-
     [Fact]
     public void ToEnumerable_when_source_is_null_throws_ArgumentNullException()
     {
@@ -120,6 +118,7 @@ public class ToEnumerableTests
 
 
     private static int[] Drain(IEnumerable<int> source) => source.ToArray();
+
 
 
     private static IEnumerable<int> CreateTrackingSequence(Action onYield)

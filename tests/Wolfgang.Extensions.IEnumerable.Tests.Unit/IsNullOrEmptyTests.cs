@@ -6,8 +6,6 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 public class IsNullOrEmptyTests
 {
-
-
     [Fact]
     public void IsNullOrEmpty_with_null_source_returns_true()
     {

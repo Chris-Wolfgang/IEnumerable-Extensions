@@ -7,8 +7,6 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 public class ShuffleTests
 {
-
-
     [Fact]
     public void Shuffle_called_with_null_source_throws_ArgumentNullException()
     {
