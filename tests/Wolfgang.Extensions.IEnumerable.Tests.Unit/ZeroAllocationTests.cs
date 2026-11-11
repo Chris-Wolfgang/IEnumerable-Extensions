@@ -31,6 +31,7 @@ public class ZeroAllocationTests
     private static readonly List<int> _emptyList = new();
     private static readonly Action<int> _noOp = static _ => { };
     // Written by the allocation control test so its array escapes; see that test.
+    // ReSharper disable once NotAccessedField.Local - write-only on purpose: a stored array escapes, so Native AOT cannot elide the control allocation
     private static int[]? _allocationSink;
 
 
