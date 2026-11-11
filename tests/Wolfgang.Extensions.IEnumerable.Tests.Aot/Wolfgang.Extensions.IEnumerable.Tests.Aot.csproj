@@ -39,25 +39,19 @@
     <ProjectReference Include="..\..\src\Wolfgang.Extensions.IEnumerable\Wolfgang.Extensions.IEnumerable.csproj" />
   </ItemGroup>
 
-  <!-- The unit tests themselves, linked from the 2.x project. Four files stay in the 2.x run only
-       (measured 2026-10-30 with a native win-x64 publish; none of the reasons is in the library):
-       - DocExampleTests.cs: compiles the library's XML-doc <example> blocks with Roslyn, reading the
-         source tree and the TRUSTED_PLATFORM_ASSEMBLIES list, neither of which a native binary has.
-         Roslyn is not trim-safe (10 IL2026/IL2075/IL2091 diagnostics, all inside
-         Microsoft.CodeAnalysis). It checks source comments, not runtime behaviour.
+  <!-- The unit tests themselves, linked from the 2.x project. Two files stay in the 2.x run only
+       (measured 2026-10-30 with a native win-x64 publish; neither reason is in the library):
        - PropertyTests.cs: CsCheck 4.9.1's Check static constructor calls
          Assembly.GetCallingAssembly(), which throws PlatformNotSupportedException under Native AOT,
          so all 8 property tests fail before reaching the library.
-       - ZeroAllocationTests.cs: its self-check AllocatedBytes_when_the_measured_call_allocates_reports_bytes
-         measures 0 bytes for `new int[16]` in the native binary (the AOT compiler drops or
-         stack-allocates the non-escaping array), so the file's own control fails. Allocation
-         behaviour is a codegen property; the 2.x run checks it on every TFM.
        - MutationSurvivorTests.cs: four tests assert which method threw through Exception.TargetSite,
          which is RequiresUnreferencedCode (IL2026 under TreatWarningsAsErrors) and may be null in a
          native binary. The contract they pin is the JIT diagnostic, and the mutation run that
-         motivates them is a JIT run too. -->
+         motivates them is a JIT run too.
+       The XML-doc example tests (Roslyn, not trim-safe) live in Tests.DocExamples, so they are not
+       linked here. -->
   <ItemGroup>
-    <Compile Include="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\**\*.cs" Exclude="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\obj\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\bin\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\DocExampleTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\MutationSurvivorTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\PropertyTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\ZeroAllocationTests.cs" Link="Unit\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\**\*.cs" Exclude="..\Wolfgang.Extensions.IEnumerable.Tests.Unit\obj\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\bin\**;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\MutationSurvivorTests.cs;..\Wolfgang.Extensions.IEnumerable.Tests.Unit\PropertyTests.cs" Link="Unit\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>
