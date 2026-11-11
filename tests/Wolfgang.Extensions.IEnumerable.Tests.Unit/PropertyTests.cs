@@ -26,7 +26,7 @@ public class PropertyTests
 
 
     [Fact]
-    public void IsEmpty_agrees_with_Any_for_every_runtime_shape()
+    public void IsEmpty_when_given_any_runtime_shape_agrees_with_Any()
     {
         _items.Sample
         (
@@ -43,7 +43,7 @@ public class PropertyTests
 
 
     [Fact]
-    public void IsNullOrEmpty_agrees_with_Any_for_every_runtime_shape_and_is_true_for_null()
+    public void IsNullOrEmpty_when_given_any_runtime_shape_agrees_with_Any_and_is_true_for_null()
     {
         _items.Sample
         (
@@ -62,7 +62,7 @@ public class PropertyTests
 
 
     [Fact]
-    public void None_agrees_with_Any_for_every_runtime_shape()
+    public void None_when_given_any_runtime_shape_agrees_with_not_Any()
     {
         _items.Sample
         (
@@ -79,7 +79,7 @@ public class PropertyTests
 
 
     [Fact]
-    public void None_with_predicate_agrees_with_not_Any_with_predicate_for_every_runtime_shape()
+    public void None_when_given_a_predicate_and_any_runtime_shape_agrees_with_not_Any_with_that_predicate()
     {
         _items.Sample
         (
@@ -97,7 +97,7 @@ public class PropertyTests
 
 
     [Fact]
-    public void ForEach_visits_every_item_once_in_order_for_every_runtime_shape()
+    public void ForEach_when_given_any_runtime_shape_visits_every_item_once_in_order()
     {
         _items.Sample
         (
@@ -118,7 +118,7 @@ public class PropertyTests
 
 
     [Fact]
-    public void Do_yields_the_source_unchanged_and_runs_the_action_once_per_item_in_order()
+    public void Do_when_enumerated_yields_the_source_unchanged_and_runs_the_action_once_per_item_in_order()
     {
         _items.Sample
         (
@@ -140,7 +140,7 @@ public class PropertyTests
 
 
     [Fact]
-    public void Shuffle_returns_a_permutation_of_the_source_and_does_not_modify_it()
+    public void Shuffle_when_given_any_source_returns_a_permutation_and_does_not_modify_the_source()
     {
         _items.Sample
         (
@@ -161,7 +161,7 @@ public class PropertyTests
 
 
     [Fact]
-    public void ToEnumerable_yields_the_same_sequence_and_is_never_a_more_concrete_collection()
+    public void ToEnumerable_when_given_any_source_yields_the_same_sequence_and_is_never_a_more_concrete_collection()
     {
         _items.Sample
         (

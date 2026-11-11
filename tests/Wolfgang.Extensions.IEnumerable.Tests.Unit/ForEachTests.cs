@@ -31,7 +31,7 @@ public class ForEachTests
 
 
     [Fact]
-    public void ForEach_executes_action_on_each_item_in_enumerable()
+    public void ForEach_when_source_has_items_executes_action_on_each()
     {
         var source = new[] { 1, 2, 3, 4, 5 };
 
@@ -46,7 +46,7 @@ public class ForEachTests
 
 
     [Fact]
-    public void ForEach_with_empty_enumerable_does_not_execute_action()
+    public void ForEach_when_source_is_empty_does_not_execute_action()
     {
         var source = Array.Empty<int>();
 

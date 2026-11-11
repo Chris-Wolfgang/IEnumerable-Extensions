@@ -62,7 +62,7 @@ public class DoTests
 
 
     [Fact]
-    public void Do_yields_original_items_unchanged()
+    public void Do_when_source_has_items_yields_them_unchanged()
     {
         var source = new[] { 10, 20, 30 };
 
@@ -74,7 +74,7 @@ public class DoTests
 
 
     [Fact]
-    public void Do_preserves_ordering()
+    public void Do_when_source_is_ordered_preserves_the_order()
     {
         var source = new[] { 5, 3, 1, 4, 2 };
         var observed = new List<int>();
@@ -88,7 +88,7 @@ public class DoTests
 
 
     [Fact]
-    public void Do_does_not_enumerate_source_until_consumed()
+    public void Do_when_result_is_not_enumerated_does_not_enumerate_source()
     {
         var enumerated = false;
         var source = CreateTrackingEnumerable(() => enumerated = true, 1, 2, 3);
@@ -105,7 +105,7 @@ public class DoTests
 
 
     [Fact]
-    public void Do_executes_action_before_yielding_item()
+    public void Do_when_an_item_is_yielded_has_already_run_the_action_on_it()
     {
         var source = new[] { 1, 2, 3 };
         var log = new List<string>();
