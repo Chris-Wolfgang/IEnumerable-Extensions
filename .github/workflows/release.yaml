@@ -382,6 +382,8 @@ jobs:
     runs-on: windows-latest
     outputs:
       has-packages: ${{ steps.check-packages.outputs.has-packages }}
+      sdk-version: ${{ steps.toolchain.outputs.sdk-version }}
+      runner-image: ${{ steps.toolchain.outputs.runner-image }}
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -405,6 +407,17 @@ jobs:
         run: |
           dotnet restore
           dotnet build --no-restore --configuration Release
+
+      # The SDK and runner image that built the released assemblies, for the
+      # reproducible-build manifest (a verifier rebuilds with the same SDK).
+      - name: Record build toolchain
+        id: toolchain
+        shell: pwsh
+        run: |
+          $sdk = (dotnet --version).Trim()
+          "sdk-version=$sdk" >> $env:GITHUB_OUTPUT
+          "runner-image=$env:ImageOS $env:ImageVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "SDK $sdk on $env:ImageOS $env:ImageVersion"
 
       # Renders each src project's transitive NuGet closure to obj/THIRD-PARTY-NOTICES.md;
       # Directory.Build.props packs it at the package root. Runs from the tag, after
@@ -828,7 +841,9 @@ jobs:
     if: needs.pack-and-validate.outputs.has-packages == 'true'
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Required to upload assets to the GitHub Release
+      contents: write       # Required to upload assets to the GitHub Release
+      id-token: write       # OIDC token for signing the hash-list attestation
+      attestations: write   # record the attestation for SHA256SUMS.txt and the manifest
     steps:
       - name: Download NuGet packages artifact
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
@@ -866,10 +881,14 @@ jobs:
       # Third-party verification input (REPRODUCIBLE-BUILD.md): the SHA-256 of every file a consumer
       # can compare a rebuild against, for the exact packages attached to this release. It describes
       # the published bytes; it is not itself signed (the provenance attestation covers the .nupkg).
+      # SHA256SUMS.txt holds the same digests in `sha256sum` format: one line per .nupkg/.snupkg
+      # and one per .dll/.pdb inside it (named <package>!<entry>), so it can be read without JSON.
       - name: Write reproducible-build manifest
         env:
           TAG_NAME: ${{ github.event.release.tag_name }}
           COMMIT_SHA: ${{ github.sha }}
+          SDK_VERSION: ${{ needs.pack-and-validate.outputs.sdk-version }}
+          RUNNER_IMAGE: ${{ needs.pack-and-validate.outputs.runner-image }}
         run: |
           set -euo pipefail
           python3 - <<'PY'
@@ -881,8 +900,12 @@ jobs:
           manifest = {
               "tag": os.environ["TAG_NAME"],
               "commit": os.environ["COMMIT_SHA"],
+              "sdk": os.environ.get("SDK_VERSION", ""),
+              "runner_image": os.environ.get("RUNNER_IMAGE", ""),
+              "build_os": "windows",
               "packages": [],
           }
+          sums = []
           for path in sorted(glob.glob("nuget-packages/*.nupkg") + glob.glob("nuget-packages/*.snupkg")):
               with open(path, "rb") as f:
                   package_sha = sha(f.read())
@@ -891,14 +914,34 @@ jobs:
                   for name in sorted(z.namelist()):
                       if name.endswith((".dll", ".pdb")):
                           files[name] = sha(z.read(name))
+              sums.append(f"{package_sha}  {os.path.basename(path)}")
+              sums.extend(f"{digest}  {os.path.basename(path)}!{name}" for name, digest in files.items())
               manifest["packages"].append({"file": os.path.basename(path), "sha256": package_sha, "files": files})
           if not manifest["packages"] or not any(p["files"] for p in manifest["packages"]):
               raise SystemExit("No package with a .dll or .pdb was found; refusing to write an empty manifest.")
           with open("nuget-packages/reproducible-build-manifest.json", "w", encoding="utf-8") as out:
               json.dump(manifest, out, indent=2)
               out.write("\n")
-          print("Wrote manifest for", len(manifest["packages"]), "package(s)")
+          with open("nuget-packages/SHA256SUMS.txt", "w", encoding="utf-8", newline="\n") as out:
+              out.write("\n".join(sums) + "\n")
+          print("Wrote manifest and SHA256SUMS.txt for", len(manifest["packages"]), "package(s)")
           PY
+
+      # Sign the hash list and the manifest with the same keyless build-provenance model as the
+      # packages, so a verifier can prove both came from this workflow run:
+      # gh attestation verify SHA256SUMS.txt --repo <owner>/<repo> --signer-workflow <owner>/<repo>/.github/workflows/release.yaml
+      - name: Attest hash list and manifest
+        id: attest-hashes
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8  # v4.2.2
+        with:
+          subject-path: |
+            ./nuget-packages/SHA256SUMS.txt
+            ./nuget-packages/reproducible-build-manifest.json
+
+      - name: Name hash-list attestation bundle
+        env:
+          BUNDLE_PATH: ${{ steps.attest-hashes.outputs.bundle-path }}
+        run: cp "$BUNDLE_PATH" hashes.sigstore.json
 
       # `gh` is pre-installed on the runner, so no third-party action is needed
       # to upload release assets (zizmor superfluous-actions).
@@ -909,10 +952,10 @@ jobs:
           TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
           shopt -s nullglob
-          files=(./nuget-packages/*.nupkg ./nuget-packages/*.snupkg ./nuget-packages/*.bom.json ./nuget-packages/reproducible-build-manifest.json)
+          files=(./nuget-packages/*.nupkg ./nuget-packages/*.snupkg ./nuget-packages/*.bom.json ./nuget-packages/reproducible-build-manifest.json ./nuget-packages/SHA256SUMS.txt)
           # nullglob only drops unmatched *patterns*; a literal name stays and would make
           # `gh release upload` fail, so add the coverage zip only when it exists.
           if [ -f release-coverage.zip ]; then files+=(release-coverage.zip); fi
-          files+=(provenance.sigstore.json)
+          files+=(provenance.sigstore.json hashes.sigstore.json)
           echo "Uploading ${#files[@]} asset(s) to release $TAG_NAME"
           gh release upload "$TAG_NAME" "${files[@]}" --clobber
