@@ -344,7 +344,11 @@ public static class IEnumerableExtensions
             generator.GetBytes(seed);
         }
 
+        // S2245: Shuffle orders elements; it is not a security context (no keys, tokens or secrets),
+        // and the seed already comes from the cryptographic generator above.
+#pragma warning disable S2245
         return new Random(BitConverter.ToInt32(seed, 0));
+#pragma warning restore S2245
     }
 #endif
 
