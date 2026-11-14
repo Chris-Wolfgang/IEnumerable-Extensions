@@ -43,8 +43,13 @@ jobs:
         with:
           persist-credentials: false
 
+      # Install into runner.temp so both legs use the SDK downloaded from Microsoft. The
+      # ubuntu image's preinstalled SDK 11 carries reference assemblies with other MVIDs, which
+      # changes the PDB's referenced-assembly records and so the net11.0 output hashes.
       - name: Setup .NET
         uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
         with:
           dotnet-version: |
             10.0.x
