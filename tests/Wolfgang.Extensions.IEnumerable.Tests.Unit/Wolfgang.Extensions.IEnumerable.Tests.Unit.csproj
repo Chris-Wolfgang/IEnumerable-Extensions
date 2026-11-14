@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net462;net47;net471;net472;net48;net481;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>net462;net47;net471;net472;net48;net481;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0;net10.0;net11.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
@@ -67,7 +67,7 @@
        xunit.runner.visualstudio 3.x runs xunit v2 (2.9.3) tests as well as xunit.v3 ones, so this slot takes
        the current runner and is left uncapped for Dependabot. The older slots above stay on 2.4.5 / 2.8.2
        only because runner 3.x no longer targets those frameworks. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0' ">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0' or '$(TargetFramework)' == 'net11.0' ">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.1">
       <PrivateAssets>all</PrivateAssets>
@@ -85,13 +85,13 @@
 
   <!-- CsCheck (property-based tests, PropertyTests.cs) targets net8.0 and later only, so it is referenced
        only there and the test file is compiled out on older frameworks. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0' or '$(TargetFramework)' == 'net11.0'">
     <PackageReference Include="CsCheck" Version="4.9.1" />
   </ItemGroup>
 
   <!-- Fuzz replay corpus read by PropertyTests (net8.0+): failing inputs from fuzz runs, replayed as
        deterministic regressions on every run. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net10.0' or '$(TargetFramework)' == 'net11.0'">
     <None Include="fuzz-replay\seeds.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
