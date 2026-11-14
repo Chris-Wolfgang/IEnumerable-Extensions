@@ -44,6 +44,14 @@ Open an issue and include: the release tag and commit, your operating system and
 
 Releases published after the manifest step was added to `release.yaml` carry a `reproducible-build-manifest.json` asset. It lists the tag, the commit, and the SHA-256 of each attached `.nupkg` and `.snupkg` and of every `.dll` and `.pdb` inside them. It describes the **published bytes**, which is what a rebuild is compared against; it is not signed (the build-provenance attestation covers the `.nupkg`, see [Verifying a release](SECURITY.md#verifying-a-release)). Because of the toolchain-dependent fields above, a rebuild is not expected to match every hash; compare with `cmp -l` as described and treat a mismatch confined to those five ranges as the expected near-match. Older releases have no manifest; compare against the `.nupkg` itself.
 
+Releases published after `SHA256SUMS.txt` was added also carry that file: the same digests in `sha256sum` format, one line per `.nupkg`/`.snupkg` and one per `.dll`/`.pdb` inside it, named `<package>!<entry>` (for example `Wolfgang.Extensions.IEnumerable.<version>.nupkg!lib/net8.0/Wolfgang.Extensions.IEnumerable.dll`). The manifest of those releases also records the SDK version (`sdk`) and runner image (`runner_image`) that built the packages, so step 1 above no longer depends on the run log. Both files are attested by `release.yaml`; check them before trusting their hashes:
+
+```bash
+gh attestation verify SHA256SUMS.txt --repo Chris-Wolfgang/IEnumerable-Extensions --signer-workflow Chris-Wolfgang/IEnumerable-Extensions/.github/workflows/release.yaml
+```
+
+Add `--bundle hashes.sigstore.json` (a release asset) to verify offline. The same command works for `reproducible-build-manifest.json`.
+
 ### Sharing your verification result
 
 There is no third-party attestation service wired into this repository. A verification is recorded as a signed
