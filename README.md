@@ -122,7 +122,7 @@ IEnumerable<int> slowPath = new List<int> { 1, 2, 3 }.ToEnumerable();
 
 ### Shuffle on .NET 10
 
-.NET 10 added `System.Linq.Enumerable.Shuffle<TSource>(IEnumerable<TSource>)`. In a file that has both `using System.Linq;` and `using Wolfgang.Extensions.IEnumerable;`, a call such as `deck.Shuffle()` is ambiguous and fails to compile with `CS0121` when targeting net10.0. Older target frameworks are not affected. Either call this library's method explicitly:
+.NET 10 added `System.Linq.Enumerable.Shuffle<TSource>(IEnumerable<TSource>)`. In a file that has both `using System.Linq;` and `using Wolfgang.Extensions.IEnumerable;`, a call such as `deck.Shuffle()` is ambiguous and fails to compile with `CS0121` when targeting net10.0 or later (including net11.0). Older target frameworks are not affected. Either call this library's method explicitly:
 
 ```csharp
 using Wolfgang.Extensions.IEnumerable;
