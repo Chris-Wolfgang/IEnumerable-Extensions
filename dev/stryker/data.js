@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794360629995,
+  "lastUpdate": 1794749615796,
   "repoUrl": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions",
   "entries": {
     "Mutation score": [
@@ -160,6 +160,33 @@ window.BENCHMARK_DATA = {
         "benches": [
           {
             "name": "Mutation score",
+            "value": 100,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "f78983917816db97fd481ccccf929ee894210c47",
+          "message": "docs: verifier steps for the literal copyright year and provenance (#630) (#655)\n\n* build: use a literal copyright year instead of the build clock (#630)\n\n$([System.DateTime]::UtcNow.Year) puts the build year into\nAssemblyCopyrightAttribute, so rebuilding a tag after 1 January gives a\ndifferent binary. Use the literal \"2025-2026\" (LICENSE starts in 2025),\nmatching repo-template's comment and wording.\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n* docs: verifier steps for the literal copyright year and provenance (#630)\n\nREPRODUCIBLE-BUILD.md said the build depends on the calendar year;\nafter #654 only v1.4.0 and earlier do, so the -p:Copyright override is\nneeded only for those tags. Add a step 4 that checks the package's\nbuild provenance with gh attestation verify (online or with the\nrelease's provenance.sigstore.json).\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n\n---------\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-14T23:00:29Z",
+          "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/f78983917816db97fd481ccccf929ee894210c47"
+        },
+        "date": 1794749612387,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.IEnumerable.Tests.Unit)",
             "value": 100,
             "unit": "%"
           }
