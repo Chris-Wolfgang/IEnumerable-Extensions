@@ -1,7 +1,6 @@
 #if NETCOREAPP3_0_OR_GREATER
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
@@ -107,7 +106,7 @@ public class ZeroAllocationTests
         // Steady state, not the first call: the runtime can make a one-off allocation while a call
         // site warms up (dispatch stubs, tiering), and that lands in a single batch. A call that
         // really allocates does so in every batch, so the minimum is what must be zero.
-        var steadyState = batches.Min();
+        var steadyState = System.Linq.Enumerable.Min(batches);
 
         Assert.True
         (
@@ -119,7 +118,7 @@ public class ZeroAllocationTests
 
 
     private static long MeasureAllocatedBytes(Action call)
-        => MeasureAllocatedBytesPerBatch(call).Min();
+        => System.Linq.Enumerable.Min(MeasureAllocatedBytesPerBatch(call));
 
 
 
