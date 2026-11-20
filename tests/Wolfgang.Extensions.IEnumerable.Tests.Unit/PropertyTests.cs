@@ -28,7 +28,6 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 /// every later short run checks it as a regression.
 /// </para>
 /// </remarks>
-// ReSharper disable PossibleMultipleEnumeration - every property compares two methods over the same sequence
 public class PropertyTests
 {
     private const string ReplayFileName = "seeds.txt";
@@ -37,6 +36,8 @@ public class PropertyTests
 
     private static readonly Gen<(List<int> Items, int PartitionCount)> _itemsAndPartitionCount =
         Gen.Select(_items, Gen.Int[1, 8]);
+
+    private static readonly Func<int, bool>[] _predicates = { IsMultipleOfThree, IsAboveTen };
 
 
 
@@ -51,7 +52,7 @@ public class PropertyTests
             {
                 foreach (var shape in Shapes(items))
                 {
-                    Assert.Equal(!shape.Any(), shape.IsEmpty());
+                    Assert.Equal(items.Count == 0, shape.IsEmpty());
                 }
             }
         );
@@ -70,7 +71,7 @@ public class PropertyTests
             {
                 foreach (var shape in Shapes(items))
                 {
-                    Assert.Equal(!shape.Any(), shape.IsNullOrEmpty());
+                    Assert.Equal(items.Count == 0, shape.IsNullOrEmpty());
                 }
             }
         );
@@ -91,7 +92,7 @@ public class PropertyTests
             {
                 foreach (var shape in Shapes(items))
                 {
-                    Assert.Equal(!shape.Any(), shape.None());
+                    Assert.Equal(items.Count == 0, shape.None());
                 }
             }
         );
@@ -108,10 +109,12 @@ public class PropertyTests
             _items,
             items =>
             {
-                foreach (var shape in Shapes(items))
+                foreach (var predicate in _predicates)
                 {
-                    Assert.Equal(!shape.Any(IsMultipleOfThree), shape.None(IsMultipleOfThree));
-                    Assert.Equal(!shape.Any(IsAboveTen), shape.None(IsAboveTen));
+                    foreach (var shape in Shapes(items))
+                    {
+                        Assert.Equal(!items.Any(predicate), shape.None(predicate));
+                    }
                 }
             }
         );
@@ -175,13 +178,13 @@ public class PropertyTests
             _items,
             items =>
             {
-                foreach (var shape in Shapes(items))
+                foreach (var (shape, backing) in ShapesWithBacking(items))
                 {
                     var shuffled = shape.Shuffle().ToList();
 
                     Assert.Equal(items.Count, shuffled.Count);
                     Assert.Equal(items.OrderBy(static x => x), shuffled.OrderBy(static x => x));
-                    Assert.Equal(items, shape.ToList());
+                    Assert.Equal(items, backing);
                 }
             }
         );
@@ -360,6 +363,23 @@ public class PropertyTests
         yield return new List<int>(items);
         yield return items.ToEnumerable();
     }
+
+
+
+    /// <summary>
+    /// The same three runtime shapes as <see cref="Shapes"/>, each paired with the collection that
+    /// stores its items, so a test can check that a method left the source unchanged without
+    /// enumerating the shape a second time.
+    /// </summary>
+    private static IEnumerable<(IEnumerable<int> Shape, IReadOnlyList<int> Backing)> ShapesWithBacking(List<int> items)
+    {
+        var array = items.ToArray();
+        yield return (array, array);
+
+        var list = new List<int>(items);
+        yield return (list, list);
+
+        yield return (items.ToEnumerable(), items);
+    }
 }
-// ReSharper restore PossibleMultipleEnumeration
 #endif
