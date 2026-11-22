@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1794749615796,
+  "lastUpdate": 1795356634322,
   "repoUrl": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions",
   "entries": {
     "Mutation score": [
@@ -183,6 +183,33 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/f78983917816db97fd481ccccf929ee894210c47"
         },
         "date": 1794749612387,
+        "tool": "customBiggerIsBetter",
+        "benches": [
+          {
+            "name": "Mutation score (tests/Wolfgang.Extensions.IEnumerable.Tests.Unit)",
+            "value": 100,
+            "unit": "%"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Chris Wolfgang",
+            "username": "Chris-Wolfgang",
+            "email": "210299580+Chris-Wolfgang@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "db6b7cac5862260f30412990fff47f16e41d70f2",
+          "message": "docs: describe the canonical reproducible-build gate and Windows report (#630) (#692)\n\nREPRODUCIBLE-BUILD.md still described the hand-edited workflow (build twice\non each OS from two directories, and a cross-os job that fails). It now\ndescribes the canonical one: the Ubuntu same-commit double pack that gates on\n.dll/.pdb and package entries, and the Windows job that reports the cross-OS\ndiff without failing.\n\nCo-authored-by: Claude Opus 5.5 <noreply@anthropic.com>",
+          "timestamp": "2026-11-20T18:52:17Z",
+          "url": "https://github.com/Chris-Wolfgang/IEnumerable-Extensions/commit/db6b7cac5862260f30412990fff47f16e41d70f2"
+        },
+        "date": 1795356629729,
         "tool": "customBiggerIsBetter",
         "benches": [
           {
