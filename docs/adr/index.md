@@ -4,6 +4,7 @@ Short records of non-obvious design choices: the context, the decision and its c
 
 | # | Title | Status |
 |---|-------|--------|
+| [0000](0000-record-architecture-decisions.md) | Record architecture decisions | Accepted |
 | [0001](0001-pin-assembly-version.md) | Pin AssemblyVersion at 1.0.0.0 | Accepted |
 | [0002](0002-opaque-runtime-return-types.md) | Return opaque iterators from Shuffle and ToEnumerable | Accepted |
 | [0003](0003-namespace-mirrors-bcl-type.md) | Namespace mirrors the BCL type | Accepted |
