@@ -25,6 +25,16 @@
     <!-- Treat warnings as errors in Release builds -->
     <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
 
+    <!-- Silence the "<package> doesn't support <tfm> and has not been tested
+         with it" message that buildTransitive targets of newer build-time
+         packages print for older targets. Microsoft.SourceLink.GitHub 11.x
+         pulls System.IO.Hashing 11.0.0, whose targets print it for net8.0 and
+         every older .NET target here. The message has no warning code, so
+         TreatWarningsAsErrors never fails on it; it only adds noise to every
+         build. SourceLink is PrivateAssets=all, so consumers never get the
+         dependency. -->
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+
     <!-- XML documentation for every library under src/ (fleet initiative D3).
          With TreatWarningsAsErrors above, a public member without a doc
          comment (CS1591) fails the Release build - that is the point. Scoped
