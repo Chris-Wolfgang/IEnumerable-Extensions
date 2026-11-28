@@ -9,8 +9,8 @@ namespace Wolfgang.Extensions.IEnumerable.Tests.Unit;
 
 /// <summary>
 /// The library is a set of synchronous extension methods with exactly one piece of shared state:
-/// the <see cref="Random"/> behind <c>Shuffle</c> (the process-wide <c>Random.Shared</c> in the net8.0 and net10.0
-/// builds, a thread-local instance in the net462 and netstandard2.0 builds). These tests exercise that state, and
+/// the <see cref="Random"/> behind <c>Shuffle</c> (the process-wide <c>Random.Shared</c> in the net8.0, net10.0 and
+/// net11.0 builds, a thread-local instance in the net462 and netstandard2.0 builds). These tests exercise that state, and
 /// concurrent reads of one shared source, from several dedicated threads at once. Assertions are
 /// structural (every result is a valid permutation, the source is untouched, nothing throws) so they
 /// do not depend on timing.
@@ -137,6 +137,37 @@ public class ConcurrencyTests
         );
 
         Assert.Equal(Threads * IterationsPerThread * ItemCount, calls);
+    }
+
+
+
+    [Fact]
+    public async Task Partition_when_one_result_is_enumerated_from_many_threads_yields_each_partition_in_full_each_time()
+    {
+        const int partitionCount = 5;
+        var partitions = Enumerable.Range(0, ItemCount).Partition(partitionCount);
+        var expected = Enumerable
+            .Range(0, partitionCount)
+            .Select(p => Enumerable.Range(0, ItemCount).Where(v => v % partitionCount == p).ToArray())
+            .ToArray();
+
+        var wrongResults = 0;
+        await RunOnDedicatedThreadsAsync
+        (
+            () =>
+            {
+                for (var i = 0; i < IterationsPerThread; i++)
+                {
+                    for (var p = 0; p < partitionCount; p++)
+                    {
+                        // Adds 0 when the partition yields exactly its round-robin share, in order.
+                        Interlocked.Add(ref wrongResults, partitions[p].SequenceEqual(expected[p]) ? 0 : 1);
+                    }
+                }
+            }
+        );
+
+        Assert.Equal(0, wrongResults);
     }
 
 
