@@ -1,17 +1,29 @@
 # Introduction
 
-**Wolfgang.Extensions.IEnumerable** is a .NET library that provides a collection of useful extension methods for types that implement `IEnumerable<T>`.
+**Wolfgang.Extensions.IEnumerable** is a .NET library that provides a collection of useful extension methods for types that implement `IEnumerable<T>`. These extensions enhance the functionality of standard LINQ operations and add commonly-needed utilities that make working with collections more intuitive and efficient.
+
+## Purpose
+
+The library addresses common scenarios when working with collections in .NET that aren't covered by the standard LINQ operators. Whether you need to check if a collection is empty, iterate with side effects, split it into round-robin groups, or randomize elements, this library provides clean, well-tested extension methods that integrate seamlessly with your existing code.
+
+## Key Features
+
+- **Broad .NET Platform Support**: Targets .NET Framework 4.6.2, .NET Standard 2.0, .NET 8, .NET 10 and .NET 11
+- **Performance-Optimized**: Implements optimizations for specific collection types (e.g., `List<T>`, `ICollection<T>`)
+- **Well-Documented**: Comprehensive XML documentation with code examples
+- **Thoroughly Tested**: Extensive unit test coverage ensuring reliability
+- **MIT Licensed**: Free to use in both open-source and commercial projects
 
 ## Available Extension Methods
 
 ### ForEach
-Executes the specified action on each item in the enumerable. This is a terminal operation that consumes the sequence.
+Executes the specified action on each item in the enumerable, providing a more functional approach to iteration with side effects. This is a terminal operation that consumes the sequence.
 
 ### Do
 Executes a side-effect action on each element without transforming the elements. The original items are yielded unchanged, making it ideal for logging, metrics, or debugging within a pipeline.
 
 ### IsEmpty
-Efficiently determines whether a sequence contains no elements, with optimizations for `ICollection<T>`.
+Efficiently determines whether a sequence contains no elements, with optimizations for common collection types.
 
 ### IsNullOrEmpty
 Safely checks whether a sequence is null or contains no elements in a single operation.
@@ -24,10 +36,29 @@ Safely checks whether a sequence is null or contains no elements in a single ope
 Distributes the elements round-robin across a fixed number of groups: item 1 goes to group 0, item 2 to group 1, and item `partitionCount + 1` back to group 0. The source is enumerated once, eagerly; the result is a read-only list of exactly `partitionCount` groups whose sizes differ by at most one.
 
 ### Shuffle
-Creates a new `IEnumerable<T>` containing the elements from the source in a random order using the Fisher-Yates shuffle algorithm.
+Creates a new `IEnumerable<T>` containing the elements from the source in a random order using the Fisher-Yates shuffle algorithm. The result is materialized eagerly — the input is fully consumed before `Shuffle` returns.
 
 ### ToEnumerable
-Wraps the source in a lazy iterator so that pattern-matching checks (`result is List<T>`, `result is ICollection<T>`, `result is T[]`) return false. Primarily useful in unit tests that need to exercise the non-`ICollection` path of another extension method.
+Wraps the source in a lazy iterator so that pattern-matching checks (`result is List<T>`, `result is ICollection<T>`, `result is T[]`) return false. Primarily useful in unit tests when you want to exercise the non-`ICollection` slow path of another extension method.
+
+## Design Philosophy
+
+The library follows these principles:
+
+1. **Consistency**: Methods follow naming and behavior patterns established by LINQ
+2. **Safety**: Null checks and argument validation prevent runtime errors
+3. **Performance**: Optimized implementations for common collection types
+4. **Clarity**: Clear, descriptive names that communicate intent
+5. **Compatibility**: Wide framework support for maximum usability
+
+## Use Cases
+
+This library is particularly useful for:
+
+- **Application developers** who want cleaner, more expressive collection operations
+- **Library authors** building on top of .NET's collection framework
+- **Teams** standardizing on common utility methods across projects
+- **Projects** requiring both modern and legacy .NET framework support
 
 ## Getting Started
 
