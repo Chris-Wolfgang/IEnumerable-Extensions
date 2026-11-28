@@ -22,7 +22,7 @@ time and allocation.
 
 ## Running the benchmarks
 
-Prerequisite: the .NET 10.0 SDK (the repository's build requirement; the benchmark project itself targets `net8.0`).
+Prerequisite: the .NET 11.0 SDK (the repository's build requirement, pinned in `global.json`; the benchmark project itself targets `net8.0`).
 
 ```bash
 # From the repository root: every suite (interactive picker if no filter is given)

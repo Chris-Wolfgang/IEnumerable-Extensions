@@ -6,8 +6,8 @@ This guide will help you set up a development environment for contributing to Wo
 
 ### Required Software
 
-1. **.NET SDK 10.0** (required: older SDKs cannot load the projects)
-   - The library supports .NET Framework 4.6.2 through .NET 10
+1. **.NET SDK 11.0** (required: `global.json` pins `11.0.100` with `rollForward: latestFeature`, so older SDKs cannot load the projects)
+   - The library targets .NET Framework 4.6.2, .NET Standard 2.0, .NET 8, .NET 10 and .NET 11
    - Download from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)
    - Verify installation: `dotnet --version`
 

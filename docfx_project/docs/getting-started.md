@@ -10,60 +10,214 @@ This guide will help you install and start using Wolfgang.Extensions.IEnumerable
 dotnet add package Wolfgang.Extensions.IEnumerable
 ```
 
+### Via Package Manager Console (Visual Studio)
+
+```powershell
+Install-Package Wolfgang.Extensions.IEnumerable
+```
+
+### Via NuGet Package Manager UI
+
+1. Right-click on your project in Solution Explorer
+2. Select "Manage NuGet Packages"
+3. Search for "Wolfgang.Extensions.IEnumerable"
+4. Click "Install"
+
+## Requirements
+
+The package targets `net462`, `netstandard2.0`, `net8.0`, `net10.0` and `net11.0`, so it runs on:
+
+- **.NET Framework 4.6.2+**
+- **.NET Standard 2.0** compatible runtimes (.NET Core 2.0+, .NET 5 and later)
+- **.NET 8, .NET 10 and .NET 11** through their own builds
+
 ## Basic Usage
 
-Add the using directive to your code:
+After installation, add the using directive to your code:
 
 ```csharp
 using Wolfgang.Extensions.IEnumerable;
 ```
 
-### ForEach - Terminal Iteration
+### Examples
+
+#### ForEach - Terminal Iteration with Actions
 
 ```csharp
 var numbers = new[] { 1, 2, 3, 4, 5 };
+
+// Print each number
 numbers.ForEach(n => Console.WriteLine(n));
+
+// Execute complex actions
+var users = GetUsers();
+users.ForEach(user =>
+{
+    user.IsActive = true;
+});
 ```
 
-### Do - Passthrough Side Effects
+#### Do - Passthrough Side Effects
 
 ```csharp
+// Log each item as it flows through a pipeline
 var results = items
-    .Do(x => Console.WriteLine($"Processing: {x}"))
     .Where(x => x.IsActive)
+    .Do(x => Console.WriteLine($"Processing: {x.Name}"))
+    .Select(x => x.Transform())
+    .ToList();
+
+// Chain multiple Do calls for debugging
+var output = data
+    .Do(x => logger.LogDebug($"Before filter: {x}"))
+    .Where(x => x.Value > 0)
+    .Do(x => logger.LogDebug($"After filter: {x}"))
     .ToList();
 ```
 
-### IsEmpty / IsNullOrEmpty
+#### IsEmpty - Check for Empty Collections
 
 ```csharp
+var items = new List<string>();
+
 if (items.IsEmpty())
 {
     Console.WriteLine("No items found");
 }
 
-IEnumerable<string>? data = GetData();
+// Performance-optimized for ICollection<T>
+var numbers = new int[] { };
+bool isEmpty = numbers.IsEmpty(); // Returns true
+```
+
+#### IsNullOrEmpty - Safe Null and Empty Checking
+
+```csharp
+IEnumerable<string>? data = GetData(); // May return null
+
 if (data.IsNullOrEmpty())
 {
     Console.WriteLine("Data is null or empty");
+    return;
+}
+
+// Safe to use data here
+data.ForEach(item => Process(item));
+```
+
+#### None - Inverse of Any
+
+```csharp
+var numbers = new[] { 1, 2, 3, 4 };
+
+// Check if sequence has no elements
+var emptyList = new List<int>();
+bool hasNoElements = emptyList.None(); // Returns true
+
+// Check if no elements match a condition
+bool noOddNumbers = numbers.None(n => n % 2 == 1); // Returns false
+bool noNegatives = numbers.None(n => n < 0);       // Returns true
+```
+
+#### Partition - Round-Robin Groups
+
+```csharp
+var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+// Exactly 3 groups whose sizes differ by at most one; the source is read once, eagerly
+var groups = numbers.Partition(3);
+// groups[0]: 1, 4, 7   groups[1]: 2, 5, 8   groups[2]: 3, 6, 9
+
+for (var i = 0; i < groups.Count; i++)
+{
+    Console.WriteLine($"Group {i}: {string.Join(", ", groups[i])}");
 }
 ```
 
-### None - Inverse of Any
+#### Shuffle - Randomize Collection Order
 
 ```csharp
-bool noNegatives = numbers.None(n => n < 0);
+var deck = new[] { "Ace", "King", "Queen", "Jack", "10" };
+
+// Create a shuffled copy
+var shuffledDeck = deck.Shuffle();
+
+// Original deck remains unchanged
+foreach (var card in shuffledDeck)
+{
+    Console.WriteLine(card);
+}
 ```
 
-### Shuffle - Randomize Order
+#### ToEnumerable - Hide the Concrete Collection Type
 
 ```csharp
-var shuffled = deck.Shuffle();
+var list = new List<int> { 1, 2, 3 };
+
+// The result is a lazy iterator: `wrapped is List<int>` and `wrapped is ICollection<int>` are both false,
+// so methods with an ICollection<T> fast path take their general (enumerating) path instead.
+IEnumerable<int> wrapped = list.ToEnumerable();
 ```
 
-### ToEnumerable - Hide the Concrete Collection Type
+## Method Chaining
+
+All extension methods can be chained with LINQ and other extension methods:
 
 ```csharp
-// `wrapped is List<int>` is false, so ICollection<T> fast paths are bypassed (useful in tests)
-IEnumerable<int> wrapped = new List<int> { 1, 2, 3 }.ToEnumerable();
+var numbers = Enumerable.Range(1, 100)
+    .Where(n => n % 2 == 0)
+    .Do(n => Console.WriteLine($"Filtered: {n}"))
+    .Shuffle()
+    .Take(10);
+
+if (numbers.None(n => n > 50))
+{
+    Console.WriteLine("No numbers greater than 50 in sample");
+}
 ```
+
+## Performance Considerations
+
+### Optimized for Common Types
+
+The library includes optimizations for common collection types:
+
+- `IsEmpty()` and `None()` use `ICollection<T>.Count` when available instead of enumerating
+- `ForEach()` delegates to `List<T>.ForEach` for list instances
+- `Shuffle()` copies the source into a `T[]` once (`Array.Copy` for arrays, `ICollection<T>.CopyTo` for collections, `ToArray()` otherwise) and shuffles that buffer in place
+
+### Thread Safety
+
+- `Shuffle()` uses thread-safe random number generation
+  - `net8.0`, `net10.0` and `net11.0` builds: `Random.Shared`
+  - `net462` and `netstandard2.0` builds: a per-thread `Random` seeded from the OS random number generator
+- Each partition returned by `Partition()` can be enumerated any number of times, from different threads
+
+## Error Handling
+
+The library follows LINQ conventions for error handling:
+
+```csharp
+// Throws ArgumentNullException
+IEnumerable<int>? nullCollection = null;
+nullCollection.ForEach(x => Console.WriteLine(x)); // Throws
+
+// IsNullOrEmpty handles null safely
+bool result = nullCollection.IsNullOrEmpty(); // Returns true (no exception)
+
+// None throws on null
+nullCollection.None(); // Throws ArgumentNullException
+```
+
+## Next Steps
+
+- Review the [Introduction](introduction.md) for a complete overview of features
+- See the [Setup Guide](https://github.com/Chris-Wolfgang/IEnumerable-Extensions/blob/main/docs/setup.md) for development environment configuration
+- Check the API documentation for detailed method signatures and parameters
+- Explore the unit tests in the repository for additional usage examples
+
+## Support
+
+- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/Chris-Wolfgang/IEnumerable-Extensions/issues)
+- **Source Code**: Available on [GitHub](https://github.com/Chris-Wolfgang/IEnumerable-Extensions)
+- **License**: MIT License

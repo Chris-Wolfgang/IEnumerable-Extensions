@@ -4,8 +4,8 @@ Welcome to the documentation for **Wolfgang.Extensions.IEnumerable**, a comprehe
 
 ## Quick Links
 
-- **[Introduction](introduction.md)** - Learn about the library's purpose and features
-- **[Getting Started](getting-started.md)** - Installation and usage guide
+- **[Introduction](../docfx_project/docs/introduction.md)** - Learn about the library's purpose and features
+- **[Getting Started](../docfx_project/docs/getting-started.md)** - Installation and usage guide
 - **[Setup Guide](setup.md)** - Development environment setup
 - **[GitHub Repository](https://github.com/Chris-Wolfgang/IEnumerable-Extensions)** - Source code and issues
 - **[NuGet Package](https://www.nuget.org/packages/Wolfgang.Extensions.IEnumerable)** - Download the package
@@ -19,6 +19,7 @@ Wolfgang.Extensions.IEnumerable provides essential extension methods that comple
 ✅ **IsEmpty** - Check if a sequence is empty  
 ✅ **IsNullOrEmpty** - Safely check for null or empty sequences  
 ✅ **None** - Determine if no elements match criteria  
+✅ **Partition** - Split into a fixed number of round-robin groups  
 ✅ **Shuffle** - Randomize collection order  
 ✅ **ToEnumerable** - Strip the concrete type for slow-path testing  
 
@@ -77,10 +78,10 @@ Methods like `IsNullOrEmpty` provide safe null checking without throwing excepti
 
 ## Documentation Sections
 
-### [Introduction](introduction.md)
+### [Introduction](../docfx_project/docs/introduction.md)
 Detailed overview of the library's purpose, design philosophy, and use cases.
 
-### [Getting Started](getting-started.md)
+### [Getting Started](../docfx_project/docs/getting-started.md)
 Step-by-step guide to installing and using the library in your projects. Includes:
 - Installation instructions
 - Basic usage examples
